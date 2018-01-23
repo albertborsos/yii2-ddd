@@ -1,0 +1,35 @@
+<?php
+/**
+ * This is the template for generating the model class of a specified table.
+ */
+
+/* @var $this yii\web\View */
+/* @var $generator app\gii\generators\crud\Generator */
+
+echo "<?php\n";
+?>
+
+namespace <?= $generator->getCreateDomainClass(true) ?>;
+
+use app\models\AbstractDomain;
+use <?= ltrim($generator->getResourceClass()) ?>;
+
+class <?= \yii\helpers\StringHelper::basename($generator->getCreateDomainClass()) ?> extends AbstractDomain
+{
+    /**
+     * Business logic to store data for multiple resources.
+     *
+     * @return mixed
+     */
+    public function process()
+    {
+        $resource = new <?= \yii\helpers\StringHelper::basename($generator->getResourceClass()) ?>($this->getForm());
+        if ($resource->save()) {
+            $this->setId($resource->getId());
+            return true;
+        }
+
+        $this->addErrors($resource->getErrors());
+        return false;
+    }
+}
