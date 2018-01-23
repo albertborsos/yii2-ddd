@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "albertborsos\\ddd\\": ""
+            "albertborsos\\ddd\\": "src/"
         }
     }
 }
