@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\crud\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\crud\Generator */
 
 echo "<?php\n";
 ?>

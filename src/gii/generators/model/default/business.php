@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\model\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\model\Generator */
 /* @var $tableName string full table name */
 /* @var $className string class name */
 /* @var $queryClassName string query class name */
@@ -19,7 +19,7 @@ echo "<?php\n";
 namespace <?= $generator->getBusinessClass(true) ?>;
 
 use Yii;
-use app\models\BusinessObject;
+use \albertborsos\ddd\interfaces\BusinessObject;
 use <?= $generator->ns .'\\Abstract' . $generator->modelClass ?>;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getBusinessClass()) ?> extends Abstract<?= $generator->modelClass ?> implements BusinessObject<?= "\n" ?>

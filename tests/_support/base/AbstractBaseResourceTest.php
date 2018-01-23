@@ -10,11 +10,11 @@ abstract class AbstractBaseResourceTest extends \yii\codeception\DbTestCase
     protected $modelClass;
 
     /**
-     * @param \app\models\FormObject|null $formObject
-     * @param \app\models\BusinessObject|null $businessObject
-     * @return object|\app\models\AbstractResource
+     * @param \albertborsos\ddd\interfaces\FormObject|null $formObject
+     * @param \albertborsos\ddd\interfaces\BusinessObject|null $businessObject
+     * @return object|\albertborsos\ddd\models\AbstractResource
      */
-    protected function mockResource(\app\models\FormObject $formObject = null, \app\models\BusinessObject $businessObject = null)
+    protected function mockResource(\albertborsos\ddd\interfaces\FormObject $formObject = null, \albertborsos\ddd\interfaces\BusinessObject $businessObject = null)
     {
         return Yii::createObject($this->resourceClass, [$formObject, $businessObject]);
     }

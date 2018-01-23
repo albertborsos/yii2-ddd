@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\crud\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\crud\Generator */
 
 $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass);
 $pluralizedModelName = lcfirst(\yii\helpers\Inflector::pluralize($modelClassBaseName));

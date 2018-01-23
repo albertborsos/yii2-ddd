@@ -7,7 +7,7 @@ use yii\helpers\StringHelper;
 
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\model\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\model\Generator */
 
 $modelClass = StringHelper::basename($generator->modelClass);
 
@@ -17,7 +17,7 @@ echo "<?php\n";
 namespace <?= StringHelper::dirname(ltrim($generator->getResourceClass(), '\\')) ?>;
 
 use Yii;
-use app\models\AbstractResource;
+use \albertborsos\ddd\models\AbstractResource;
 use <?= $generator->getBusinessClass() ?>;
 
 /**

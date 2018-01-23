@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\model\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\model\Generator */
 /* @var $tableName string full table name */
 /* @var $className string class name */
 /* @var $tableSchema yii\db\TableSchema */

@@ -4,14 +4,14 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\crud\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\crud\Generator */
 
 echo "<?php\n";
 ?>
 
 namespace <?= $generator->getAbstractFormClass(true) ?>;
 
-use app\models\FormObject;
+use \albertborsos\ddd\interfaces\FormObject;
 use <?= ltrim($generator->modelClass) ?>;
 use yii\base\Model;
 

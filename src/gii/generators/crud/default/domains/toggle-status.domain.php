@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator app\gii\generators\crud\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\crud\Generator */
 
 echo "<?php\n";
 
@@ -13,7 +13,7 @@ $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass
 
 namespace <?= $generator->getToggleStatusDomainClass(true) ?>;
 
-use app\models\AbstractDomain;
+use \albertborsos\ddd\models\AbstractDomain;
 use <?= ltrim($generator->getToggleStatusFormClass()) ?>;
 use <?= ltrim($generator->getResourceClass()) ?>;
 use <?= ltrim($generator->modelClass) ?>;

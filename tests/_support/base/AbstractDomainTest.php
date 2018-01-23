@@ -12,11 +12,11 @@ abstract class AbstractDomainTest extends \yii\codeception\DbTestCase
 
     /**
      * @param array $loadParams
-     * @param \app\models\BusinessObject|null $businessObject
+     * @param \albertborsos\ddd\interfaces\BusinessObject|null $businessObject
      * @param array $initParams
-     * @return \app\models\FormObject|\yii\base\Model
+     * @return \albertborsos\ddd\interfaces\FormObject|\yii\base\Model
      */
-    protected function mockForm($loadParams = [], \app\models\BusinessObject $businessObject = null, $initParams = [], $isInitParamsAreArguments = false)
+    protected function mockForm($loadParams = [], \albertborsos\ddd\interfaces\BusinessObject $businessObject = null, $initParams = [], $isInitParamsAreArguments = false)
     {
         if ($isInitParamsAreArguments) {
             $params = $businessObject ? array_merge([$businessObject], $initParams) : $initParams;
@@ -24,7 +24,7 @@ abstract class AbstractDomainTest extends \yii\codeception\DbTestCase
             $params = $businessObject ? [$businessObject, $initParams] : [$initParams];
         }
 
-        /** @var \yii\base\Model|\app\models\FormObject $form */
+        /** @var \yii\base\Model|\albertborsos\ddd\interfaces\FormObject $form */
         $form = Yii::createObject($this->formClass, $params);
         $form->load($loadParams, '');
 
@@ -32,11 +32,11 @@ abstract class AbstractDomainTest extends \yii\codeception\DbTestCase
     }
 
     /**
-     * @param \app\models\FormObject $formObject
-     * @param \app\models\BusinessObject|null $businessObject
-     * @return \app\models\AbstractDomain
+     * @param \albertborsos\ddd\interfaces\FormObject $formObject
+     * @param \albertborsos\ddd\interfaces\BusinessObject|null $businessObject
+     * @return \albertborsos\ddd\models\AbstractDomain
      */
-    protected function mockDomain(\app\models\FormObject $formObject, \app\models\BusinessObject $businessObject = null)
+    protected function mockDomain(\albertborsos\ddd\interfaces\FormObject $formObject, \albertborsos\ddd\interfaces\BusinessObject $businessObject = null)
     {
         return Yii::createObject($this->domainClass, [$formObject, $businessObject]);
     }
