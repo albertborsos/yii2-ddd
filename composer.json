@@ -13,9 +13,18 @@
     "require": {
         "yiisoft/yii2": "~2.0.0"
     },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "~2.0",
+        "codeception/codeception": "~2.3",
+        "codeception/specify": " *",
+        "codeception/verify": " *",
+        "codeception/mockery-module": "^0.2.2",
+        "mito/yii2-coding-standards": "~2.0.0@beta"
+    },
     "autoload": {
         "psr-4": {
-            "albertborsos\\ddd\\": "src/"
+            "albertborsos\\ddd\\": "src/",
+            "albertborsos\\ddd\\tests\\": "tests/"
         }
     }
 }
