@@ -1,0 +1,21 @@
+{
+    "name": "albertborsos/yii2-ddd",
+    "description": "Classes for Domain-Driven Development with Yii 2.0 Framework",
+    "type": "library",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abert Borsos",
+            "email": "hello@borsosalbert.hu"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "albertborsos\\ddd\\": ""
+        }
+    }
+}
