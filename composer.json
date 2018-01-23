@@ -24,7 +24,8 @@
     "autoload": {
         "psr-4": {
             "albertborsos\\ddd\\": "src/",
-            "albertborsos\\ddd\\tests\\": "tests/"
+            "albertborsos\\ddd\\tests\\": "tests/",
+            "albertborsos\\ddd\\tests\\support\\base\\": "tests/_support/base/"
         }
     }
 }
