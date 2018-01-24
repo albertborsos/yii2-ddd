@@ -17,7 +17,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 ?>
-<?= "<?php " ?> \app\components\InspiniaHelper::setMiddleBarContent($this->render('_view-buttons', ['model' => $model])) ?>
+<?= "<?php " ?> \albertborsos\themehelper\inspinia\ThemeHelper::setMiddleBarContent($this->render('_view-buttons', ['model' => $model])) ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-view">
     <div class="col-lg-4 col-md-6 col-sm-6">
         <div class="ibox">

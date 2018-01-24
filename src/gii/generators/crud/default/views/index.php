@@ -34,7 +34,7 @@ use <?= $generator->indexWidgetType === 'grid' ? "yii\\grid\\GridView" : "yii\\w
         ],
     ]); ?>" : '' ?>
 
-    <?= "<?php " ?>\app\components\InspiniaHelper::setMiddleBarContent($this->render('_search', [
+    <?= "<?php " ?>\albertborsos\themehelper\inspinia\ThemeHelper::setMiddleBarContent($this->render('_search', [
         'model' => $searchModel,
         'pjaxContainerSelector' => '#<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index-list',
     ])) ?>
@@ -77,7 +77,10 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 }
 ?>
             [
-                'class' => 'app\components\grid\ActionColumn',
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => [
+                    'class' => 'btn btn-default btn-xs',
+                ],
                 'template' => '{view} {update} {status} {delete}',
                 'visibleButtons' => [
                     'view' => Yii::$app->user->can('view<?= StringHelper::basename($generator->modelClass) ?>'),
