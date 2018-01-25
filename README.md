@@ -75,7 +75,7 @@ class AppResource extends AbstractResource
             return true;
         }
 
-        $this->addErrors($model->getErrors());
+        $this->getForm()->addErrors($model->getErrors());
         return false;
     }
 
@@ -94,7 +94,7 @@ class AppResource extends AbstractResource
             return true;
         }
 
-        $this->addErrors($model->getErrors());
+        $this->getForm()->addErrors($model->getErrors());
         return false;
     }
 
@@ -182,16 +182,17 @@ class CreateAppDomain extends AbstractDomain
      */
     public function process()
     {
-        $resource = new AppResource($this->getForm());
-        if ($resource->save()) {
-            $this->assignLanguages($resource->getId(), $this->getForm()->languages);
-            $this->setId($resource->getId());
-
-            return true;
+        try {
+            $resource = new AppResource($this->getForm());
+            if ($resource->save()) {
+                $this->assignLanguages($resource->getId(), $this->getForm()->languages);
+                $this->setId($resource->getId());
+    
+                return true;
+            }
+        } catch(\yii\db\Exception $e) {
+            $this->getForm()->addErrors(['exception' => $e->getMessage()]);
         }
-
-        $this->addErrors($resource->getErrors());
-
         return false;
     }
 
@@ -240,8 +241,6 @@ class AppController extends \yii\web\Controller
                 AlertWidget::addSuccess('App created successfully!');
                 return $this->redirect(['view', 'id' => $domain->getId()]);
             }
-
-            $form->addErrors($domain->getErrors());
         }
 
         return $this->render('create', [
