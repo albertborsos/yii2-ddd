@@ -35,7 +35,6 @@ class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusDomainC
             return true;
         }
 
-        $this->addErrors($resource->getErrors());
         return false;
     }
 

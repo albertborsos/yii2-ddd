@@ -29,7 +29,6 @@ class <?= \yii\helpers\StringHelper::basename($generator->getCreateDomainClass()
             return true;
         }
 
-        $this->addErrors($resource->getErrors());
         return false;
     }
 }

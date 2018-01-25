@@ -40,7 +40,7 @@ class <?= StringHelper::basename($generator->getResourceClass()) ?> extends Abst
             return true;
         }
 
-        $this->addErrors($model->getErrors());
+        $this->getForm()->addErrors($model->getErrors());
         return false;
     }
 
@@ -58,7 +58,7 @@ class <?= StringHelper::basename($generator->getResourceClass()) ?> extends Abst
             return true;
         }
 
-        $this->addErrors($model->getErrors());
+        $this->getForm()->addErrors($model->getErrors());
         return false;
     }
 

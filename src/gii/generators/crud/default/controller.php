@@ -177,8 +177,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 AlertWidget::addSuccess('<?= $modelClass ?> created successfully!');
                 return $this->redirect(['view', 'id' => $domain->getId()]);
             }
-
-            $form->addErrors($domain->getErrors());
         }
 
         return $this->render('create', [
@@ -208,8 +206,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 AlertWidget::addSuccess('<?= $modelClass ?> updated successfully!');
                 return $this->redirect(['update', 'id' => $domain->getId()]);
             }
-
-            $form->addErrors($domain->getErrors());
         }
 
         return $this->render('update', [
@@ -259,7 +255,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 AlertWidget::addSuccess('<?= $modelClass ?> updated successfully!');
                 return $this->redirect(['index']);
             }
-            $form->addErrors($domain->getErrors());
         }
         AlertWidget::addError(\yii\bootstrap\Html::errorSummary($form));
         return $this->redirect(['index']);
