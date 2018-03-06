@@ -2,9 +2,10 @@
 
 namespace albertborsos\ddd\tests\support\base;
 
+use Codeception\Test\Unit;
 use Yii;
 
-abstract class AbstractBaseResourceTest extends \yii\codeception\DbTestCase
+abstract class AbstractBaseResourceTest extends Unit
 {
     protected $resourceClass;
     protected $modelClass;

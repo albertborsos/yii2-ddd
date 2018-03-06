@@ -2,9 +2,10 @@
 
 namespace albertborsos\ddd\tests\support\base;
 
+use Codeception\Test\Unit;
 use Yii;
 
-abstract class AbstractDomainTest extends \yii\codeception\DbTestCase
+abstract class AbstractDomainTest extends Unit
 {
     protected $formClass;
     protected $domainClass;
