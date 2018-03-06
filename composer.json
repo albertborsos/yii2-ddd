@@ -15,10 +15,9 @@
         "albertborsos/yii2-theme-helper": "~0.1"
     },
     "require-dev": {
-        "yiisoft/yii2-codeception": "~2.0",
-        "codeception/codeception": "~2.3",
-        "codeception/specify": " *",
-        "codeception/verify": " *",
+        "codeception/codeception": "^2.4",
+        "codeception/verify": "~0.4.0",
+        "codeception/specify": "~0.4.6",
         "codeception/mockery-module": "^0.2.2",
         "mito/yii2-coding-standards": "~2.0.0@beta"
     },
