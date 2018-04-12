@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "~2.0.0",
+        "yiisoft/yii2": "~2.0",
         "albertborsos/yii2-theme-helper": "~0.1"
     },
     "require-dev": {
@@ -27,6 +27,11 @@
             "albertborsos\\ddd\\": "src/",
             "albertborsos\\ddd\\tests\\": "tests/",
             "albertborsos\\ddd\\tests\\support\\base\\": "tests/_support/base/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
         }
     }
 }
