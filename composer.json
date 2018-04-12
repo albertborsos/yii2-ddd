@@ -12,7 +12,7 @@
     ],
     "require": {
         "yiisoft/yii2": "~2.0",
-        "albertborsos/yii2-theme-helper": "~0.1"
+        "albertborsos/yii2-theme-helper": "1.0.x-dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "~2.0",
