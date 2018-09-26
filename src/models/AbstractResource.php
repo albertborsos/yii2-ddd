@@ -11,6 +11,7 @@ use yii\web\Linkable;
 
 /**
  * Class AbstractResource
+ * @deprecated since 0.3.0, will be removed in 1.0.0.
  * @package albertborsos\ddd\models
  */
 abstract class AbstractResource extends AbstractModel

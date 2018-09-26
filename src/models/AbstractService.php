@@ -9,14 +9,13 @@ use yii\web\Linkable;
 /**
  * Class AbstractDomain
  * @package albertborsos\ddd\models
- * @deprecated since 0.3.0, will be removed in 1.0.0. Use `AbstractService` instead.
  */
-abstract class AbstractDomain extends AbstractModel
+abstract class AbstractService extends AbstractModel
 {
     /**
      * @return boolean
      */
-    abstract public function process();
+    abstract public function execute();
 
     /**
      * @return array

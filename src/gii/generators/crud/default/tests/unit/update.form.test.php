@@ -34,7 +34,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
      * @skip
      * @dataProvider invalidDataProvider
      */
-    public function testNotPassFormWithInvalidData($expectedErrorAttribute, $<?= lcfirst($modelClassBaseName) ?>Alias, $name)
+    public function testShouldNotPassFormWithInvalidData($expectedErrorAttribute, $<?= lcfirst($modelClassBaseName) ?>Alias, $name)
     {
         /** @var <?= $generator->getUpdateFormClass() ?> $form */
         $form = $this->mockForm([
@@ -42,6 +42,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         ], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
 
         $this->assertFalse($form->validate());
+        $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::encode($form->getErrors()));
         $this->assertArrayHasKey($expectedErrorAttribute, $form->getErrors());
     }
 
@@ -56,14 +57,14 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
      * @skip
      * @dataProvider validDataProvider
      */
-    public function testPassFormWithValidData($<?= lcfirst($modelClassBaseName) ?>Alias, $name)
+    public function testShouldPassFormWithValidData($<?= lcfirst($modelClassBaseName) ?>Alias, $name)
     {
         /** @var <?= $generator->getUpdateFormClass() ?> $form */
         $form = $this->mockForm([
             'name' => $name,
         ], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
 
-        $this->assertTrue($form->validate(), \yii\helpers\Html::errorSummary($form));
+        $this->assertTrue($form->validate(), \yii\helpers\Json::encode($form->getErrors()));
         $this->assertEmpty($form->getErrors());
     }
 }

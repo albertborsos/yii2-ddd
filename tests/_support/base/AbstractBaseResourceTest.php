@@ -5,6 +5,11 @@ namespace albertborsos\ddd\tests\support\base;
 use Codeception\Test\Unit;
 use Yii;
 
+/**
+ * Class AbstractBaseResourceTest
+ * @deprecated since 0.3.0, will be removed in 1.0.0.
+ * @package albertborsos\ddd\tests\support\base
+ */
 abstract class AbstractBaseResourceTest extends Unit
 {
     protected $resourceClass;

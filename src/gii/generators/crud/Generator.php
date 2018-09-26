@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
 use yii\db\Schema;
 use yii\gii\CodeFile;
+use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 use yii\helpers\VarDumper;
@@ -38,6 +39,9 @@ class Generator extends \yii\gii\Generator
     public $baseControllerClass = 'yii\web\Controller';
     public $indexWidgetType = 'grid';
     public $searchModelClass = '';
+    public $generateTests = false;
+    public $testPath = '@app/tests';
+
     /**
      * @var boolean whether to wrap the `GridView` or `ListView` widget with the `yii\widgets\Pjax` widget
      * @since 2.0.5
@@ -69,7 +73,7 @@ class Generator extends \yii\gii\Generator
     {
         return array_merge(parent::rules(), [
             [['controllerClass', 'modelClass', 'searchModelClass', 'baseControllerClass'], 'filter', 'filter' => 'trim'],
-            [['modelClass', 'controllerClass', 'baseControllerClass', 'indexWidgetType'], 'required'],
+            [['modelClass', 'controllerClass', 'baseControllerClass', 'indexWidgetType', 'testPath'], 'required'],
             [['searchModelClass'], 'compare', 'compareAttribute' => 'modelClass', 'operator' => '!==', 'message' => 'Search Model Class must not be equal to Model Class.'],
             [['modelClass', 'controllerClass', 'baseControllerClass', 'searchModelClass'], 'match', 'pattern' => '/^[\w\\\\]*$/', 'message' => 'Only word characters and backslashes are allowed.'],
             [['modelClass'], 'validateClass', 'params' => ['extends' => BaseActiveRecord::className()]],
@@ -80,8 +84,10 @@ class Generator extends \yii\gii\Generator
             [['indexWidgetType'], 'in', 'range' => ['grid', 'list']],
             [['modelClass'], 'validateModelClass'],
             [['enableI18N', 'enablePjax'], 'boolean'],
+            [['generateTests'], 'boolean'],
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
             ['viewPath', 'safe'],
+            ['testPath', 'safe'],
         ]);
     }
 
@@ -105,6 +111,26 @@ class Generator extends \yii\gii\Generator
     }
 
     /**
+     * An inline validator that checks if the attribute value refers to a valid namespaced class name.
+     * The validator will check if the directory containing the new class file exist or not.
+     * @param string $attribute the attribute being validated
+     * @param array $params the validation options
+     * @throws \yii\base\Exception
+     */
+    public function validateNewClass($attribute, $params)
+    {
+        $class = ltrim($this->$attribute, '\\');
+        if (($pos = strrpos($class, '\\')) !== false) {
+            $ns = substr($class, 0, $pos);
+            $path = Yii::getAlias('@' . str_replace('\\', '/', $ns), false);
+            if ($path && !is_dir($path)) {
+                FileHelper::createDirectory($path);
+            }
+        }
+        parent::validateNewClass($attribute, $params);
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -113,10 +139,12 @@ class Generator extends \yii\gii\Generator
             'modelClass' => 'Model Class',
             'controllerClass' => 'Controller Class',
             'viewPath' => 'View Path',
+            'testPath' => 'Test Path',
             'baseControllerClass' => 'Base Controller Class',
             'indexWidgetType' => 'Widget Used in Index Page',
             'searchModelClass' => 'Search Model Class',
             'enablePjax' => 'Enable Pjax',
+            'generateTests' => 'Generate test files',
         ]);
     }
 
@@ -135,6 +163,8 @@ class Generator extends \yii\gii\Generator
             'viewPath' => 'Specify the directory for storing the view scripts for the controller. You may use path alias here, e.g.,
                 <code>/var/www/basic/controllers/views/post</code>, <code>@app/views/post</code>. If not set, it will default
                 to <code>@app/views/ControllerID</code>',
+            'testPath' => 'Specify the directory for storing the test scripts for the controller. You may use path alias here, e.g.,
+                <code>@app/tests/codeception</code>.',
             'baseControllerClass' => 'This is the class that the new CRUD controller class will extend from.
                 You should provide a fully qualified class name, e.g., <code>yii\web\Controller</code>.',
             'indexWidgetType' => 'This is the widget type to be used in the index page to display list of the models.
@@ -160,7 +190,7 @@ class Generator extends \yii\gii\Generator
      */
     public function stickyAttributes()
     {
-        return array_merge(parent::stickyAttributes(), ['baseControllerClass', 'indexWidgetType']);
+        return array_merge(parent::stickyAttributes(), ['baseControllerClass', 'indexWidgetType', 'testPath']);
     }
 
     /**
@@ -182,24 +212,24 @@ class Generator extends \yii\gii\Generator
     public function generate()
     {
         $controllerFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->controllerClass, '\\')) . '.php');
-        $abstractFormFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getAbstractFormClass(), '\\')) . '.php');
-        $createDomainFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getCreateDomainClass(), '\\')) . '.php');
-        $createDomainTestFile = ltrim($this->getTestFilePath($this->getCreateDomainClass()), '\\') . '.php';
+        $createServiceFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getCreateServiceClass(), '\\')) . '.php');
         $createFormFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getCreateFormClass(), '\\')) . '.php');
-        $createFormTestFile = ltrim($this->getTestFilePath($this->getCreateFormClass()), '\\') . '.php';
-        $updateDomainFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getUpdateDomainClass(), '\\')) . '.php');
-        $updateDomainTestFile = ltrim($this->getTestFilePath($this->getUpdateDomainClass()), '\\') . '.php';
+        $updateServiceFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getUpdateServiceClass(), '\\')) . '.php');
         $updateFormFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getUpdateFormClass(), '\\')) . '.php');
-        $updateFormTestFile = ltrim($this->getTestFilePath($this->getUpdateFormClass()), '\\') . '.php';
-        $deleteDomainFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getDeleteDomainClass(), '\\')) . '.php');
-        $deleteDomainTestFile = ltrim($this->getTestFilePath($this->getDeleteDomainClass()), '\\') . '.php';
+        $deleteServiceFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getDeleteServiceClass(), '\\')) . '.php');
         $deleteFormFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getDeleteFormClass(), '\\')) . '.php');
-        $deleteFormTestFile = ltrim($this->getTestFilePath($this->getDeleteFormClass()), '\\') . '.php';
-        $fixtureDataFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getUnitTestFixtureDataFile(), '\\')) . '.php');
-        $fixtureClassFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getUnitTestFixtureClass(), '\\')) . '.php');
-        $toggleStatusDomainFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getToggleStatusDomainClass(), '\\')) . '.php');
+        $toggleStatusServiceFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getToggleStatusServiceClass(), '\\')) . '.php');
         $toggleStatusFormFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->getToggleStatusFormClass(), '\\')) . '.php');
-        $toggleStatusDomainTestFile = ltrim($this->getTestFilePath($this->getToggleStatusDomainClass()), '\\') . '.php';
+
+        $fixtureDataFile = $this->getUnitTestFixtureDataFile() . '.php';
+        $fixtureClassFile = $this->getUnitTestFixtureClass() . '.php';
+        $createServiceTestFile = ltrim($this->getTestFilePath($this->getCreateServiceClass()), '\\') . '.php';
+        $createFormTestFile = ltrim($this->getTestFilePath($this->getCreateFormClass()), '\\') . '.php';
+        $updateServiceTestFile = ltrim($this->getTestFilePath($this->getUpdateServiceClass()), '\\') . '.php';
+        $updateFormTestFile = ltrim($this->getTestFilePath($this->getUpdateFormClass()), '\\') . '.php';
+        $deleteServiceTestFile = ltrim($this->getTestFilePath($this->getDeleteServiceClass()), '\\') . '.php';
+        $deleteFormTestFile = ltrim($this->getTestFilePath($this->getDeleteFormClass()), '\\') . '.php';
+        $toggleStatusServiceTestFile = ltrim($this->getTestFilePath($this->getToggleStatusServiceClass()), '\\') . '.php';
 
         $files = [
             new CodeFile($controllerFile, $this->render('controller.php')),
@@ -211,30 +241,39 @@ class Generator extends \yii\gii\Generator
         }
 
         $files = array_merge($files, [
-            new CodeFile($abstractFormFile, $this->render('domains/abstract.form.php')),
             new CodeFile($createFormFile, $this->render('domains/create.form.php')),
             new CodeFile($updateFormFile, $this->render('domains/update.form.php')),
             new CodeFile($deleteFormFile, $this->render('domains/delete.form.php')),
-            new CodeFile($createDomainFile, $this->render('domains/create.domain.php')),
-            new CodeFile($updateDomainFile, $this->render('domains/update.domain.php')),
-            new CodeFile($deleteDomainFile, $this->render('domains/delete.domain.php')),
-            //tests
-            new CodeFile($fixtureClassFile, $this->render('tests/unit/fixture.class.php')),
-            new CodeFile($fixtureDataFile, $this->render('tests/unit/fixture.php')),
-            new CodeFile($createFormTestFile, $this->render('tests/unit/create.form.test.php')),
-            new CodeFile($updateFormTestFile, $this->render('tests/unit/update.form.test.php')),
-            new CodeFile($deleteFormTestFile, $this->render('tests/unit/delete.form.test.php')),
-            new CodeFile($createDomainTestFile, $this->render('tests/unit/create.domain.test.php')),
-            new CodeFile($updateDomainTestFile, $this->render('tests/unit/update.domain.test.php')),
-            new CodeFile($deleteDomainTestFile, $this->render('tests/unit/delete.domain.test.php')),
+            new CodeFile($createServiceFile, $this->render('domains/create.service.php')),
+            new CodeFile($updateServiceFile, $this->render('domains/update.service.php')),
+            new CodeFile($deleteServiceFile, $this->render('domains/delete.service.php')),
         ]);
+
+        if ($this->generateTests) {
+            $files = array_merge($files, [
+                //tests
+                new CodeFile($fixtureClassFile, $this->render('tests/unit/fixture.class.php')),
+                new CodeFile($fixtureDataFile, $this->render('tests/unit/fixture.php')),
+                new CodeFile($createFormTestFile, $this->render('tests/unit/create.form.test.php')),
+                new CodeFile($updateFormTestFile, $this->render('tests/unit/update.form.test.php')),
+                new CodeFile($deleteFormTestFile, $this->render('tests/unit/delete.form.test.php')),
+                new CodeFile($createServiceTestFile, $this->render('tests/unit/create.service.test.php')),
+                new CodeFile($updateServiceTestFile, $this->render('tests/unit/update.service.test.php')),
+                new CodeFile($deleteServiceTestFile, $this->render('tests/unit/delete.service.test.php')),
+            ]);
+        }
 
         if (in_array('status', $this->getColumnNames())) {
             $files = array_merge($files, [
-                new CodeFile($toggleStatusDomainFile, $this->render('domains/toggle-status.domain.php')),
+                new CodeFile($toggleStatusServiceFile, $this->render('domains/toggle-status.service.php')),
                 new CodeFile($toggleStatusFormFile, $this->render('domains/toggle-status.form.php')),
-                new CodeFile($toggleStatusDomainTestFile, $this->render('tests//unit/toggle-status.domain.test.php')),
             ]);
+
+            if ($this->generateTests) {
+                $files = array_merge($files, [
+                    new CodeFile($toggleStatusServiceTestFile, $this->render('tests//unit/toggle-status.service.test.php')),
+                ]);
+            }
         }
 
         $viewPath = $this->getViewPath();
@@ -616,18 +655,15 @@ class Generator extends \yii\gii\Generator
         }
     }
 
-    public function getCreateDomainClass($namespaceOnly = false)
+    public function getCreateServiceClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
         // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', null);
         // replace className with domain name
         array_pop($parts);
-        $parts[] = 'Create' . StringHelper::basename($this->modelClass) . 'Domain';
+        $parts[] = 'Create' . StringHelper::basename($this->modelClass) . 'Service';
 
         if ($namespaceOnly) {
             array_pop($parts);
@@ -639,12 +675,8 @@ class Generator extends \yii\gii\Generator
     public function getCreateFormClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // replace `business` to `forms`
-        $businessKey = array_search('business', $parts);
-        $parts[$businessKey] = 'forms';
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', 'forms');
         // replace className with forms name
         array_pop($parts);
         $parts[] = 'Create' . StringHelper::basename($this->modelClass) . 'Form';
@@ -655,18 +687,14 @@ class Generator extends \yii\gii\Generator
 
         return implode('\\', $parts);
     }
-    public function getToggleStatusDomainClass($namespaceOnly = false)
+    public function getToggleStatusServiceClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', null);
         // replace className with domain name
         array_pop($parts);
-        $parts[] = 'Toggle' . StringHelper::basename($this->modelClass) . 'StatusDomain';
+        $parts[] = 'Toggle' . StringHelper::basename($this->modelClass) . 'StatusService';
 
         if ($namespaceOnly) {
             array_pop($parts);
@@ -678,12 +706,8 @@ class Generator extends \yii\gii\Generator
     public function getToggleStatusFormClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // replace `business` to `forms`
-        $businessKey = array_search('business', $parts);
-        $parts[$businessKey] = 'forms';
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', 'forms');
         // replace className with forms name
         array_pop($parts);
         $parts[] = 'Toggle' . StringHelper::basename($this->modelClass) . 'StatusForm';
@@ -695,18 +719,14 @@ class Generator extends \yii\gii\Generator
         return implode('\\', $parts);
     }
 
-    public function getUpdateDomainClass($namespaceOnly = false)
+    public function getUpdateServiceClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', null);
         // replace className with domain name
         array_pop($parts);
-        $parts[] = 'Update' . StringHelper::basename($this->modelClass) . 'Domain';
+        $parts[] = 'Update' . StringHelper::basename($this->modelClass) . 'Service';
 
         if ($namespaceOnly) {
             array_pop($parts);
@@ -718,12 +738,8 @@ class Generator extends \yii\gii\Generator
     public function getUpdateFormClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // replace `business` to `forms`
-        $businessKey = array_search('business', $parts);
-        $parts[$businessKey] = 'forms';
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', 'forms');
         // replace className with forms name
         array_pop($parts);
         $parts[] = 'Update' . StringHelper::basename($this->modelClass) . 'Form';
@@ -735,18 +751,14 @@ class Generator extends \yii\gii\Generator
         return implode('\\', $parts);
     }
 
-    public function getDeleteDomainClass($namespaceOnly = false)
+    public function getDeleteServiceClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', null);
         // replace className with domain name
         array_pop($parts);
-        $parts[] = 'Delete' . StringHelper::basename($this->modelClass) . 'Domain';
+        $parts[] = 'Delete' . StringHelper::basename($this->modelClass) . 'Service';
 
         if ($namespaceOnly) {
             array_pop($parts);
@@ -758,12 +770,8 @@ class Generator extends \yii\gii\Generator
     public function getDeleteFormClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // replace `resources` to `domains`
-        $resourceKey = array_search('resources', $parts);
-        $parts[$resourceKey] = 'domains';
-        // replace `business` to `forms`
-        $businessKey = array_search('business', $parts);
-        $parts[$businessKey] = 'forms';
+        $parts = $this->replacePart($parts, 'domains', 'services');
+        $parts = $this->replacePart($parts, 'business', 'forms');
         // replace className with forms name
         array_pop($parts);
         $parts[] = 'Delete' . StringHelper::basename($this->modelClass) . 'Form';
@@ -778,9 +786,7 @@ class Generator extends \yii\gii\Generator
     public function getResourceClass($namespaceOnly = false)
     {
         $parts = StringHelper::explode($this->modelClass, '\\');
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
+        $parts = $this->replacePart($parts, 'business', null);
         // replace className with resource name
         array_pop($parts);
         $parts[] = StringHelper::basename($this->modelClass) . 'Resource';
@@ -792,49 +798,51 @@ class Generator extends \yii\gii\Generator
         return implode('\\', $parts);
     }
 
-    public function getAbstractFormClass($namespaceOnly = false)
-    {
-        $parts = StringHelper::explode($this->modelClass, '\\');
-        // unset `business`
-        $businessKey = array_search('business', $parts);
-        unset($parts[$businessKey]);
-        // replace className with resource name
-        array_pop($parts);
-        $parts[] = 'Abstract' . StringHelper::basename($this->modelClass) . 'Form';
-
-        if ($namespaceOnly) {
-            array_pop($parts);
-        }
-
-        return implode('\\', $parts);
-    }
-
     private function getUnitTestFixtureDataFile()
     {
-        $parts[] = 'app\\tests\\codeception\\unit\\fixtures\\data';
+        $parts[] = rtrim(Yii::getAlias($this->testPath), '/');
+        $parts[] = 'unit/fixtures/data';
         $parts[] = strtolower(StringHelper::basename($this->modelClass));
 
-        return implode('\\', $parts);
+        return implode('/', $parts);
     }
 
     private function getUnitTestFixtureClass()
     {
-        $parts[] = 'app\\tests\\codeception\\unit\\fixtures';
+        $parts[] = rtrim(Yii::getAlias($this->testPath), '/');
+        $parts[] = 'unit/fixtures';
         $parts[] = StringHelper::basename($this->modelClass) . 'Fixture';
 
-        return implode('\\', $parts);
+        return implode('/', $parts);
     }
 
     public function getTestFilePath($mainClassName)
     {
         $path = Yii::getAlias('@' . str_replace('\\', '/', $mainClassName));
+        $testNs = trim($this->testPath, '@/');
         $parts = StringHelper::explode($path, '/');
-        // replace `app` to `test`
-        $resourceKey = array_search('app', $parts);
-        $parts[$resourceKey] = 'app/tests/codeception/unit';
+        $parts = $this->replacePart($parts, 'app', $testNs . '/unit');
         array_pop($parts);
         $parts[] = StringHelper::basename($mainClassName) . 'Test';
 
         return implode('/', $parts);
+    }
+
+    /**
+     * @param $parts
+     * @return mixed
+     */
+    private function replacePart($parts, $keyFrom, $keyTo)
+    {
+        $keyFromId = array_search($keyFrom, $parts);
+        if ($keyFromId !== false) {
+            $parts[$keyFromId] = $keyTo;
+        }
+
+        if (empty($parts[$keyFromId])) {
+            unset($parts[$keyFromId]);
+        }
+
+        return $parts;
     }
 }

@@ -14,10 +14,10 @@ echo "<?php\n";
 
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getToggleStatusDomainClass())) ?> extends AbstractDomainTest
+class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getToggleStatusServiceClass())) ?> extends AbstractServiceTest
 {
     protected $formClass = '<?= $generator->getToggleStatusFormClass()?>';
-    protected $domainClass = '<?= $generator->getToggleStatusDomainClass()?>';
+    protected $serviceClass = '<?= $generator->getToggleStatusServiceClass()?>';
     protected $modelClass = '<?= $generator->modelClass?>';
 
     protected function tearDown()
@@ -55,11 +55,11 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         $model = $this->getModel($this-><?= $pluralizedModelName ?>[$fixtureAlias]['id']);
         $form = $this->mockForm([], $model);
 
-        $domain = $this->mockDomain($form, $model);
-        $this->assertTrue($domain->process());
-        $this->assertEquals($model->id, $domain->getId());
+        $service = $this->mockService($form, $model);
+        $this->assertTrue($service->execute());
+        $this->assertEquals($model->id, $service->getId());
 
-        $model = $this->getModel($domain->getId());
+        $model = $this->getModel($service->getId());
 
         $this->assertNotNull($model);
         $this->assertEquals($expectedStatus, $model->status);

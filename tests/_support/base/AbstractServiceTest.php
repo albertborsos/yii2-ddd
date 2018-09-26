@@ -5,15 +5,10 @@ namespace albertborsos\ddd\tests\support\base;
 use Codeception\Test\Unit;
 use Yii;
 
-/**
- * Class AbstractDomainTest
- * @deprecated since 0.3.0, will be removed in 1.0.0. Use `albertborsos\ddd\tests\support\base\AbstractServiceTest` instead.
- * @package albertborsos\ddd\tests\support\base
- */
-abstract class AbstractDomainTest extends Unit
+abstract class AbstractServiceTest extends Unit
 {
     protected $formClass;
-    protected $domainClass;
+    protected $serviceClass;
     protected $modelClass;
 
     /**
@@ -40,11 +35,11 @@ abstract class AbstractDomainTest extends Unit
     /**
      * @param \albertborsos\ddd\interfaces\FormObject $formObject
      * @param \albertborsos\ddd\interfaces\BusinessObject|null $businessObject
-     * @return \albertborsos\ddd\models\AbstractDomain
+     * @return \albertborsos\ddd\models\AbstractService
      */
-    protected function mockDomain(\albertborsos\ddd\interfaces\FormObject $formObject, \albertborsos\ddd\interfaces\BusinessObject $businessObject = null)
+    protected function mockService(\albertborsos\ddd\interfaces\FormObject $formObject, \albertborsos\ddd\interfaces\BusinessObject $businessObject = null)
     {
-        return Yii::createObject($this->domainClass, [$formObject, $businessObject]);
+        return Yii::createObject($this->serviceClass, [$formObject, $businessObject]);
     }
 
     /**

@@ -14,18 +14,17 @@ echo "<?php\n";
 
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateDomainClass())) ?> extends AbstractDomainTest
+class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateServiceClass())) ?> extends AbstractServiceTest
 {
     protected $formClass = '<?= $generator->getUpdateFormClass()?>';
-    protected $domainClass = '<?= $generator->getUpdateDomainClass()?>';
+    protected $serviceClass = '<?= $generator->getUpdateServiceClass()?>';
     protected $modelClass = '<?= $generator->modelClass?>';
 
     protected function tearDown()
     {
         $models = <?= $generator->modelClass?>::find()->all();
         foreach ($models as $model) {
-            $resource = new <?= $generator->getResourceClass()?>(null, $model);
-            $resource->delete();
+            $model->delete();
         }
         parent::tearDown();
     }
@@ -40,7 +39,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     /**
      * Test only valid events here.
      * Test invalid events in `<?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateFormClass())) ?>`,
-     * because invalid events should not reach the process method of domain classes.
+     * because invalid events should not reach the execute method of service classes.
      */
     public function update<?= $modelClassBaseName ?>Provider()
     {
@@ -65,9 +64,9 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
             'name' => $name,
         ], $model);
 
-        $domain = $this->mockDomain($form, $model);
-        $this->assertTrue($domain->process());
-        $this->assertEquals($expectedId, $domain->getId());
+        $service = $this->mockService($form, $model);
+        $this->assertTrue($service->execute());
+        $this->assertEquals($expectedId, $service->getId());
 
         $model = $this->getModel($expectedId);
         $this->assertEquals($name, $model->name);

@@ -11,10 +11,11 @@ echo "<?php\n";
 
 namespace <?= $generator->getUpdateFormClass(true) ?>;
 
-use <?= ltrim($generator->getAbstractFormClass()) ?>;
+use \yii\base\Model;
+use \albertborsos\ddd\interfaces\FormObject;
 use <?= ltrim($generator->modelClass) ?>;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getUpdateFormClass()) ?> extends <?= \yii\helpers\StringHelper::basename($generator->getAbstractFormClass()) . "\n" ?>
+class <?= \yii\helpers\StringHelper::basename($generator->getUpdateFormClass()) ?> extends Model implements FormObject
 {
     // public $email;
 
@@ -26,7 +27,6 @@ class <?= \yii\helpers\StringHelper::basename($generator->getUpdateFormClass()) 
 
     private function preloadAttributes(<?= \yii\helpers\StringHelper::basename($generator->modelClass) ?> $model)
     {
-        $this->id = $model->id;
         // $this->email = $model->email;
     }
 

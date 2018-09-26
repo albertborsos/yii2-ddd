@@ -62,9 +62,6 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
         switch ($column->name) {
             case 'id':
                 break;
-            case 'status':
-                echo "            'statusText',\n";
-                break;
             case 'created_at':
             case 'updated_at':
                 echo "            '" . $column->name . ":datetime',\n";

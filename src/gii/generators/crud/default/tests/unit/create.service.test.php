@@ -11,17 +11,16 @@ $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass
 echo "<?php\n";
 ?>
 
-class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateDomainClass())) ?> extends AbstractDomainTest
+class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateServiceClass())) ?> extends AbstractServiceTest
 {
     protected $formClass = '<?= $generator->getCreateFormClass() ?>';
-    protected $domainClass = '<?= $generator->getCreateDomainClass()?>';
+    protected $serviceClass = '<?= $generator->getCreateServiceClass()?>';
 
     protected function tearDown()
     {
         $models = <?= $generator->modelClass?>::find()->all();
         foreach ($models as $model) {
-            $resource = new <?= $generator->getResourceClass()?>(null, $model);
-            $resource->delete();
+            $model->delete();
         }
         parent::tearDown();
     }
@@ -29,7 +28,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     /**
      * Test only valid events here.
      * Test invalid events in `<?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateFormClass())) ?>`,
-     * because invalid events should not reach the process method of domain classes.
+     * because invalid events should not reach the execute method of service classes.
      */
     public function create<?= $modelClassBaseName ?>Provider()
     {
@@ -48,10 +47,10 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
             'name' => $name,
         ]);
 
-        $domain = $this->mockDomain($form);
-        $this->assertTrue($domain->process());
+        $service = $this->mockService($form);
+        $this->assertTrue($service->execute());
 
-        $model = <?= $generator->modelClass ?>::findOne($domain->getId());
+        $model = <?= $generator->modelClass ?>::findOne($service->getId());
 
         $this->assertEquals($name, $model->name);
 <?php if (in_array('status', $generator->getColumnNames())) : ?>

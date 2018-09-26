@@ -31,7 +31,7 @@ class Generator extends \yii\gii\Generator
     const RELATIONS_ALL_INVERSE = 'all-inverse';
 
     public $db = 'db';
-    public $ns = 'app\models';
+    public $ns = 'app\modules\moduleName\domains\domainName\activerecords';
     public $tableName;
     public $modelClass;
     public $baseClass = 'yii\db\ActiveRecord';
@@ -240,13 +240,9 @@ class Generator extends \yii\gii\Generator
             }
 
             $businessFile = Yii::getAlias('@' . str_replace('\\', '/', $this->getBusinessClass())) . '.php';
-            $resourceFile = Yii::getAlias('@' . str_replace('\\', '/', $this->getResourceClass())) . '.php';
-            $resourceTestFile = $this->getResourceUnitTestPath();
 
             $files = array_merge($files, [
                 new CodeFile($businessFile, $this->render('business.php', $params)),
-                new CodeFile($resourceFile, $this->render('resource.php')),
-                new CodeFile($resourceTestFile, $this->render('../tests/resource.test.php')),
             ]);
         }
 
@@ -877,40 +873,5 @@ class Generator extends \yii\gii\Generator
         }
 
         return implode('\\', $parts);
-    }
-
-    public function getResourceClass($namespaceOnly = false)
-    {
-        $parts = StringHelper::explode($this->ns, '\\');
-        // unset `activerecords`
-        $activeRecordsKey = array_search('activerecords', $parts);
-        unset($parts[$activeRecordsKey]);
-        $parts[] = $this->modelClass . 'Resource';
-
-        if ($namespaceOnly) {
-            array_pop($parts);
-        }
-
-        return implode('\\', $parts);
-    }
-
-    public function getResourceUnitTestPath()
-    {
-        $path = Yii::getAlias('@' . str_replace('\\', '/', $this->ns));
-        $parts = StringHelper::explode($path, '/');
-        // replace `app` to `test`
-        $resourceKey = array_search('app', $parts);
-        $parts[$resourceKey] = 'app\\tests\\codeception\\unit';
-        // unset `activerecords`
-        $activeRecordsKey = array_search('activerecords', $parts);
-        unset($parts[$activeRecordsKey]);
-        $parts[] = $this->modelClass . 'ResourceTest';
-
-        return implode('\\', $parts) . '.php';
-    }
-
-    public function getResourceUnitTestClass()
-    {
-        return $this->modelClass . 'ResourceTest';
     }
 }

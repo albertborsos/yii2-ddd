@@ -11,10 +11,11 @@ echo "<?php\n";
 
 namespace <?= $generator->getDeleteFormClass(true) ?>;
 
-use <?= ltrim($generator->getAbstractFormClass()) ?>;
+use \yii\base\Model;
+use \albertborsos\ddd\interfaces\FormObject;
 use <?= ltrim($generator->modelClass) ?>;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getDeleteFormClass()) ?> extends <?= \yii\helpers\StringHelper::basename($generator->getAbstractFormClass()) . "\n" ?>
+class <?= \yii\helpers\StringHelper::basename($generator->getDeleteFormClass()) ?> extends Model implements FormObject
 {
     // public $hasChild;
 

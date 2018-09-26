@@ -14,10 +14,10 @@ echo "<?php\n";
 
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteDomainClass())) ?> extends AbstractDomainTest
+class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteServiceClass())) ?> extends AbstractServiceTest
 {
     protected $formClass = '<?= $generator->getDeleteFormClass()?>';
-    protected $domainClass = '<?= $generator->getDeleteDomainClass()?>';
+    protected $serviceClass = '<?= $generator->getDeleteServiceClass()?>';
     protected $modelClass = '<?= $generator->modelClass?>';
 
     public function fixtures()
@@ -30,7 +30,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     /**
      * Test only valid events here.
      * Test invalid events in `<?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteFormClass())) ?>`,
-     * because invalid events should not reach the process method of domain classes.
+     * because invalid events should not reach the execute method of service classes.
      */
     public function delete<?= $modelClassBaseName ?>Provider()
     {
@@ -51,9 +51,9 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
 
         $form = $this->mockForm([], $model);
 
-        $domain = $this->mockDomain($form, $model);
-        $this->assertTrue($domain->process());
-        $this->assertEquals($expectedId, $domain->getId());
+        $service = $this->mockService($form, $model);
+        $this->assertTrue($service->execute());
+        $this->assertEquals($expectedId, $service->getId());
 
         $model = $this->getModel($expectedId);
         $this->assertNull($model);

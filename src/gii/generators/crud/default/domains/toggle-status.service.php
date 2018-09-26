@@ -11,29 +11,30 @@ echo "<?php\n";
 $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass);
 ?>
 
-namespace <?= $generator->getToggleStatusDomainClass(true) ?>;
+namespace <?= $generator->getToggleStatusServiceClass(true) ?>;
 
-use \albertborsos\ddd\models\AbstractDomain;
+use \albertborsos\ddd\models\AbstractService;
 use <?= ltrim($generator->getToggleStatusFormClass()) ?>;
-use <?= ltrim($generator->getResourceClass()) ?>;
 use <?= ltrim($generator->modelClass) ?>;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusDomainClass()) ?> extends AbstractDomain
+class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusServiceClass()) ?> extends AbstractService
 {
     /**
-     * Business logic to store data for multiple resources.
-     *
-     * @return mixed
+     * @return bool
      */
-    public function process()
+    public function execute()
     {
-        $form = $this->toggleStatus();
+        $form = $this->toggleStatus($this->getForm());
 
-        $resource = new <?= \yii\helpers\StringHelper::basename($generator->getResourceClass()) ?>($form, $this->getModel());
-        if ($resource->save()) {
-            $this->setId($resource->getId());
+        $model = $this->getModel();
+        $model->load($form->attributes, '');
+
+        if ($model->save()) {
+            $this->setId($model->getId());
             return true;
         }
+
+        $this->getForm()->addErrors($model->getErrors());
 
         return false;
     }
@@ -41,10 +42,9 @@ class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusDomainC
     /**
      * @return <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormClass()) . "\n" ?>
      */
-    private function toggleStatus()
+    private function toggleStatus(<?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormClass()) ?> $form)
     {
-        /** @var <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormClass()) ?> $form */
-        $form = clone $this->getForm();
+        $form = clone $form;
         switch ($form->status) {
             case <?= $modelClassBaseName ?>::STATUS_ACTIVE:
                 $form->status = <?= $modelClassBaseName ?>::STATUS_INACTIVE;

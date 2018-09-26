@@ -11,10 +11,11 @@ echo "<?php\n";
 
 namespace <?= $generator->getCreateFormClass(true) ?>;
 
-use <?= ltrim($generator->getAbstractFormClass()) ?>;
+use \yii\base\Model;
+use \albertborsos\ddd\interfaces\FormObject;
 use <?= ltrim($generator->modelClass) ?>;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getCreateFormClass()) ?> extends <?= \yii\helpers\StringHelper::basename($generator->getAbstractFormClass()) . "\n" ?>
+class <?= \yii\helpers\StringHelper::basename($generator->getCreateFormClass()) ?> extends Model implements FormObject
 {
     // public $email;
 

@@ -5,6 +5,11 @@ namespace albertborsos\ddd\grid;
 use albertborsos\ddd\data\ResourceDataProvider;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class DataColumn
+ * @deprecated since 0.3.0, will be removed in 1.0.0.
+ * @package albertborsos\ddd\grid
+ */
 class DataColumn extends \yii\grid\DataColumn
 {
     private $_isResourceProvider = false;

@@ -13,10 +13,11 @@ echo "<?php\n";
 
 namespace <?= $generator->getUpdateFormClass(true) ?>;
 
-use <?= ltrim($generator->getAbstractFormClass()) ?>;
+use \yii\base\Model;
+use \albertborsos\ddd\interfaces\FormObject;
 use <?= ltrim($generator->modelClass) ?>;
 
-class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormClass()) ?> extends <?= \yii\helpers\StringHelper::basename($generator->getAbstractFormClass()) . "\n" ?>
+class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormClass()) ?> extends Model implements FormObject
 {
     public $status;
 
@@ -28,7 +29,6 @@ class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusFormCla
 
     private function preloadAttributes(<?= \yii\helpers\StringHelper::basename($generator->modelClass) ?> $model)
     {
-        $this->id = $model->id;
         $this->status = $model->status;
     }
 

@@ -17,13 +17,14 @@ $searchModelClass = StringHelper::basename($generator->searchModelClass);
 if ($modelClass === $searchModelClass) {
     $searchModelAlias = $searchModelClass . 'Search';
 }
-$createDomainClass = StringHelper::basename($generator->getCreateDomainClass());
+$createServiceClass = StringHelper::basename($generator->getCreateServiceClass());
 $createFormClass = StringHelper::basename($generator->getCreateFormClass());
-$updateDomainClass = StringHelper::basename($generator->getUpdateDomainClass());
+$updateServiceClass = StringHelper::basename($generator->getUpdateServiceClass());
 $updateFormClass = StringHelper::basename($generator->getUpdateFormClass());
-$toggleStatusDomainClass = StringHelper::basename($generator->getToggleStatusDomainClass());
+$deleteServiceClass = StringHelper::basename($generator->getDeleteServiceClass());
+$deleteFormClass = StringHelper::basename($generator->getDeleteFormClass());
+$toggleStatusServiceClass = StringHelper::basename($generator->getToggleStatusServiceClass());
 $toggleStatusFormClass = StringHelper::basename($generator->getToggleStatusFormClass());
-$resourceClass = StringHelper::basename($generator->getResourceClass());
 
 /* @var $class ActiveRecordInterface */
 $class = $generator->modelClass;
@@ -51,13 +52,14 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\bootstrap\ActiveForm;
 use yii\filters\AccessControl;
-use <?= ltrim($generator->getCreateDomainClass(), '\\') ?>;
+use <?= ltrim($generator->getCreateServiceClass(), '\\') ?>;
+use <?= ltrim($generator->getUpdateServiceClass(), '\\') ?>;
+use <?= ltrim($generator->getDeleteServiceClass(), '\\') ?>;
+use <?= ltrim($generator->getToggleStatusServiceClass(), '\\') ?>;
 use <?= ltrim($generator->getCreateFormClass(), '\\') ?>;
-use <?= ltrim($generator->getUpdateDomainClass(), '\\') ?>;
 use <?= ltrim($generator->getUpdateFormClass(), '\\') ?>;
-use <?= ltrim($generator->getToggleStatusDomainClass(), '\\') ?>;
+use <?= ltrim($generator->getDeleteFormClass(), '\\') ?>;
 use <?= ltrim($generator->getToggleStatusFormClass(), '\\') ?>;
-use <?= ltrim($generator->getResourceClass(), '\\') ?>;
 
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
@@ -172,10 +174,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         }
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $domain = new <?= $createDomainClass ?>($form);
-            if ($domain->process()) {
+            $service = new <?= $createServiceClass ?>($form);
+            if ($service->execute()) {
                 AlertWidget::addSuccess('<?= $modelClass ?> created successfully!');
-                return $this->redirect(['view', 'id' => $domain->getId()]);
+                return $this->redirect(['view', 'id' => $service->getId()]);
             }
         }
 
@@ -201,10 +203,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         }
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $domain = new <?= $updateDomainClass ?>($form, $model);
-            if ($domain->process()) {
+            $service = new <?= $updateServiceClass ?>($form, $model);
+            if ($service->execute()) {
                 AlertWidget::addSuccess('<?= $modelClass ?> updated successfully!');
-                return $this->redirect(['update', 'id' => $domain->getId()]);
+                return $this->redirect(['update', 'id' => $service->getId()]);
             }
         }
 
@@ -222,15 +224,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionDelete(<?= $actionParams ?>)
     {
         $model = $this->findModel($id);
-        $form = new <?= StringHelper::basename($generator->getDeleteFormClass())?>($model);
+        $form = new <?= $deleteFormClass ?>($model);
         if ($form->validate()) {
-            $domain = new <?= StringHelper::basename($generator->getDeleteDomainClass())?>(null, $model);
-            if ($domain->process()) {
+            $service = new <?= $deleteServiceClass ?>(null, $model);
+            if ($service->execute()) {
                 AlertWidget::addSuccess('<?= $modelClass ?> removed successfully!');
                 return $this->redirect(['index']);
             }
 
-            AlertWidget::addError(Html::errorSummary($domain));
+            AlertWidget::addError(Html::errorSummary($service));
             return $this->redirect(['index']);
         }
 
@@ -250,8 +252,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
         $form = new <?= $toggleStatusFormClass ?>($model);
         if ($form->validate()) {
-            $domain = new <?= $toggleStatusDomainClass ?>($form, $model);
-            if ($domain->process()) {
+            $service = new <?= $toggleStatusServiceClass ?>($form, $model);
+            if ($service->execute()) {
                 AlertWidget::addSuccess('<?= $modelClass ?> updated successfully!');
                 return $this->redirect(['index']);
             }
