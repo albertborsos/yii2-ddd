@@ -11,12 +11,14 @@ $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractFormTest;
+
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteFormClass())) ?> extends AbstractFormTest
 {
     protected $formClass = '<?= $generator->getDeleteFormClass() ?>';
     protected $modelClass = '<?= $generator->modelClass ?>';
 
-    public function fixtures()
+    public function _fixtures()
     {
         return [
             '<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>' => \tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture::className(),
@@ -37,7 +39,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     public function testShouldNotPassFormWithInvalidData($expectedErrorAttribute, $<?= lcfirst($modelClassBaseName) ?>Alias)
     {
         /** @var <?= $generator->getDeleteFormClass() ?> $form */
-        $form = $this->mockForm([], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
+        $form = $this->mockForm([], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
         $this->assertFalse($form->validate());
         $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::encode($form->getErrors()));
@@ -58,7 +60,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     public function testShouldPassFormWithValidData($<?= lcfirst($modelClassBaseName) ?>Alias)
     {
         /** @var <?= $generator->getDeleteFormClass() ?> $form */
-        $form = $this->mockForm([], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
+        $form = $this->mockForm([], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
         $this->assertTrue($form->validate(), \yii\helpers\Json::encode($form->getErrors()));
         $this->assertEmpty($form->getErrors());

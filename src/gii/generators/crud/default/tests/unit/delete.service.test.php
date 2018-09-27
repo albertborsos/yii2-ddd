@@ -12,6 +12,7 @@ $pluralizedModelName = lcfirst(\yii\helpers\Inflector::pluralize($modelClassBase
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractServiceTest;
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteServiceClass())) ?> extends AbstractServiceTest
@@ -46,7 +47,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
      */
     public function testDelete<?= $modelClassBaseName ?>($fixtureAlias)
     {
-        $expectedId = $this-><?= $pluralizedModelName ?>[$fixtureAlias]['id'];
+        $expectedId = $this->grabFixture('<?= $pluralizedModelName ?>', $fixtureAlias)['id'];
         $model = $this->getModel($expectedId);
 
         $form = $this->mockForm([], $model);

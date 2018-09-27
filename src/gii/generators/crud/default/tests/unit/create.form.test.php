@@ -11,6 +11,8 @@ $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractFormTest;
+
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateFormClass())) ?> extends AbstractFormTest
 {
     protected $formClass = '<?= $generator->getCreateFormClass() ?>';

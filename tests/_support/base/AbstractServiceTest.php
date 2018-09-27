@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\tests\support\base;
 
-use Codeception\Test\Unit;
 use Yii;
 
 abstract class AbstractServiceTest extends Unit

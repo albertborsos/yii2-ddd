@@ -12,6 +12,7 @@ $pluralizedModelName = lcfirst(\yii\helpers\Inflector::pluralize($modelClassBase
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractServiceTest;
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getToggleStatusServiceClass())) ?> extends AbstractServiceTest
@@ -52,7 +53,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
      */
     public function testToToggle<?= $modelClassBaseName ?>Status($fixtureAlias, $expectedStatus)
     {
-        $model = $this->getModel($this-><?= $pluralizedModelName ?>[$fixtureAlias]['id']);
+        $model = $this->getModel($this->tester->grabFixture('<?= $pluralizedModelName ?>', $fixtureAlias)['id']);
         $form = $this->mockForm([], $model);
 
         $service = $this->mockService($form, $model);

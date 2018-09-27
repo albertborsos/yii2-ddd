@@ -11,6 +11,8 @@ $modelClassBaseName = \yii\helpers\StringHelper::basename($generator->modelClass
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractFormTest;
+
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateFormClass())) ?> extends AbstractFormTest
 {
     protected $formClass = '<?= $generator->getUpdateFormClass() ?>';
@@ -39,7 +41,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         /** @var <?= $generator->getUpdateFormClass() ?> $form */
         $form = $this->mockForm([
             'name' => $name,
-        ], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
+        ], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
         $this->assertFalse($form->validate());
         $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::encode($form->getErrors()));
@@ -62,7 +64,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         /** @var <?= $generator->getUpdateFormClass() ?> $form */
         $form = $this->mockForm([
             'name' => $name,
-        ], $this->getModel($this-><?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>[$<?= lcfirst($modelClassBaseName) ?>Alias]['id']));
+        ], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
         $this->assertTrue($form->validate(), \yii\helpers\Json::encode($form->getErrors()));
         $this->assertEmpty($form->getErrors());

@@ -12,6 +12,7 @@ $pluralizedModelName = lcfirst(\yii\helpers\Inflector::pluralize($modelClassBase
 echo "<?php\n";
 ?>
 
+use albertborsos\ddd\tests\support\base\AbstractServiceTest;
 use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateServiceClass())) ?> extends AbstractServiceTest
@@ -55,8 +56,8 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
      */
     public function testUpdate<?= $modelClassBaseName ?>($fixtureAlias, $name)
     {
-        $expectedId = $this-><?= $pluralizedModelName ?>[$fixtureAlias]['id'];
-        $expectedStatus = $this-><?= $pluralizedModelName ?>[$fixtureAlias]['status'];
+        $expectedId = $this->tester->grabFixture('<?= $pluralizedModelName ?>', $fixtureAlias)['id'];
+        $expectedStatus = $this->tester->grabFixture('<?= $pluralizedModelName ?>', $fixtureAlias)['status'];
 
         $model = $this->getModel($expectedId);
 
