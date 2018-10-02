@@ -17,9 +17,9 @@ use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getUpdateServiceClass())) ?> extends AbstractServiceTest
 {
-    protected $formClass = '<?= $generator->getUpdateFormClass()?>';
-    protected $serviceClass = '<?= $generator->getUpdateServiceClass()?>';
-    protected $modelClass = '<?= $generator->modelClass?>';
+    protected $formClass = <?= $generator->getUpdateFormClass()?>::class;
+    protected $serviceClass = <?= $generator->getUpdateServiceClass()?>::class;
+    protected $modelClass = <?= $generator->modelClass?>::class;
 
     protected function tearDown()
     {
@@ -33,7 +33,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     public function fixtures()
     {
         return [
-            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::className(),
+            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::class,
         ];
     }
 

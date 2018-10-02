@@ -17,14 +17,14 @@ use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteServiceClass())) ?> extends AbstractServiceTest
 {
-    protected $formClass = '<?= $generator->getDeleteFormClass()?>';
-    protected $serviceClass = '<?= $generator->getDeleteServiceClass()?>';
-    protected $modelClass = '<?= $generator->modelClass?>';
+    protected $formClass = <?= $generator->getDeleteFormClass()?>::class;
+    protected $serviceClass = <?= $generator->getDeleteServiceClass()?>::class;
+    protected $modelClass = <?= $generator->modelClass?>::class;
 
     public function fixtures()
     {
         return [
-            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::className(),
+            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::class,
         ];
     }
 

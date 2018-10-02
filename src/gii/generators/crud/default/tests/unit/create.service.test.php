@@ -15,8 +15,8 @@ use albertborsos\ddd\tests\support\base\AbstractServiceTest;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateServiceClass())) ?> extends AbstractServiceTest
 {
-    protected $formClass = '<?= $generator->getCreateFormClass() ?>';
-    protected $serviceClass = '<?= $generator->getCreateServiceClass()?>';
+    protected $formClass = <?= $generator->getCreateFormClass() ?>::class;
+    protected $serviceClass = <?= $generator->getCreateServiceClass()?>::class;
 
     protected function tearDown()
     {

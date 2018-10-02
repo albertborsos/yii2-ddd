@@ -17,9 +17,9 @@ use tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getToggleStatusServiceClass())) ?> extends AbstractServiceTest
 {
-    protected $formClass = '<?= $generator->getToggleStatusFormClass()?>';
-    protected $serviceClass = '<?= $generator->getToggleStatusServiceClass()?>';
-    protected $modelClass = '<?= $generator->modelClass?>';
+    protected $formClass = <?= $generator->getToggleStatusFormClass()?>::class;
+    protected $serviceClass = <?= $generator->getToggleStatusServiceClass()?>::class;
+    protected $modelClass = <?= $generator->modelClass?>::class;
 
     protected function tearDown()
     {
@@ -34,7 +34,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
     public function fixtures()
     {
         return [
-            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::className(),
+            '<?= $pluralizedModelName ?>' => <?= $modelClassBaseName ?>Fixture::class,
         ];
     }
 

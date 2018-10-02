@@ -15,7 +15,7 @@ use albertborsos\ddd\tests\support\base\AbstractFormTest;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getCreateFormClass())) ?> extends AbstractFormTest
 {
-    protected $formClass = '<?= $generator->getCreateFormClass() ?>';
+    protected $formClass = <?= $generator->getCreateFormClass() ?>::class;
 
     public function invalidDataProvider()
     {
@@ -36,7 +36,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         ]);
 
         $this->assertFalse($form->validate());
-        $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::encode($form->getErrors()));
+        $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::errorSummary($form));
         $this->assertArrayHasKey($expectedErrorAttribute, $form->getErrors());
     }
 
@@ -58,7 +58,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
             'name' => $name,
         ]);
 
-        $this->assertTrue($form->validate(), \yii\helpers\Json::encode($form->getErrors()));
+        $this->assertTrue($form->validate(), \yii\helpers\Json::errorSummary($form));
         $this->assertEmpty($form->getErrors());
     }
 }

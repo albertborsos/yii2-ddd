@@ -22,7 +22,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getCreateFormClass()) 
     public function rules()
     {
         return [
-            // [['email'], 'unique', 'targetClass' => <?= \yii\helpers\StringHelper::basename($generator->modelClass) ?>::className(), 'targetAttribute' => 'email'],
+            // [['email'], 'unique', 'targetClass' => <?= \yii\helpers\StringHelper::basename($generator->modelClass) ?>::class, 'targetAttribute' => 'email'],
         ];
     }
 }

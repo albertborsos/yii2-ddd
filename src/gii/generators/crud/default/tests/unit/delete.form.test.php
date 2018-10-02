@@ -15,13 +15,13 @@ use albertborsos\ddd\tests\support\base\AbstractFormTest;
 
 class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($generator->getDeleteFormClass())) ?> extends AbstractFormTest
 {
-    protected $formClass = '<?= $generator->getDeleteFormClass() ?>';
-    protected $modelClass = '<?= $generator->modelClass ?>';
+    protected $formClass = <?= $generator->getDeleteFormClass() ?>::class;
+    protected $modelClass = <?= $generator->modelClass ?>::class;
 
     public function _fixtures()
     {
         return [
-            '<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>' => \tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture::className(),
+            '<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>' => \tests\codeception\unit\fixtures\<?= $modelClassBaseName ?>Fixture::class,
         ];
     }
 
@@ -42,7 +42,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         $form = $this->mockForm([], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
         $this->assertFalse($form->validate());
-        $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::encode($form->getErrors()));
+        $this->assertCount(1, $form->getErrors(), \yii\helpers\Json::errorSummary($form));
         $this->assertArrayHasKey($expectedErrorAttribute, $form->getErrors());
     }
 
@@ -62,7 +62,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getTestFilePath($gener
         /** @var <?= $generator->getDeleteFormClass() ?> $form */
         $form = $this->mockForm([], $this->getModel($this->tester->grabFixture('<?= \yii\helpers\Inflector::pluralize(lcfirst($modelClassBaseName)) ?>', $<?= lcfirst($modelClassBaseName) ?>Alias)['id']));
 
-        $this->assertTrue($form->validate(), \yii\helpers\Json::encode($form->getErrors()));
+        $this->assertTrue($form->validate(), \yii\helpers\Json::errorSummary($form));
         $this->assertEmpty($form->getErrors());
     }
 }

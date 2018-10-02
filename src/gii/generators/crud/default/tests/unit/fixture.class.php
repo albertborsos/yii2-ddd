@@ -10,7 +10,7 @@ namespace tests\codeception\unit\fixtures;
 
 class <?= $modelClassBaseName ?>Fixture extends \yii\test\ActiveFixture
 {
-    public $modelClass = '<?= $generator->modelClass ?>';
+    public $modelClass = <?= $generator->modelClass ?>::class;
 
     public $dataFile = '@tests/codeception/unit/fixtures/data/<?= lcfirst($modelClassBaseName) ?>.php';
 }

@@ -33,7 +33,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getUpdateFormClass()) 
     public function rules()
     {
         return [
-            // [['email'], 'unique', 'targetClass' => <?= \yii\helpers\StringHelper::basename($generator->modelClass) ?>::className(), 'targetAttribute' => 'email', 'filter' => function ($query) {
+            // [['email'], 'unique', 'targetClass' => <?= \yii\helpers\StringHelper::basename($generator->modelClass) ?>::class, 'targetAttribute' => 'email', 'filter' => function ($query) {
             //     /** @var \yii\db\Query $query */
             //     return $query->andWhere(['NOT IN', 'id', $this->id]);
             // }],
