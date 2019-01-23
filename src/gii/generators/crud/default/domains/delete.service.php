@@ -35,7 +35,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getDeleteServiceClass(
                 throw new Exception('<?= \yii\helpers\StringHelper::basename($generator->modelClass) ?> cannot be removed!');
             }
             $transaction->commit();
-            $this->setId($this->getModel()->getId());
+            $this->setId($this->getModel()->id);
             return true;
         } catch (Exception $e) {
             $transaction->rollBack();

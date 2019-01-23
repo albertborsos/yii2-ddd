@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/albertborsos/yii2-ddd.svg?branch=master)](https://travis-ci.org/albertborsos/yii2-ddd)
+
 DDD Classes for Yii 2.0
 =======================
 Classes for a Domain-Driven Design inspired workflow with Yii 2.0 Framework
@@ -97,8 +99,8 @@ class CreateAppService extends AbstractService
             $model->load($this->getForm()->attributes, '');
 
             if ($model->save()) {
-                $this->assignLanguages($model->getId(), $this->getForm()->languages);
-                $this->setId($model->getId());
+                $this->assignLanguages($model->id, $this->getForm()->languages);
+                $this->setId($model->id);
 
                 return true;
             }

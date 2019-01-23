@@ -3,17 +3,11 @@
 /* @var $form yii\widgets\ActiveForm */
 /* @var $generator yii\gii\generators\crud\Generator */
 
-echo $form->field($generator, 'modelClass');
-echo $form->field($generator, 'searchModelClass');
-echo $form->field($generator, 'controllerClass');
-echo $form->field($generator, 'viewPath');
-echo $form->field($generator, 'baseControllerClass');
-echo $form->field($generator, 'indexWidgetType')->dropDownList([
-    'grid' => 'GridView',
-    'list' => 'ListView',
+echo $this->render('@vendor/yiisoft/yii2-gii/src/generators/crud/form.php', [
+    'form' => $form,
+    'generator' => $generator,
 ]);
-echo $form->field($generator, 'enableI18N')->checkbox();
-echo $form->field($generator, 'enablePjax')->checkbox();
+echo \yii\helpers\Html::tag('hr');
 echo $form->field($generator, 'generateTests')->checkbox();
 echo $form->field($generator, 'testPath');
-echo $form->field($generator, 'messageCategory');
+echo \yii\helpers\Html::tag('hr');

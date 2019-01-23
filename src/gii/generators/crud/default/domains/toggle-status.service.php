@@ -30,7 +30,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getToggleStatusService
         $model->load($form->attributes, '');
 
         if ($model->save()) {
-            $this->setId($model->getId());
+            $this->setId($model->id);
             return true;
         }
 

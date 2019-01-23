@@ -25,7 +25,7 @@ class <?= \yii\helpers\StringHelper::basename($generator->getUpdateServiceClass(
         $model->load($this->getForm()->attributes, '');
 
         if ($model->save()) {
-            $this->setId($model->getId());
+            $this->setId($model->id);
             return true;
         }
 

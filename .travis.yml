@@ -1,0 +1,44 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+
+# to support hhvm
+dist: trusty
+
+# faster builds on new travis setup not using sudo
+sudo: false
+
+# cache vendor dirs
+cache:
+  directories:
+  - $HOME/.composer/cache
+
+env:
+  matrix:
+  - COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
+  - COMPOSER_OPTIONS=""
+
+install:
+- travis_retry composer self-update && composer --version
+- export PATH="$HOME/.composer/vendor/bin:$PATH"
+- travis_retry composer install --prefer-dist --no-interaction
+
+before_script:
+- |
+  if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
+    PHPUNIT_FLAGS="--coverage --coverage-xml"
+  fi
+
+script:
+- sh ./phpcs.sh
+#- php ./vendor/bin/codecept run unit -d $PHPUNIT_FLAGS
+
+#after_success:
+#- php ./vendor/bin/coveralls -v --exclude-no-stmt -c .coveralls.yml

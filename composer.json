@@ -27,5 +27,11 @@
             "albertborsos\\ddd\\tests\\": "tests/",
             "albertborsos\\ddd\\tests\\support\\base\\": "tests/_support/base/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
