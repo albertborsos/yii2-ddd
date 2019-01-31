@@ -4,7 +4,7 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $generator yii\gii\generators\model\Generator */
+/* @var $generator \albertborsos\ddd\gii\generators\model\Generator */
 /* @var $tableName string full table name */
 /* @var $className string class name */
 /* @var $queryClassName string query class name */
@@ -19,6 +19,11 @@ echo "<?php\n";
 namespace <?= $generator->ns ?>;
 
 use Yii;
+<?php if (!empty($relations)): ?>
+<?php foreach ($relations as $name => $relation): ?>
+use <?= $generator->getBusinessClass(true) ?>\<?= preg_replace($prefixPattern, '', $relation[1]) . ";\n"; ?>
+<?php endforeach; ?>
+<?php endif; ?>
 
 /**
  * This is the model class for table "<?= $generator->generateTableName($tableName) ?>".
@@ -29,7 +34,7 @@ use Yii;
 <?php if (!empty($relations)): ?>
  *
 <?php foreach ($relations as $name => $relation): ?>
- * @property <?= $relation[1] . ($relation[2] ? '[]' : '') . ' $' . lcfirst($name) . "\n" ?>
+ * @property <?= preg_replace($prefixPattern, '', $relation[1]) . ($relation[2] ? '[]' : '') . ' $' . lcfirst(preg_replace($prefixPattern, '', $name)) . "\n" ?>
 <?php endforeach; ?>
 <?php endif; ?>
  */
@@ -77,7 +82,7 @@ abstract class Abstract<?= $className ?> extends <?= '\\' . ltrim($generator->ba
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function get<?= $name ?>()
+    public function get<?= preg_replace($prefixPattern, '', $name) ?>()
     {
         <?= $relation[0] . "\n" ?>
     }

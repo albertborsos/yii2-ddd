@@ -47,6 +47,7 @@ class Generator extends \yii\gii\generators\model\Generator
             $modelClassName = $this->generateClassName($tableName);
             $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($modelClassName) : false;
             $tableSchema = $db->getTableSchema($tableName);
+            $prefixToRemoveFromRelations = preg_replace('/' . preg_quote($modelClassName) . '$/', '', $this->getOriginalClassName($tableName));
             $params = [
                 'tableName' => $tableName,
                 'className' => $modelClassName,
@@ -55,6 +56,7 @@ class Generator extends \yii\gii\generators\model\Generator
                 'labels' => $this->generateLabels($tableSchema),
                 'rules' => $this->generateRules($tableSchema),
                 'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
+                'prefixPattern' => '/^' . preg_quote($prefixToRemoveFromRelations, '/') . '/',
             ];
             $files[] = new CodeFile(
                 Yii::getAlias('@' . str_replace('\\', '/', $this->ns)) . '/Abstract' . $modelClassName . '.php',
@@ -98,5 +100,18 @@ class Generator extends \yii\gii\generators\model\Generator
         }
 
         return implode('\\', $parts);
+    }
+
+    protected function getOriginalClassName($tableName, $useSchemaName = null)
+    {
+        if (isset($this->classNames[$tableName])) {
+            $current = $this->classNames[$tableName];
+            unset($this->classNames[$tableName]);
+        }
+
+        $original = $this->generateClassName($tableName, $useSchemaName);
+        $this->classNames[$tableName] = $current;
+
+        return $original;
     }
 }
