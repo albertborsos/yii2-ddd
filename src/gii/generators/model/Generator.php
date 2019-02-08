@@ -47,7 +47,6 @@ class Generator extends \yii\gii\generators\model\Generator
             $modelClassName = $this->generateClassName($tableName);
             $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($modelClassName) : false;
             $tableSchema = $db->getTableSchema($tableName);
-            $prefixToRemoveFromRelations = preg_replace('/' . preg_quote($modelClassName) . '$/', '', $this->getOriginalClassName($tableName));
             $params = [
                 'tableName' => $tableName,
                 'className' => $modelClassName,
@@ -56,7 +55,7 @@ class Generator extends \yii\gii\generators\model\Generator
                 'labels' => $this->generateLabels($tableSchema),
                 'rules' => $this->generateRules($tableSchema),
                 'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
-                'prefixPattern' => '/^' . preg_quote($prefixToRemoveFromRelations, '/') . '/',
+                'prefixPattern' => $this->removePrefixPattern($modelClassName, $tableName),
             ];
             $files[] = new CodeFile(
                 Yii::getAlias('@' . str_replace('\\', '/', $this->ns)) . '/Abstract' . $modelClassName . '.php',
@@ -113,5 +112,16 @@ class Generator extends \yii\gii\generators\model\Generator
         $this->classNames[$tableName] = $current;
 
         return $original;
+    }
+
+    /**
+     * @param string $modelClassName
+     * @param $tableName
+     * @return string|string[]|null
+     */
+    protected function removePrefixPattern(string $modelClassName, $tableName)
+    {
+        $prefixToRemoveFromRelations = preg_replace('/' . preg_quote($modelClassName) . '$/', '', $this->getOriginalClassName($tableName));
+        return '/^' . preg_quote($prefixToRemoveFromRelations, '/') . '/';
     }
 }
