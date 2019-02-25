@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\tests\support\base;
 
+use Mockery\MockInterface;
+
 /**
  * Trait MockTrait
  * @package albertborsos\ddd\tests\support\base
@@ -22,7 +24,7 @@ namespace albertborsos\ddd\tests\support\base;
  */
 trait MockTrait
 {
-    private function mockObject(array $config): object
+    private function mockObject(array $config): MockInterface
     {
         $model = \Mockery::mock($config['class'])->makePartial()->shouldAllowMockingProtectedMethods();
 
