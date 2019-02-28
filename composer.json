@@ -12,8 +12,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "yiisoft/yii2": "~2.0.0",
-        "albertborsos/yii2-theme-helper": "~0.1"
+        "yiisoft/yii2": "~2.0.0"
     },
     "require-dev": {
         "codeception/codeception": "~2.5",
@@ -21,6 +20,9 @@
         "codeception/specify": "~1.0",
         "codeception/mockery-module": "^0.2.2",
         "mito/yii2-coding-standards": "~2.0.0@beta"
+    },
+    "suggest": {
+        "albertborsos/yii2-theme-helper": "Required for the generated templates"
     },
     "autoload": {
         "psr-4": {
