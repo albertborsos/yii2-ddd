@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "yiisoft/yii2": "~2.0.0"
+        "yiisoft/yii2": "~2.0.0",
+        "satooshi/php-coveralls": "^2.1"
     },
     "require-dev": {
         "codeception/base": "~3.0",
