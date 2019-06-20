@@ -15,10 +15,10 @@
         "yiisoft/yii2": "~2.0.0"
     },
     "require-dev": {
-        "codeception/codeception": "~2.5",
+        "codeception/base": "~3.0",
         "codeception/verify": "~1.0",
         "codeception/specify": "~1.0",
-        "codeception/mockery-module": "^0.2.2",
+        "codeception/mockery-module": "^0.3.0",
         "mito/yii2-coding-standards": "~2.0.0@beta"
     },
     "suggest": {
