@@ -34,6 +34,7 @@ abstract class AbstractModel extends Component
      * @var \yii\db\ActiveRecord|BusinessObject
      */
     private $_model;
+
     /**
      * @var array
      */
