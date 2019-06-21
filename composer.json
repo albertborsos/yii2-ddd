@@ -11,19 +11,16 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "yiisoft/yii2": "~2.0.0",
-        "satooshi/php-coveralls": "^2.1"
+        "php": ">=7.1.0",
+        "yiisoft/yii2": "~2.0.0"
     },
     "require-dev": {
         "codeception/base": "~3.0",
         "codeception/verify": "~1.0",
         "codeception/specify": "~1.0",
         "codeception/mockery-module": "^0.3.0",
+        "satooshi/php-coveralls": "^2.1",
         "mito/yii2-coding-standards": "~2.0.0@beta"
-    },
-    "suggest": {
-        "albertborsos/yii2-theme-helper": "Required for the generated templates"
     },
     "autoload": {
         "psr-4": {
