@@ -40,11 +40,6 @@ abstract class AbstractModel extends Component
      */
     private $_errors;
 
-    /**
-     * @return array
-     */
-    abstract protected function getAttributes();
-
     public function __construct(FormObject $form = null, BusinessObject $model = null)
     {
         if ($form) {

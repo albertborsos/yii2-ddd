@@ -16,12 +16,4 @@ abstract class AbstractService extends AbstractModel
      * @return boolean
      */
     abstract public function execute();
-
-    /**
-     * @return array
-     */
-    protected function getAttributes()
-    {
-        return $this->getForm()->getAttributes();
-    }
 }
