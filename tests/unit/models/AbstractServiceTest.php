@@ -2,31 +2,26 @@
 
 namespace albertborsos\ddd\tests\unit\models;
 
-use albertborsos\ddd\models\AbstractService;
-use albertborsos\ddd\tests\support\base\MockedForm;
-use albertborsos\ddd\tests\support\base\MockedModel;
-use albertborsos\ddd\tests\support\base\MockedService;
+use albertborsos\ddd\tests\support\base\StubbedForm;
+use albertborsos\ddd\tests\support\base\StubbedModel;
+use albertborsos\ddd\tests\support\base\StubbedService;
 use Codeception\PHPUnit\TestCase;
-use Codeception\Util\Debug;
-use PHPUnit\Framework\MockObject\MockObject;
 use yii\base\Model;
-use yii\helpers\Json;
-use yii\helpers\VarDumper;
 
 class AbstractServiceTest extends TestCase
 {
     /**
      * @param null $form
      * @param null $model
-     * @return MockedService
+     * @return StubbedService
      */
     public function mockService($form = null, $model = null)
     {
         if (!empty(func_get_args())) {
-            return \Yii::createObject(MockedService::className(), func_get_args());
+            return \Yii::createObject(StubbedService::className(), func_get_args());
         }
 
-        return \Yii::createObject(MockedService::className());
+        return \Yii::createObject(StubbedService::className());
     }
 
     public function invalidConstructionDataProvider()
@@ -34,8 +29,8 @@ class AbstractServiceTest extends TestCase
         return [
             'no arguments is valid'   => [[], null],
             'invalid form interface'  => [[new Model()], 'TypeError'],
-            'invalid model interface' => [[new MockedForm(), new Model()], 'TypeError'],
-            'valid arguments'         => [[new MockedForm(), new MockedModel()], null],
+            'invalid model interface' => [[new StubbedForm(), new Model()], 'TypeError'],
+            'valid arguments'         => [[new StubbedForm(), new StubbedModel()], null],
         ];
     }
 
@@ -55,7 +50,7 @@ class AbstractServiceTest extends TestCase
 
     public function testGetFormObject()
     {
-        $mockedForm = new MockedForm();
+        $mockedForm = new StubbedForm();
         $service = $this->mockService($mockedForm);
 
         $this->assertSame($mockedForm, $service->testGetForm());
@@ -63,9 +58,36 @@ class AbstractServiceTest extends TestCase
 
     public function testGetModelObject()
     {
-        $mockedModel = new MockedModel();
+        $mockedModel = new StubbedModel();
         $service = $this->mockService(null, $mockedModel);
 
         $this->assertSame($mockedModel, $service->testGetModel());
+    }
+
+    public function testExecuteOk()
+    {
+        $mockedForm = new StubbedForm();
+        $mockedModel = new StubbedModel();
+
+        $service = $this->mockService($mockedForm, $mockedModel);
+
+        $this->assertNull($service->getId());
+        $this->assertTrue($service->execute());
+        $this->assertNotNull($service->getId());
+        $this->assertEmpty($mockedForm->errors);
+    }
+
+    public function testExecuteFailed()
+    {
+        $mockedForm = new StubbedForm();
+        $mockedModel = new StubbedModel();
+
+        $service = $this->mockService($mockedForm, $mockedModel);
+
+        $this->assertEmpty($mockedForm->errors);
+        $this->assertNull($service->getId());
+        $this->assertFalse($service->failedExecute());
+        $this->assertNull($service->getId());
+        $this->assertNotEmpty($mockedForm->errors);
     }
 }
