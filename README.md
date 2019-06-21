@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/albertborsos/yii2-ddd.svg?branch=master)](https://travis-ci.org/albertborsos/yii2-ddd)
+[![Coverage Status](https://coveralls.io/repos/github/albertborsos/yii2-ddd/badge.svg)](https://coveralls.io/github/albertborsos/yii2-ddd)
 
 DDD Classes for Yii 2.0
 =======================

@@ -28,7 +28,7 @@ install:
 
 script:
 - sh ./phpcs.sh
-#- php ./vendor/bin/codecept run unit -d $PHPUNIT_FLAGS
+- php ./vendor/bin/codecept run unit -d --coverage --coverage-xml
 
-#after_success:
-#- php ./vendor/bin/coveralls -v --exclude-no-stmt -c .coveralls.yml
+after_success:
+- php ./vendor/bin/php-coveralls -v --exclude-no-stmt -c .coveralls.yml

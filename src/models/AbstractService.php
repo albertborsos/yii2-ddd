@@ -2,6 +2,9 @@
 
 namespace albertborsos\ddd\models;
 
+use albertborsos\ddd\interfaces\BusinessObject;
+use albertborsos\ddd\interfaces\FormObject;
+use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -10,48 +13,86 @@ use yii\web\Linkable;
  * Class AbstractDomain
  * @package albertborsos\ddd\models
  */
-abstract class AbstractService extends AbstractModel
+abstract class AbstractService extends Component
 {
+    /**
+     * The ID of the (main) object
+     * @var integer|mixed
+     */
+    private $_id;
+
+    /**
+     * @var \yii\base\Model|FormObject
+     */
+    private $_form;
+
+    /**
+     * @var \yii\db\ActiveRecord|BusinessObject
+     */
+    private $_model;
+
+    public function __construct(FormObject $form = null, BusinessObject $model = null)
+    {
+        if ($form) {
+            $this->setForm($form);
+        }
+        if ($model) {
+            $this->setModel($model);
+        }
+        parent::__construct([]);
+    }
+
     /**
      * @return boolean
      */
     abstract public function execute();
 
     /**
-     * @return array
+     * @return FormObject|\yii\base\Model
      */
-    protected function getAttributes()
+    protected function getForm()
     {
-        return $this->getForm()->getAttributes();
+        return $this->_form;
+    }
+
+
+    /**
+     * @return BusinessObject|ActiveRecord
+     */
+    protected function getModel()
+    {
+        return $this->_model;
     }
 
     /**
-     * Converts the model into an array.
-     *
-     * This method will first identify which fields to be included in the resulting array by calling [[resolveFields()]].
-     * It will then turn the model into an array with these fields. If `$recursive` is true,
-     * any embedded objects will also be converted into arrays.
-     *
-     * If the model implements the [[Linkable]] interface, the resulting array will also have a `_link` element
-     * which refers to a list of links as specified by the interface.
-     *
-     * @param array $fields the fields being requested. If empty, all fields as specified by [[fields()]] will be returned.
-     * @param array $expand the additional fields being requested for exporting. Only fields declared in [[extraFields()]]
-     * will be considered.
-     * @param bool $recursive whether to recursively return array representation of embedded objects.
-     * @return array the array representation of the object
+     * @param $id
      */
-    public function toArray(array $fields = [], array $expand = [], $recursive = true)
+    protected function setId($id)
     {
-        $data = [];
-        foreach ($this->resolveFields($fields, $expand) as $field => $definition) {
-            $data[$field] = is_string($definition) ? $this->getForm()->$definition : call_user_func($definition, $this, $field);
-        }
+        $this->_id = $id;
+    }
 
-        if ($this instanceof Linkable) {
-            $data['_links'] = Link::serialize($this->getLinks());
-        }
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
 
-        return $recursive ? ArrayHelper::toArray($data) : $data;
+    /**
+     * @param FormObject $form
+     */
+    private function setForm(FormObject $form)
+    {
+        $this->_form = $form;
+    }
+
+    /**
+     * @param BusinessObject $model
+     */
+    private function setModel(BusinessObject $model)
+    {
+        $this->_model = $model;
     }
 }
