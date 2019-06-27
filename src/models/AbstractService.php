@@ -4,6 +4,7 @@ namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\FormObject;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\web\Link;
@@ -31,13 +32,21 @@ abstract class AbstractService extends Component
      */
     private $_model;
 
-    public function __construct(FormObject $form = null, BusinessObject $model = null)
+    /**
+     * @var RepositoryInterface
+     */
+    private $_repository;
+
+    public function __construct(FormObject $form = null, BusinessObject $model = null, RepositoryInterface $repository = null)
     {
         if ($form) {
             $this->setForm($form);
         }
         if ($model) {
             $this->setModel($model);
+        }
+        if ($repository) {
+            $this->setRepository($repository);
         }
         parent::__construct([]);
     }
@@ -55,13 +64,20 @@ abstract class AbstractService extends Component
         return $this->_form;
     }
 
-
     /**
      * @return BusinessObject|ActiveRecord
      */
     protected function getModel()
     {
         return $this->_model;
+    }
+
+    /**
+     * @return RepositoryInterface
+     */
+    protected function getRepository()
+    {
+        return $this->_repository;
     }
 
     /**
@@ -94,5 +110,13 @@ abstract class AbstractService extends Component
     private function setModel(BusinessObject $model)
     {
         $this->_model = $model;
+    }
+
+    /**
+     * @param RepositoryInterface $repository
+     */
+    private function setRepository(RepositoryInterface $repository)
+    {
+        $this->_repository = $repository;
     }
 }
