@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\models;
 
+use albertborsos\ddd\interfaces\BusinessObject;
+use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 use yii\base\Exception;
@@ -10,7 +12,15 @@ use yii\db\ActiveRecordInterface;
 
 abstract class AbstractRepository extends Component implements RepositoryInterface
 {
-    abstract protected static function modelClass();
+    /**
+     * @return string
+     */
+    abstract protected static function businessModelClass(): string;
+
+    /**
+     * @return string
+     */
+    abstract protected static function dataModelClass(): string;
 
     /**
      * @throws Exception
@@ -19,98 +29,73 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     public function init()
     {
         parent::init();
-        if (!\Yii::createObject(static::modelClass()) instanceof ActiveRecordInterface) {
-            throw new Exception(get_called_class() . '::modelClass() must implements `yii\db\ActiveRecordInterface`');
+        if (!\Yii::createObject(static::dataModelClass()) instanceof ActiveRecordInterface) {
+            throw new Exception(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
+        }
+        if (!\Yii::createObject(static::businessModelClass()) instanceof BusinessObject) {
+            throw new Exception(get_called_class() . '::businessModelClass() must implements `albertborsos\ddd\interfaces\BusinessObject`');
         }
     }
 
     /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
-    public static function find()
+    protected static function find()
     {
-        return call_user_func([static::modelClass(), 'find']);
+        return call_user_func([static::dataModelClass(), 'find']);
     }
 
     /**
      * @param $condition
-     * @return ActiveRecordInterface|null ActiveRecord instance matching the condition, or `null` if nothing matches.
+     * @return BusinessObject|mixed
+     * @throws \yii\base\InvalidConfigException
      */
     public static function findOne($condition)
     {
-        return call_user_func_array([static::modelClass(), 'findOne'], [$condition]);
+        $model = call_user_func([static::dataModelClass(), 'findOne'], $condition);
+
+        return EntityFactory::create(static::businessModelClass(), $model->attributes);
     }
 
     /**
      * @param $condition
-     * @return ActiveRecordInterface[]|array an array of ActiveRecord instance, or an empty array if nothing matches.
+     * @return BusinessObject[]|array
      */
     public static function findAll($condition)
     {
-        return call_user_func_array([static::modelClass(), 'findAll'], [$condition]);
+        $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
+
+        return EntityFactory::createCollection(static::businessModelClass(), $models);
     }
 
     /**
-     * @param $attributes
-     * @param null $condition
-     * @return int the number of rows updated
-     */
-    public static function updateAll($attributes, $condition = null)
-    {
-        return call_user_func_array([static::modelClass(), 'updateAll'], [$attributes, $condition]);
-    }
-
-    /**
-     * @param null $condition
-     * @return int the number of rows deleted
-     */
-    public static function deleteAll($condition = null)
-    {
-        return call_user_func_array([static::modelClass(), 'deleteAll'], [$condition]);
-    }
-
-    /**
-     * @param ActiveRecordInterface $model
+     * @param EntityInterface $model
      * @param bool $runValidation
      * @param null $attributeNames
-     * @return bool whether the saving succeeded (i.e. no validation errors occurred).
+     * @return bool|mixed
+     * @throws \yii\base\InvalidConfigException
      */
-    public function save(ActiveRecordInterface $model, $runValidation = true, $attributeNames = null)
+    public function save(EntityInterface $model, $runValidation = true, $attributeNames = null)
     {
-        return $model->save($runValidation, $attributeNames);
+        /** @var ActiveRecordInterface $activerecord */
+        $activerecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+
+        if ($activerecord->save($runValidation, $attributeNames)) {
+            return $activerecord->getPrimaryKey();
+        }
+
+        return false;
     }
 
     /**
      * @param ActiveRecordInterface $model
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return bool whether the attributes are valid and the record is inserted successfully.
      */
-    public function insert(ActiveRecordInterface $model, $runValidation = true, $attributeNames = null)
-    {
-        return $model->insert($runValidation, $attributeNames);
-    }
-
     /**
-     * @param ActiveRecordInterface $model
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return int|bool the number of rows affected, or `false` if validation fails
-     * or updating process is stopped for other reasons.
-     * Note that it is possible that the number of rows affected is 0, even though the
-     * update execution is successful.
-     */
-    public function update(ActiveRecordInterface $model, $runValidation = true, $attributeNames = null)
-    {
-        return $model->update($runValidation, $attributeNames);
-    }
-
-    /**
-     * @param ActiveRecordInterface $model
+     * @param BusinessObject $model
      * @return int|bool the number of rows deleted, or `false` if the deletion is unsuccessful for some reason.
      * Note that it is possible that the number of rows deleted is 0, even though the deletion execution is successful.
      */
-    public function delete(ActiveRecordInterface $model)
+    public function delete(BusinessObject $model)
     {
         return $model->delete();
     }

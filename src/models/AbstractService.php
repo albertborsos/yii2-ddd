@@ -6,9 +6,6 @@ use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
-use yii\helpers\ArrayHelper;
-use yii\web\Link;
-use yii\web\Linkable;
 
 /**
  * Class AbstractDomain
@@ -65,7 +62,7 @@ abstract class AbstractService extends Component
     }
 
     /**
-     * @return BusinessObject|ActiveRecord
+     * @return BusinessObject
      */
     protected function getModel()
     {
