@@ -7,6 +7,11 @@ use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ * Class AbstractRepository
+ * @package albertborsos\ddd\repositories
+ * @since 1.1.0
+ */
 abstract class AbstractRepository extends Component implements RepositoryInterface
 {
     /**

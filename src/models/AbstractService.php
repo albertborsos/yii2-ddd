@@ -31,6 +31,7 @@ abstract class AbstractService extends Component
 
     /**
      * @var RepositoryInterface
+     * @since 1.1.0
      */
     private $_repository;
 
@@ -71,6 +72,7 @@ abstract class AbstractService extends Component
 
     /**
      * @return RepositoryInterface
+     * @since 1.1.0
      */
     protected function getRepository()
     {
@@ -111,6 +113,7 @@ abstract class AbstractService extends Component
 
     /**
      * @param RepositoryInterface $repository
+     * @since 1.1.0
      */
     private function setRepository(RepositoryInterface $repository)
     {

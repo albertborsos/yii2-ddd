@@ -2,6 +2,11 @@
 
 namespace albertborsos\ddd\interfaces;
 
+/**
+ * Interface RepositoryInterface
+ * @package albertborsos\ddd\interfaces
+ * @since 1.1.0
+ */
 interface RepositoryInterface
 {
     public static function findOne($condition);

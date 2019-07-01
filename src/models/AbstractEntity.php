@@ -10,6 +10,7 @@ use yii\base\Model;
  * @package albertborsos\ddd\models
  *
  * @property array $attributes
+ * @since 1.1.0
  */
 class AbstractEntity extends Model implements EntityInterface
 {

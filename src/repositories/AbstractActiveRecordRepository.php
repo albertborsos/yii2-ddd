@@ -4,11 +4,16 @@ namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityInterface;
-use albertborsos\ddd\models\EntityFactory;
+use albertborsos\ddd\factories\EntityFactory;
 use yii\base\Exception;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecordInterface;
 
+/**
+ * Class AbstractActiveRecordRepository
+ * @package albertborsos\ddd\repositories
+ * @since 1.1.0
+ */
 abstract class AbstractActiveRecordRepository extends AbstractRepository
 {
     /**
