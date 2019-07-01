@@ -9,4 +9,6 @@ interface RepositoryInterface
     public static function findAll($condition);
 
     public function save(EntityInterface $model, $runValidation = true, $attributeNames = null);
+
+    public function delete(EntityInterface $model);
 }

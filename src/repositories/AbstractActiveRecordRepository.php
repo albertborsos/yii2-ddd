@@ -1,39 +1,26 @@
 <?php
 
-namespace albertborsos\ddd\models;
+namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityInterface;
-use albertborsos\ddd\interfaces\RepositoryInterface;
-use yii\base\Component;
+use albertborsos\ddd\models\EntityFactory;
 use yii\base\Exception;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecordInterface;
 
-abstract class AbstractRepository extends Component implements RepositoryInterface
+abstract class AbstractActiveRecordRepository extends AbstractRepository
 {
-    /**
-     * @return string
-     */
-    abstract protected static function businessModelClass(): string;
-
     /**
      * @return string
      */
     abstract protected static function dataModelClass(): string;
 
-    /**
-     * @throws Exception
-     * @throws \yii\base\InvalidConfigException
-     */
     public function init()
     {
         parent::init();
         if (!\Yii::createObject(static::dataModelClass()) instanceof ActiveRecordInterface) {
             throw new Exception(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
-        }
-        if (!\Yii::createObject(static::businessModelClass()) instanceof BusinessObject) {
-            throw new Exception(get_called_class() . '::businessModelClass() must implements `albertborsos\ddd\interfaces\BusinessObject`');
         }
     }
 
@@ -87,16 +74,11 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
         return false;
     }
 
-    /**
-     * @param ActiveRecordInterface $model
-     */
-    /**
-     * @param BusinessObject $model
-     * @return int|bool the number of rows deleted, or `false` if the deletion is unsuccessful for some reason.
-     * Note that it is possible that the number of rows deleted is 0, even though the deletion execution is successful.
-     */
-    public function delete(BusinessObject $model)
+    public function delete(EntityInterface $model)
     {
-        return $model->delete();
+        /** @var ActiveRecordInterface $activerecord */
+        $activerecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+
+        return $activerecord->delete();
     }
 }
