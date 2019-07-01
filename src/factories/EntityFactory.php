@@ -1,12 +1,18 @@
 <?php
 
-namespace albertborsos\ddd\models;
+namespace albertborsos\ddd\factories;
 
 use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityFactoryInterface;
+use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Component;
 use yii\db\ActiveRecordInterface;
 
+/**
+ * Class EntityFactory
+ * @package albertborsos\ddd\factories
+ * @since 1.1.0
+ */
 class EntityFactory extends Component implements EntityFactoryInterface
 {
     /**
@@ -34,7 +40,7 @@ class EntityFactory extends Component implements EntityFactoryInterface
         }, $models);
     }
 
-    protected static function fill(BusinessObject $entity, array $attributes)
+    protected static function fill(EntityInterface $entity, array $attributes)
     {
         $attributes = static::normalizeIdAttributes($attributes);
         foreach ($attributes as $attribute => $value) {
