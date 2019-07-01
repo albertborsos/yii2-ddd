@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\factories;
 
-use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityFactoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Component;
@@ -18,7 +17,7 @@ class EntityFactory extends Component implements EntityFactoryInterface
     /**
      * @param string $className
      * @param array $data
-     * @return BusinessObject|mixed
+     * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
     public static function create(string $className, array $data)
@@ -31,9 +30,10 @@ class EntityFactory extends Component implements EntityFactoryInterface
      * @param array|ActiveRecordInterface[] $models
      * @return array
      */
-    public static function createCollection($className, array $models): array
+    public static function createAll($className, array $models): array
     {
         return array_map(function ($model) use ($className) {
+            /** @var EntityInterface $entity */
             $entity = \Yii::createObject($className);
 
             return static::fill($entity, $model->attributes);

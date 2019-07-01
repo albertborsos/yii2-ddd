@@ -2,7 +2,7 @@
 
 namespace albertborsos\ddd\repositories;
 
-use albertborsos\ddd\interfaces\BusinessObject;
+use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 use yii\base\Exception;
@@ -17,7 +17,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     /**
      * @return string
      */
-    abstract protected static function businessModelClass(): string;
+    abstract protected static function entityModelClass(): string;
 
     /**
      * @throws Exception
@@ -26,8 +26,8 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     public function init()
     {
         parent::init();
-        if (!\Yii::createObject(static::businessModelClass()) instanceof BusinessObject) {
-            throw new Exception(get_called_class() . '::businessModelClass() must implements `albertborsos\ddd\interfaces\BusinessObject`');
+        if (!\Yii::createObject(static::entityModelClass()) instanceof EntityInterface) {
+            throw new Exception(get_called_class() . '::entityModelClass() must implements `albertborsos\ddd\interfaces\EntityInterface`');
         }
     }
 }

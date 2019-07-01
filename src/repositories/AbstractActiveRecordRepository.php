@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\repositories;
 
-use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\factories\EntityFactory;
 use yii\base\Exception;
@@ -39,25 +38,25 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
 
     /**
      * @param $condition
-     * @return BusinessObject|mixed
+     * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
     public static function findOne($condition)
     {
         $model = call_user_func([static::dataModelClass(), 'findOne'], $condition);
 
-        return EntityFactory::create(static::businessModelClass(), $model->attributes);
+        return EntityFactory::create(static::entityModelClass(), $model->attributes);
     }
 
     /**
      * @param $condition
-     * @return BusinessObject[]|array
+     * @return EntityInterface[]|array
      */
     public static function findAll($condition)
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
-        return EntityFactory::createCollection(static::businessModelClass(), $models);
+        return EntityFactory::createAll(static::entityModelClass(), $models);
     }
 
     /**

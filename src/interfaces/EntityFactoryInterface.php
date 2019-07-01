@@ -16,5 +16,5 @@ interface EntityFactoryInterface
      */
     public static function create(string $className, array $data);
 
-    public static function createCollection($className, array $models): array;
+    public static function createAll($className, array $models): array;
 }
