@@ -5,6 +5,8 @@ namespace albertborsos\ddd\factories;
 use albertborsos\ddd\interfaces\EntityFactoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Component;
+use yii\base\Exception;
+use yii\base\Model;
 use yii\db\ActiveRecordInterface;
 
 /**
@@ -16,28 +18,32 @@ class EntityFactory extends Component implements EntityFactoryInterface
 {
     /**
      * @param string $className
-     * @param array $data
+     * @param array $itemData
      * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
-    public static function create(string $className, array $data)
+    public static function create(string $className, array $itemData)
     {
-        return static::fill(\Yii::createObject($className), $data);
+        /** @var EntityInterface $entity */
+        $entity = \Yii::createObject($className);
+
+        return static::fill($entity, $itemData);
     }
 
     /**
      * @param $className
-     * @param array|ActiveRecordInterface[] $models
+     * @param array $itemsData
      * @return array
      */
-    public static function createAll($className, array $models): array
+    public static function createAll($className, array $itemsData): array
     {
-        return array_map(function ($model) use ($className) {
-            /** @var EntityInterface $entity */
-            $entity = \Yii::createObject($className);
+        return array_map(function ($itemData) use ($className) {
+            if ($itemData instanceof Model) {
+                throw new Exception('You must use `\albertborsos\ddd\factories\EntityByModelFactory` because `' . get_class($itemData) . '` instace of `\yii\base\Model`');
+            }
 
-            return static::fill($entity, $model->attributes);
-        }, $models);
+            return static::create($className, $itemData);
+        }, $itemsData);
     }
 
     protected static function fill(EntityInterface $entity, array $attributes)

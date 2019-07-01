@@ -2,9 +2,11 @@
 
 namespace albertborsos\ddd\repositories;
 
+use albertborsos\ddd\factories\EntityByModelFactory;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\factories\EntityFactory;
 use yii\base\Exception;
+use yii\base\Model;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecordInterface;
 
@@ -56,11 +58,11 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
-        return EntityFactory::createAll(static::entityModelClass(), $models);
+        return EntityByModelFactory::createAll(static::entityModelClass(), $models);
     }
 
     /**
-     * @param EntityInterface $model
+     * @param EntityInterface|Model $model
      * @param bool $runValidation
      * @param null $attributeNames
      * @return bool|mixed
@@ -68,16 +70,21 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
      */
     public function save(EntityInterface $model, $runValidation = true, $attributeNames = null)
     {
-        /** @var ActiveRecordInterface $activerecord */
-        $activerecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+        /** @var ActiveRecordInterface $activeRecord */
+        $activeRecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
 
-        if ($activerecord->save($runValidation, $attributeNames)) {
-            return $activerecord->getPrimaryKey();
+        if ($activeRecord->save($runValidation, $attributeNames)) {
+            return $activeRecord->getPrimaryKey();
         }
 
         return false;
     }
 
+    /**
+     * @param EntityInterface|Model $model
+     * @return bool|int
+     * @throws \yii\base\InvalidConfigException
+     */
     public function delete(EntityInterface $model)
     {
         /** @var ActiveRecordInterface $activerecord */

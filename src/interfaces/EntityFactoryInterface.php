@@ -11,10 +11,10 @@ interface EntityFactoryInterface
 {
     /**
      * @param string $className
-     * @param array $data
+     * @param array $itemData
      * @return mixed
      */
-    public static function create(string $className, array $data);
+    public static function create(string $className, array $itemData);
 
-    public static function createAll($className, array $models): array;
+    public static function createAll($className, array $itemsData): array;
 }
