@@ -32,6 +32,14 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
     }
 
     /**
+     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
+     */
+    public function find()
+    {
+        return call_user_func([static::dataModelClass(), 'find']);
+    }
+
+    /**
      * @param $condition
      * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
@@ -88,12 +96,7 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
         return $activerecord->delete();
     }
 
-    /**
-     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
-     */
-    protected function find()
-    {
-        return call_user_func([static::dataModelClass(), 'find']);
+        return false;
     }
 
     /**

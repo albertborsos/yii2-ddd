@@ -12,6 +12,11 @@ use yii\base\Model;
 interface RepositoryInterface
 {
     /**
+     * @return mixed
+     */
+    public function find();
+
+    /**
      * @param $condition
      * @return EntityInterface|Model
      */
