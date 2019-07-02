@@ -90,11 +90,12 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
      */
     public function delete(EntityInterface $model)
     {
-        /** @var ActiveRecordInterface $activerecord */
-        $activerecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+        /** @var ActiveRecordInterface $activeRecord */
+        $activeRecord = static::findOrCreate($model);
 
-        return $activerecord->delete();
-    }
+        if ($activeRecord->delete() !== false) {
+            return true;
+        }
 
         return false;
     }
