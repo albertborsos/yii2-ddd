@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\interfaces;
 
+use yii\base\Model;
+
 /**
  * Interface EntityInterface
  * @package albertborsos\ddd\interfaces
@@ -9,5 +11,10 @@ namespace albertborsos\ddd\interfaces;
  */
 interface EntityInterface extends BusinessObject
 {
-    public function primaryKey();
+    /**
+     * @return string|array
+     */
+    public function getPrimaryKey();
+
+    public function setPrimaryKey(Model $model);
 }

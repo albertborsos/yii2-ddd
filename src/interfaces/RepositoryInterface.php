@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\interfaces;
 
+use yii\base\Model;
+
 /**
  * Interface RepositoryInterface
  * @package albertborsos\ddd\interfaces
@@ -9,11 +11,29 @@ namespace albertborsos\ddd\interfaces;
  */
 interface RepositoryInterface
 {
-    public static function findOne($condition);
+    /**
+     * @param $condition
+     * @return EntityInterface|Model
+     */
+    public function findOne($condition);
 
-    public static function findAll($condition);
+    /**
+     * @param $condition
+     * @return array|EntityInterface[]|Model[]
+     */
+    public function findAll($condition);
 
+    /**
+     * @param EntityInterface $model
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
     public function save(EntityInterface $model, $runValidation = true, $attributeNames = null);
 
+    /**
+     * @param EntityInterface $model
+     * @return bool
+     */
     public function delete(EntityInterface $model);
 }

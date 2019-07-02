@@ -8,6 +8,7 @@ use albertborsos\ddd\factories\EntityFactory;
 use yii\base\Exception;
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
+use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
 
 /**
@@ -31,19 +32,11 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
     }
 
     /**
-     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
-     */
-    protected static function find()
-    {
-        return call_user_func([static::dataModelClass(), 'find']);
-    }
-
-    /**
      * @param $condition
      * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
-    public static function findOne($condition)
+    public function findOne($condition)
     {
         $model = call_user_func([static::dataModelClass(), 'findOne'], $condition);
 
@@ -54,7 +47,7 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
      * @param $condition
      * @return EntityInterface[]|array
      */
-    public static function findAll($condition)
+    public function findAll($condition)
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
@@ -66,15 +59,17 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
      * @param bool $runValidation
      * @param null $attributeNames
      * @return bool|mixed
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      */
     public function save(EntityInterface $model, $runValidation = true, $attributeNames = null)
     {
-        /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+        /** @var ActiveRecord $activeRecord */
+        $activeRecord = static::findOrCreate($model);
 
         if ($activeRecord->save($runValidation, $attributeNames)) {
-            return $activeRecord->getPrimaryKey();
+            $model->setPrimaryKey($activeRecord);
+            return true;
         }
 
         return false;
@@ -91,5 +86,37 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
         $activerecord = \Yii::createObject(static::dataModelClass(), [$model->attributes]);
 
         return $activerecord->delete();
+    }
+
+    /**
+     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
+     */
+    protected function find()
+    {
+        return call_user_func([static::dataModelClass(), 'find']);
+    }
+
+    /**
+     * @param EntityInterface|Model $model
+     * @return ActiveRecord
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected static function findOrCreate(EntityInterface $model)
+    {
+        $keys = is_array($model->getPrimaryKey()) ? $model->getPrimaryKey() : [$model->getPrimaryKey()];
+        $condition = [];
+        array_walk($keys, function ($key) use (&$condition, $model) {
+            $condition[$key] = $model->{$key};
+        });
+
+        /** @var ActiveRecord $activeRecord */
+        $activeRecord = \Yii::createObject([static::dataModelClass(), 'findOne'], [$condition]);
+
+        if (!empty($activeRecord)) {
+            $activeRecord->setAttributes($model->attributes, false);
+            return $activeRecord;
+        }
+
+        return \Yii::createObject(static::dataModelClass(), [$model->attributes]);
     }
 }
