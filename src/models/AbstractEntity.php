@@ -14,17 +14,31 @@ use yii\base\Model;
  */
 class AbstractEntity extends Model implements EntityInterface
 {
+    /**
+     * @return array|string
+     */
     public function getPrimaryKey()
     {
-        return 'id';
+        return ['id'];
     }
 
-    public function setPrimaryKey(Model $model)
+    public function setPrimaryKey(Model $model): void
     {
         $keys = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
 
         array_walk($keys, function ($key) use ($model) {
             $this->{$key} = $model->{$key};
         });
+    }
+
+    public function getCacheKey(): string
+    {
+        $keys = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
+
+        $ids = array_map(function ($key) {
+            return $this->{$key};
+        }, $keys);
+
+        return implode('-', array_merge([static::class], $ids));
     }
 }

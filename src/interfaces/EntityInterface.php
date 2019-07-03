@@ -16,5 +16,13 @@ interface EntityInterface extends BusinessObject
      */
     public function getPrimaryKey();
 
-    public function setPrimaryKey(Model $model);
+    /**
+     * @param Model $model
+     */
+    public function setPrimaryKey(Model $model): void;
+
+    /**
+     * @return string
+     */
+    public function getCacheKey();
 }
