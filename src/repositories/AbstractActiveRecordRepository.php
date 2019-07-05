@@ -105,13 +105,22 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
      * @return ActiveRecord
      * @throws \yii\base\InvalidConfigException
      */
-    protected static function findOrCreate(EntityInterface $model)
+    protected static function findOrCreate(EntityInterface $model, $skipEmptyAttributes = false)
     {
         $keys = is_array($model->getPrimaryKey()) ? $model->getPrimaryKey() : [$model->getPrimaryKey()];
+
         $condition = [];
         array_walk($keys, function ($key) use (&$condition, $model) {
             $condition[$key] = $model->{$key};
         });
+
+        if ($skipEmptyAttributes) {
+            $condition = array_filter($condition);
+        }
+
+        if (empty($condition)) {
+            return \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+        }
 
         /** @var ActiveRecord $activeRecord */
         $activeRecord = \Yii::createObject([static::dataModelClass(), 'findOne'], [$condition]);
