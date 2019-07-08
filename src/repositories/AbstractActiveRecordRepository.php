@@ -102,6 +102,7 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
 
     /**
      * @param EntityInterface|Model $model
+     * @param bool $skipEmptyAttributes
      * @return ActiveRecord
      * @throws \yii\base\InvalidConfigException
      */
