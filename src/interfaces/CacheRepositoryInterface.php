@@ -2,6 +2,9 @@
 
 namespace albertborsos\ddd\interfaces;
 
+use albertborsos\couchbase\Exception;
+use albertborsos\ddd\factories\EntityFactory;
+
 /**
  * Interface CacheRepositoryInterface
  * @package albertborsos\ddd\interfaces
@@ -13,6 +16,12 @@ interface CacheRepositoryInterface
     public function set($key, $value, $duration = null, $dependency = null);
 
     public function delete($key);
+
+    /**
+     * @param $id
+     * @return EntityInterface|null
+     */
+    public function findById($id): ?EntityInterface;
 
     /**
      * @param EntityInterface $model
