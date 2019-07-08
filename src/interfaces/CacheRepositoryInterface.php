@@ -2,9 +2,6 @@
 
 namespace albertborsos\ddd\interfaces;
 
-use albertborsos\ddd\factories\EntityFactory;
-use yii\base\Model;
-
 /**
  * Interface CacheRepositoryInterface
  * @package albertborsos\ddd\interfaces

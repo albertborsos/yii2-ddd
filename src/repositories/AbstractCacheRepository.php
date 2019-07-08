@@ -4,10 +4,8 @@ namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\CacheRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
-use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\caching\CacheInterface;
 
 /**
  * Class AbstractRepository
