@@ -48,6 +48,10 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
     {
         $model = call_user_func([static::dataModelClass(), 'findOne'], $condition);
 
+        if (empty($model)) {
+            return null;
+        }
+
         return EntityFactory::create(static::entityModelClass(), $model->attributes);
     }
 
