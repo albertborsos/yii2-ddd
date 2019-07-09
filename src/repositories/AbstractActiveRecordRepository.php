@@ -21,7 +21,7 @@ abstract class AbstractActiveRecordRepository extends AbstractRepository
     /**
      * @return string
      */
-    abstract protected static function dataModelClass(): string;
+    abstract public static function dataModelClass(): string;
 
     public function init()
     {
