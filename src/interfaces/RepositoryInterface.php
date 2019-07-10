@@ -3,6 +3,7 @@
 namespace albertborsos\ddd\interfaces;
 
 use yii\base\Model;
+use yii\db\ActiveQueryInterface;
 
 /**
  * Interface RepositoryInterface
@@ -17,7 +18,12 @@ interface RepositoryInterface
     public static function dataModelClass(): string;
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public static function searchModelClass(): string;
+
+    /**
+     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
     public function find();
 
