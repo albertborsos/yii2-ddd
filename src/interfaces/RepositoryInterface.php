@@ -12,6 +12,11 @@ use yii\base\Model;
 interface RepositoryInterface
 {
     /**
+     * @return string
+     */
+    public static function dataModelClass(): string;
+
+    /**
      * @return mixed
      */
     public function find();

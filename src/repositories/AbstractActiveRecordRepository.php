@@ -18,11 +18,6 @@ use yii\db\ActiveRecordInterface;
  */
 abstract class AbstractActiveRecordRepository extends AbstractRepository
 {
-    /**
-     * @return string
-     */
-    abstract public static function dataModelClass(): string;
-
     public function init()
     {
         parent::init();

@@ -2,9 +2,6 @@
 
 namespace albertborsos\ddd\interfaces;
 
-use albertborsos\couchbase\Exception;
-use albertborsos\ddd\factories\EntityFactory;
-
 /**
  * Interface CacheRepositoryInterface
  * @package albertborsos\ddd\interfaces
