@@ -3,6 +3,7 @@
 namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\BusinessObject;
+use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
@@ -63,7 +64,7 @@ abstract class AbstractService extends Component
     }
 
     /**
-     * @return BusinessObject
+     * @return EntityInterface|BusinessObject
      */
     protected function getModel()
     {
