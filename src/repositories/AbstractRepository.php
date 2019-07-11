@@ -17,7 +17,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     /**
      * @return string
      */
-    abstract protected static function entityModelClass(): string;
+    abstract public static function entityModelClass(): string;
 
     /**
      * @throws Exception

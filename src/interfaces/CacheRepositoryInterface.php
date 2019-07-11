@@ -6,7 +6,7 @@ namespace albertborsos\ddd\interfaces;
  * Interface CacheRepositoryInterface
  * @package albertborsos\ddd\interfaces
  */
-interface CacheRepositoryInterface
+interface CacheRepositoryInterface extends RepositoryInterface
 {
     public function get($key);
 
