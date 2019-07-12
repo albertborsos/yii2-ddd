@@ -18,11 +18,6 @@ interface ActiveRepositoryInterface extends RepositoryInterface
     public static function dataModelClass(): string;
 
     /**
-     * @return string
-     */
-    public static function searchModelClass(): string;
-
-    /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
     public function find();

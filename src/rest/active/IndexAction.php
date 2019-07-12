@@ -26,26 +26,6 @@ class IndexAction extends Action
             return call_user_func($this->prepareDataProvider, $this, $requestParams);
         }
 
-        if ($searchModelClass = \Yii::createObject([$this->repositoryInterface, 'searchModelClass'])) {
-            $searchModel = \Yii::createObject($searchModelClass);
-            return $searchModel->search($requestParams, '');
-        }
-
-        $query = $this->getRepository()->find();
-
-        if (!empty($requestParams)) {
-            $query->andWhere($requestParams);
-        }
-
-        return Yii::createObject([
-            'class' => ActiveDataProvider::className(),
-            'query' => $query,
-            'pagination' => [
-                'params' => $requestParams,
-            ],
-            'sort' => [
-                'params' => $requestParams,
-            ],
-        ]);
+        return $this->getRepository()->search($requestParams, '');
     }
 }
