@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\repositories;
 
-use albertborsos\ddd\factories\EntityByModelFactory;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\factories\EntityFactory;
@@ -59,7 +58,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
-        return EntityByModelFactory::createAll(static::entityModelClass(), $models);
+        return EntityFactory::createAll(static::entityModelClass(), $models);
     }
 
     /**

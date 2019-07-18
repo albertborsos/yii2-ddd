@@ -38,7 +38,7 @@ class EntityFactory extends Component implements EntityFactoryInterface
     {
         return array_map(function ($itemData) use ($className) {
             if ($itemData instanceof Model) {
-                throw new Exception('You must use `\albertborsos\ddd\factories\EntityByModelFactory` because `' . get_class($itemData) . '` instace of `\yii\base\Model`');
+                $itemData = $itemData->attributes;
             }
 
             return static::create($className, $itemData);
