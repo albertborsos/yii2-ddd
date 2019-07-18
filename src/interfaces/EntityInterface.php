@@ -25,4 +25,11 @@ interface EntityInterface extends BusinessObject
      * @return string
      */
     public function getCacheKey();
+
+    /**
+     * Mapping of keys in data array to property names.
+     *
+     * @return array
+     */
+    public static function fieldMap(): array;
 }

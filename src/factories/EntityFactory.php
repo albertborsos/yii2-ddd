@@ -5,7 +5,6 @@ namespace albertborsos\ddd\factories;
 use albertborsos\ddd\interfaces\EntityFactoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Component;
-use yii\base\Exception;
 use yii\base\Model;
 
 /**

@@ -12,7 +12,7 @@ use yii\base\Model;
  * @property array $attributes
  * @since 1.1.0
  */
-class AbstractEntity extends Model implements EntityInterface
+abstract class AbstractEntity extends Model implements EntityInterface
 {
     /**
      * @return array|string

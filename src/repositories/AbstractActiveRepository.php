@@ -4,8 +4,7 @@ namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
-use albertborsos\ddd\factories\EntityFactory;
-use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
@@ -22,7 +21,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     {
         parent::init();
         if (!\Yii::createObject(static::dataModelClass()) instanceof ActiveRecordInterface) {
-            throw new Exception(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
+            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
         }
     }
 
@@ -47,7 +46,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             return null;
         }
 
-        return EntityFactory::create(static::entityModelClass(), $model->attributes);
+        return $this->hydrator->hydrate(static::entityModelClass(), $model->attributes);
     }
 
     /**
@@ -58,7 +57,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
-        return EntityFactory::createAll(static::entityModelClass(), $models);
+        return $this->hydrator->hydrateAll(static::entityModelClass(), $models);
     }
 
     /**
