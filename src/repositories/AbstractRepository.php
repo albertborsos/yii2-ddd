@@ -43,4 +43,19 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
             throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
         }
     }
+
+    public function hydrate($data): EntityInterface
+    {
+        return $this->hydrator->hydrate(static::entityModelClass(), $data);
+    }
+
+    public function hydrateInto(EntityInterface $model, $data): EntityInterface
+    {
+        return $this->hydrator->hydrateInto($model, $data);
+    }
+
+    public function hydrateAll($models)
+    {
+        return $this->hydrator->hydrateAll(static::entityModelClass(), $models);
+    }
 }

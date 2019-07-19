@@ -2,8 +2,10 @@
 
 namespace albertborsos\ddd\repositories;
 
+use albertborsos\ddd\data\ActiveEvent;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
+use yii\base\Event;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
@@ -46,7 +48,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             return null;
         }
 
-        return $this->hydrator->hydrate(static::entityModelClass(), $model->attributes);
+        return $this->hydrate($model->attributes);
     }
 
     /**
@@ -57,7 +59,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     {
         $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
 
-        return $this->hydrator->hydrateAll(static::entityModelClass(), $models);
+        return $this->hydrateAll($models);
     }
 
     /**
@@ -74,6 +76,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         $activeRecord = static::findOrCreate($model);
 
         if ($activeRecord->save($runValidation, $attributeNames)) {
+            $model->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord]));
             $model->setPrimaryKey($activeRecord);
             return true;
         }
@@ -92,6 +95,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         $activeRecord = static::findOrCreate($model);
 
         if ($activeRecord->delete() !== false) {
+            $model->trigger(EntityInterface::EVENT_AFTER_DELETE, new ActiveEvent(['sender' => $activeRecord]));
             return true;
         }
 
@@ -117,18 +121,20 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             $condition = array_filter($condition);
         }
 
+        $dataAttributes = $model->dataAttributes;
+
         if (empty($condition)) {
-            return \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+            return \Yii::createObject(static::dataModelClass(), [$dataAttributes]);
         }
 
         /** @var ActiveRecord $activeRecord */
         $activeRecord = \Yii::createObject([static::dataModelClass(), 'findOne'], [$condition]);
 
         if (!empty($activeRecord)) {
-            $activeRecord->setAttributes($model->attributes, false);
+            $activeRecord->setAttributes($dataAttributes, false);
             return $activeRecord;
         }
 
-        return \Yii::createObject(static::dataModelClass(), [$model->attributes]);
+        return \Yii::createObject(static::dataModelClass(), [$dataAttributes]);
     }
 }

@@ -10,6 +10,7 @@ use yii\base\Model;
  * @package albertborsos\ddd\models
  *
  * @property array $attributes
+ * @property array $dataAttributes
  * @since 1.1.0
  */
 abstract class AbstractEntity extends Model implements EntityInterface
@@ -40,5 +41,21 @@ abstract class AbstractEntity extends Model implements EntityInterface
         }, $keys);
 
         return implode('-', array_merge([static::class], $ids));
+    }
+
+    public function getDataAttributes(): array
+    {
+        return array_map(function ($property) {
+            return $this->{$property};
+        }, $this->getPublicFieldMap());
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getPublicFieldMap()
+    {
+        $map = array_intersect_key(array_flip(static::fieldMap()), $this->attributes);
+        return array_flip($map);
     }
 }

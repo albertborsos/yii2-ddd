@@ -2,6 +2,7 @@
 
 namespace albertborsos\ddd\rest\active;
 
+use albertborsos\ddd\di\Helper;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\InvalidConfigException;
@@ -33,18 +34,7 @@ class Action extends \albertborsos\ddd\rest\Action
             return call_user_func($this->findModel, $id, $this);
         }
 
-        $repository = $this->getRepository();
-        /** @var ActiveRecordInterface $modelClass */
-        $modelClass = \Yii::createObject([$this->repositoryInterface, 'dataModelClass']);
-        $keys = $modelClass::primaryKey();
-        if (count($keys) > 1) {
-            $values = explode(',', $id);
-            if (count($keys) === count($values)) {
-                $model = $repository->findOne(array_combine($keys, $values));
-            }
-        } elseif ($id !== null) {
-            $model = $repository->findOne($id);
-        }
+        $model = $this->getRepository()->findOne($this->getPrimaryKeyCondition($id));
 
         if (isset($model)) {
             return $model;
@@ -60,5 +50,23 @@ class Action extends \albertborsos\ddd\rest\Action
     public function getRepository(): ActiveRepositoryInterface
     {
         return \Yii::createObject($this->repositoryInterface);
+    }
+
+    protected function getPrimaryKeyCondition($id)
+    {
+        $repository = $this->getRepository();
+        /** @var ActiveRecordInterface $modelClass */
+        $modelClass = Helper::createObject([$this->repositoryInterface, 'dataModelClass']);
+        $keys = $modelClass::primaryKey();
+        if (count($keys) > 1) {
+            $values = explode(',', $id);
+            if (count($keys) === count($values)) {
+                return array_combine($keys, $values);
+            }
+        } elseif ($id !== null) {
+            return $id;
+        }
+
+        return false;
     }
 }

@@ -15,7 +15,7 @@ trait SetContainerDefinitionsTrait
      *
      * ```
      *  return [
-     *      albertborsos\ddd\interfaces\HydratorInterface::class => albertborsos\ddd\hydrators\Hydrator::class,
+     *      albertborsos\ddd\interfaces\HydratorInterface::class => albertborsos\ddd\hydrators\ActiveHydrator::class,
      *  ];
      * ```
      *

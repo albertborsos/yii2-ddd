@@ -36,6 +36,7 @@ interface CacheRepositoryInterface extends RepositoryInterface
      * @param EntityInterface $model
      * @param null $duration
      * @param null $dependency
+     * @return mixed
      */
     public function storeEntity(EntityInterface $model, $duration = null, $dependency = null);
 }

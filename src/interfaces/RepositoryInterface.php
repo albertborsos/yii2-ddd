@@ -17,6 +17,25 @@ interface RepositoryInterface
     public static function entityModelClass(): string;
 
     /**
+     * @param $data
+     * @return EntityInterface
+     */
+    public function hydrate($data): EntityInterface;
+
+    /**
+     * @param $model
+     * @param $data
+     * @return EntityInterface
+     */
+    public function hydrateInto(EntityInterface $model, $data): EntityInterface;
+
+    /**
+     * @param $models
+     * @return mixed
+     */
+    public function hydrateAll($models);
+
+    /**
      * Creates data provider instance with search query applied
      *
      * @param $params

@@ -12,6 +12,16 @@ use yii\base\Model;
 interface EntityInterface extends BusinessObject
 {
     /**
+     * @event AfterSaveEvent an event that is triggered after an entity is saved.
+     */
+    const EVENT_AFTER_SAVE   = 'afterSave';
+
+    /**
+     * @event Event an event that is triggered after an entity is deleted.
+     */
+    const EVENT_AFTER_DELETE = 'afterDelete';
+
+    /**
      * @return string|array
      */
     public function getPrimaryKey();
@@ -32,4 +42,16 @@ interface EntityInterface extends BusinessObject
      * @return array
      */
     public static function fieldMap(): array;
+
+    /**
+     * Mapping of property keys to entity classnames.
+     *
+     * @return array
+     */
+    public static function relationsMap(): array;
+
+    /**
+     * @return array
+     */
+    public function getDataAttributes(): array;
 }

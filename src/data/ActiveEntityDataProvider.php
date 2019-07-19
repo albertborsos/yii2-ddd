@@ -2,11 +2,14 @@
 
 namespace albertborsos\ddd\data;
 
+use albertborsos\ddd\models\AbstractEntity;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\base\InvalidConfigException;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
+use yii\db\ActiveRecordInterface;
+use yii\helpers\Inflector;
 
 class ActiveEntityDataProvider extends ActiveDataProvider
 {
@@ -35,7 +38,7 @@ class ActiveEntityDataProvider extends ActiveDataProvider
     }
 
     /**
-     * @return array
+     * @return AbstractEntity[]
      * @throws InvalidConfigException
      */
     protected function prepareModels()
