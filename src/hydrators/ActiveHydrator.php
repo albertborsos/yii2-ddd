@@ -38,6 +38,10 @@ class ActiveHydrator extends Component implements HydratorInterface
     {
         $model = $this->hydrator->hydrate($data, $className);
 
+        if (!$model instanceof EntityInterface) {
+            return $model;
+        }
+
         $relationsMap = \Yii::createObject([$className, 'relationsMap']);
         if (empty($relationsMap)) {
             return $model;
