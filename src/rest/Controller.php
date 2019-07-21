@@ -8,6 +8,11 @@ use yii\base\InvalidConfigException;
 use yii\rest\OptionsAction;
 use yii\web\ForbiddenHttpException;
 
+/**
+ * Class Controller
+ * @package albertborsos\ddd\rest
+ * @since 1.1.0
+ */
 class Controller extends \yii\rest\Controller
 {
     public $repositoryInterface;

@@ -7,6 +7,11 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 
+/**
+ * Class IndexAction
+ * @package albertborsos\ddd\rest\cache
+ * @since 1.1.0
+ */
 class IndexAction extends Action
 {
     use IndexActionTrait;

@@ -9,6 +9,11 @@ use yii\base\Model;
 use yii\helpers\Url;
 use yii\web\ServerErrorHttpException;
 
+/**
+ * Trait CreateActionTrait
+ * @package albertborsos\ddd\rest
+ * @since 1.1.0
+ */
 trait CreateActionTrait
 {
     /**

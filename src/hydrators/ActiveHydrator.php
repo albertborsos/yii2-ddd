@@ -2,10 +2,21 @@
 
 namespace albertborsos\ddd\hydrators;
 
+use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
+use albertborsos\ddd\models\AbstractEntity;
 use yii\base\Component;
 use yii\base\Model;
 
+/**
+ * Class ActiveHydrator
+ *
+ * Hydrates an instance from an array or from a `\yii\base\Model` instance.
+ * If the hydrated object is an instance of `EntityInterface` then it tries to hydrate the relations too.
+ *
+ * @package albertborsos\ddd\hydrators
+ * @since 1.1.0
+ */
 class ActiveHydrator extends Component implements HydratorInterface
 {
     /** @var \samdark\hydrator\Hydrator */

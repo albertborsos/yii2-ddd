@@ -1,11 +1,14 @@
 <?php
 
-
 namespace albertborsos\ddd\rest;
-
 
 use yii\base\InvalidConfigException;
 
+/**
+ * Trait FormAndServiceActionTrait
+ * @package albertborsos\ddd\rest
+ * @since 1.1.0
+ */
 trait FormAndServiceActionTrait
 {
     /**

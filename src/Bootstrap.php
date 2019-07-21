@@ -8,6 +8,11 @@ use albertborsos\ddd\traits\SetContainerDefinitionsTrait;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 
+/**
+ * Class Bootstrap
+ * @package albertborsos\ddd
+ * @since 1.1.0
+ */
 class Bootstrap implements BootstrapInterface
 {
     use SetContainerDefinitionsTrait;

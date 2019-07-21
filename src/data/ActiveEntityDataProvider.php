@@ -11,6 +11,27 @@ use albertborsos\ddd\interfaces\HydratorInterface;
 use yii\db\ActiveRecordInterface;
 use yii\helpers\Inflector;
 
+/**
+ * Class ActiveEntityDataProvider implement a data provider based on ActiveDataProvider
+ *
+ * ActiveEntityDataProvider converts the ActiveRecord instances to EntityInterface instances.
+ *
+ * The following is an example of using ActiveEntityDataProvider to provide EntityInterface instances:
+ *
+ * ```php
+ * $dataProvider = new ActiveEntityDataProvider([
+ *     'entityClass' => static::entityModelClass(),
+ *     'hydrator' => $this->hydrator,
+ *     'query' => $query,
+ *     'pagination' => [
+ *         'pageSize' => 20,
+ *     ],
+ *  ]);
+ * ```
+ *
+ * @package albertborsos\ddd\data
+ * @since 1.1.0
+ */
 class ActiveEntityDataProvider extends ActiveDataProvider
 {
     public $entityClass;

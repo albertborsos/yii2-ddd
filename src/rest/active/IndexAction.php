@@ -6,6 +6,11 @@ use albertborsos\ddd\rest\IndexActionTrait;
 use Yii;
 use yii\data\ActiveDataProvider;
 
+/**
+ * Class IndexAction
+ * @package albertborsos\ddd\rest\active
+ * @since 1.1.0
+ */
 class IndexAction extends Action
 {
     use IndexActionTrait;

@@ -5,6 +5,11 @@ namespace albertborsos\ddd\traits;
 use Yii;
 use yii\base\Application;
 
+/**
+ * Trait SetContainerDefinitionsTrait
+ * @package albertborsos\ddd\traits
+ * @since 1.1.0
+ */
 trait SetContainerDefinitionsTrait
 {
     /**

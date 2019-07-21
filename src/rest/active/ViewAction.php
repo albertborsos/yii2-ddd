@@ -6,6 +6,11 @@ use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\rest\ViewActionTrait;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class ViewAction
+ * @package albertborsos\ddd\rest\active
+ * @since 1.1.0
+ */
 class ViewAction extends Action
 {
     use ViewActionTrait;

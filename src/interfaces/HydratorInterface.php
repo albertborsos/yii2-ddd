@@ -2,6 +2,11 @@
 
 namespace albertborsos\ddd\interfaces;
 
+/**
+ * Interface HydratorInterface
+ * @package albertborsos\ddd\interfaces
+ * @since 1.1.0
+ */
 interface HydratorInterface
 {
     public function hydrate($className, $data);

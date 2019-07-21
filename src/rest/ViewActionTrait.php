@@ -2,6 +2,11 @@
 
 namespace albertborsos\ddd\rest;
 
+/**
+ * Trait ViewActionTrait
+ * @package albertborsos\ddd\rest
+ * @since 1.1.0
+ */
 trait ViewActionTrait
 {
     /**

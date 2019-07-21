@@ -5,6 +5,11 @@ namespace albertborsos\ddd\rest;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 
+/**
+ * Trait IndexActionTrait
+ * @package albertborsos\ddd\rest
+ * @since 1.1.0
+ */
 trait IndexActionTrait
 {
     /**
