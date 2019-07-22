@@ -1,7 +1,7 @@
 {
     "name": "albertborsos/yii2-ddd",
     "description": "Classes for Domain-Driven Development with Yii 2.0 Framework",
-    "type": "library",
+    "type": "yii2-extension",
     "keywords": ["yii2","extension"],
     "license": "MIT",
     "authors": [
