@@ -40,7 +40,7 @@ trait CreateActionTrait
 
         if ($form->validate()) {
             /** @var AbstractService $service */
-            $service = Yii::createObject($this->serviceClass, [$form, null, $this->getRepository()]);
+            $service = Yii::createObject($this->serviceClass, [$form]);
             if ($service->execute()) {
                 $response = Yii::$app->getResponse();
                 $response->setStatusCode(201);

@@ -42,13 +42,15 @@ class ActiveHydrator extends Component implements HydratorInterface
             return $model;
         }
 
-        $relationsMap = \Yii::createObject([$className, 'relationsMap']);
-        if (empty($relationsMap)) {
+        $relationMapping = $model->relationMapping();
+        if (empty($relationMapping)) {
             return $model;
         }
 
-        foreach ($relationsMap as $relationName => $entityClass) {
-            $relationHydrator = \Yii::createObject(static::class, [\Yii::createObject([$entityClass, 'fieldMap'])]);
+        foreach ($relationMapping as $relationName => $entityClass) {
+            /** @var EntityInterface $relationEntity */
+            $relationEntity = \Yii::createObject($entityClass);
+            $relationHydrator = \Yii::createObject(static::class, [$relationEntity->fieldMapping()]);
 
             if (!isset($data->$relationName)) {
                 continue;

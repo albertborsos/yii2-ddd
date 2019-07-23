@@ -38,7 +38,7 @@ trait UpdateActionTrait
 
         if ($form->validate()) {
             /** @var AbstractService $service */
-            $service = Yii::createObject($this->serviceClass, [$form, $model, $this->getRepository()]);
+            $service = Yii::createObject($this->serviceClass, [$form, $model]);
             if ($service->execute()) {
                 return $this->findModel($service->getId());
             }

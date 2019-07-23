@@ -13,11 +13,6 @@ use yii\db\ActiveQueryInterface;
 interface ActiveRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @return string
-     */
-    public static function dataModelClass(): string;
-
-    /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
     public function find();
@@ -47,4 +42,14 @@ interface ActiveRepositoryInterface extends RepositoryInterface
      * @return bool
      */
     public function delete(EntityInterface $model);
+
+    /**
+     * @return string
+     */
+    public function getDataModelClass(): string;
+
+    /**
+     * @param $className
+     */
+    public function setDataModelClass($className): void;
 }

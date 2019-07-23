@@ -22,10 +22,8 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
      */
     protected $hydrator = HydratorInterface::class;
 
-    /**
-     * @return string
-     */
-    abstract public static function entityModelClass(): string;
+    /** @var string */
+    protected $entityClass;
 
     /**
      * @throws InvalidConfigException
@@ -33,12 +31,12 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     public function init()
     {
         parent::init();
-        if (!\Yii::createObject(static::entityModelClass()) instanceof EntityInterface) {
-            throw new InvalidConfigException(get_called_class() . '::entityModelClass() must implements `' . EntityInterface::class . '`');
+        $entity = \Yii::createObject($this->entityClass);
+        if (!$entity instanceof EntityInterface) {
+            throw new InvalidConfigException(get_called_class() . '::$entityClass must implements `' . EntityInterface::class . '`');
         }
 
-        $fieldMap = \Yii::createObject([static::entityModelClass(), 'fieldMap']);
-        $this->hydrator = \Yii::createObject($this->hydrator, [$fieldMap]);
+        $this->hydrator = \Yii::createObject($this->hydrator, [$entity->fieldMapping()]);
         if (!$this->hydrator instanceof HydratorInterface) {
             throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
         }
@@ -46,7 +44,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
 
     public function hydrate($data): EntityInterface
     {
-        return $this->hydrator->hydrate(static::entityModelClass(), $data);
+        return $this->hydrator->hydrate($this->entityClass, $data);
     }
 
     public function hydrateInto(EntityInterface $model, $data): EntityInterface
@@ -56,6 +54,25 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
 
     public function hydrateAll($models)
     {
-        return $this->hydrator->hydrateAll(static::entityModelClass(), $models);
+        return $this->hydrator->hydrateAll($this->entityClass, $models);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityClass(): string
+    {
+        return $this->entityClass;
+    }
+
+    /**
+     * @param $className
+     */
+    public function setEntityClass($className): void
+    {
+        if (empty($className) || !\Yii::createObject($className) instanceof EntityInterface) {
+            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . EntityInterface::class . '`');
+        }
+        $this->entityClass = $className;
     }
 }

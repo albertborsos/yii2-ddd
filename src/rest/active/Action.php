@@ -55,9 +55,8 @@ class Action extends \albertborsos\ddd\rest\Action
 
     protected function getPrimaryKeyCondition($id)
     {
-        $repository = $this->getRepository();
         /** @var ActiveRecordInterface $modelClass */
-        $modelClass = Helper::createObject([$this->repositoryInterface, 'dataModelClass']);
+        $modelClass = $this->getRepository()->getDataModelClass();
         $keys = $modelClass::primaryKey();
         if (count($keys) > 1) {
             $values = explode(',', $id);

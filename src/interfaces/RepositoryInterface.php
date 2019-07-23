@@ -12,11 +12,6 @@ use yii\data\BaseDataProvider;
 interface RepositoryInterface
 {
     /**
-     * @return string
-     */
-    public static function entityModelClass(): string;
-
-    /**
      * @param $data
      * @return EntityInterface
      */
@@ -43,4 +38,14 @@ interface RepositoryInterface
      * @return BaseDataProvider
      */
     public function search($params, $formName = null): BaseDataProvider;
+
+    /**
+     * @return string
+     */
+    public function getEntityClass(): string;
+
+    /**
+     * @param $className
+     */
+    public function setEntityClass($className): void;
 }

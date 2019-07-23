@@ -7,6 +7,7 @@ use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
+use yii\base\InvalidConfigException;
 
 /**
  * Class AbstractDomain
@@ -14,6 +15,12 @@ use yii\base\Component;
  */
 abstract class AbstractService extends Component
 {
+    /**
+     * @var string|RepositoryInterface
+     * @since 1.1.0
+     */
+    protected $repository;
+
     /**
      * The ID of the (main) object
      * @var integer|mixed
@@ -30,13 +37,7 @@ abstract class AbstractService extends Component
      */
     private $_model;
 
-    /**
-     * @var RepositoryInterface
-     * @since 1.1.0
-     */
-    private $_repository;
-
-    public function __construct(FormObject $form = null, BusinessObject $model = null, RepositoryInterface $repository = null)
+    public function __construct(FormObject $form = null, BusinessObject $model = null, $config = [])
     {
         if ($form) {
             $this->setForm($form);
@@ -44,10 +45,11 @@ abstract class AbstractService extends Component
         if ($model) {
             $this->setModel($model);
         }
-        if ($repository) {
+        if ($this->repository) {
+            $repository = \Yii::createObject($this->repository);
             $this->setRepository($repository);
         }
-        parent::__construct([]);
+        parent::__construct($config);
     }
 
     /**
@@ -77,7 +79,7 @@ abstract class AbstractService extends Component
      */
     protected function getRepository()
     {
-        return $this->_repository;
+        return $this->repository;
     }
 
     /**
@@ -114,10 +116,9 @@ abstract class AbstractService extends Component
 
     /**
      * @param RepositoryInterface $repository
-     * @since 1.1.0
      */
-    private function setRepository(RepositoryInterface $repository)
+    protected function setRepository(RepositoryInterface $repository): void
     {
-        $this->_repository = $repository;
+        $this->repository = $repository;
     }
 }

@@ -4,6 +4,7 @@ namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Model;
+use yii\helpers\Inflector;
 
 /**
  * Class AbstractEntity
@@ -50,12 +51,25 @@ abstract class AbstractEntity extends Model implements EntityInterface
         }, $this->getPublicFieldMap());
     }
 
+    public function fieldMapping(): array
+    {
+        $properties = $this->attributes();
+        $dataFields = array_map(function ($propertyName) {
+            return Inflector::underscore($propertyName);
+        }, $properties);
+
+        $fields = array_combine($dataFields, $properties);
+        $relationFields = array_keys($this->relationMapping());
+
+        return array_merge($fields, array_combine($relationFields, $relationFields));
+    }
+
     /**
      * @return array|null
      */
     private function getPublicFieldMap()
     {
-        $map = array_intersect_key(array_flip(static::fieldMap()), $this->attributes);
+        $map = array_intersect_key(array_flip($this->fieldMapping()), $this->attributes);
         return array_flip($map);
     }
 }

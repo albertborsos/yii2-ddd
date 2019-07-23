@@ -19,10 +19,12 @@ use yii\db\ActiveRecordInterface;
  */
 abstract class AbstractActiveRepository extends AbstractRepository implements ActiveRepositoryInterface
 {
+    protected $dataModelClass;
+
     public function init()
     {
         parent::init();
-        if (!\Yii::createObject(static::dataModelClass()) instanceof ActiveRecordInterface) {
+        if (empty($this->dataModelClass) || !\Yii::createObject($this->dataModelClass) instanceof ActiveRecordInterface) {
             throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
         }
     }
@@ -32,7 +34,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function find()
     {
-        return call_user_func([static::dataModelClass(), 'find']);
+        return call_user_func([$this->dataModelClass, 'find']);
     }
 
     /**
@@ -42,7 +44,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function findOne($condition)
     {
-        $model = call_user_func([static::dataModelClass(), 'findOne'], $condition);
+        $model = call_user_func([$this->dataModelClass, 'findOne'], $condition);
 
         if (empty($model)) {
             return null;
@@ -57,7 +59,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function findAll($condition)
     {
-        $models = call_user_func([static::dataModelClass(), 'findAll'], $condition);
+        $models = call_user_func([$this->dataModelClass, 'findAll'], $condition);
 
         return $this->hydrateAll($models);
     }
@@ -73,7 +75,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     public function save(EntityInterface $model, $runValidation = true, $attributeNames = null)
     {
         /** @var ActiveRecord $activeRecord */
-        $activeRecord = static::findOrCreate($model);
+        $activeRecord = $this->findOrCreate($model);
 
         if ($activeRecord->save($runValidation, $attributeNames)) {
             $model->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord]));
@@ -92,7 +94,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     public function delete(EntityInterface $model)
     {
         /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = static::findOrCreate($model);
+        $activeRecord = $this->findOrCreate($model);
 
         if ($activeRecord->delete() !== false) {
             $model->trigger(EntityInterface::EVENT_AFTER_DELETE, new ActiveEvent(['sender' => $activeRecord]));
@@ -108,7 +110,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @return ActiveRecord
      * @throws \yii\base\InvalidConfigException
      */
-    protected static function findOrCreate(EntityInterface $model, $skipEmptyAttributes = false)
+    protected function findOrCreate(EntityInterface $model, $skipEmptyAttributes = false)
     {
         $keys = is_array($model->getPrimaryKey()) ? $model->getPrimaryKey() : [$model->getPrimaryKey()];
 
@@ -124,17 +126,37 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         $dataAttributes = $model->dataAttributes;
 
         if (empty($condition)) {
-            return \Yii::createObject(static::dataModelClass(), [$dataAttributes]);
+            return \Yii::createObject($this->dataModelClass, [$dataAttributes]);
         }
 
         /** @var ActiveRecord $activeRecord */
-        $activeRecord = \Yii::createObject([static::dataModelClass(), 'findOne'], [$condition]);
+        $activeRecord = \Yii::createObject([$this->dataModelClass, 'findOne'], [$condition]);
 
         if (!empty($activeRecord)) {
             $activeRecord->setAttributes($dataAttributes, false);
             return $activeRecord;
         }
 
-        return \Yii::createObject(static::dataModelClass(), [$dataAttributes]);
+        return \Yii::createObject($this->dataModelClass, [$dataAttributes]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataModelClass(): string
+    {
+        return $this->dataModelClass;
+    }
+
+    /**
+     * @param $className
+     * @throws InvalidConfigException
+     */
+    public function setDataModelClass($className): void
+    {
+        if (empty($className) || !\Yii::createObject($className) instanceof ActiveRecordInterface) {
+            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . ActiveRecordInterface::class . '`');
+        }
+        $this->dataModelClass = $className;
     }
 }

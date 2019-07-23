@@ -20,7 +20,7 @@ use yii\helpers\Inflector;
  *
  * ```php
  * $dataProvider = new ActiveEntityDataProvider([
- *     'entityClass' => static::entityModelClass(),
+ *     'entityClass' => $this->entityClass,
  *     'hydrator' => $this->hydrator,
  *     'query' => $query,
  *     'pagination' => [
@@ -34,6 +34,7 @@ use yii\helpers\Inflector;
  */
 class ActiveEntityDataProvider extends ActiveDataProvider
 {
+    /** @var string */
     public $entityClass;
 
     /** @var HydratorInterface */

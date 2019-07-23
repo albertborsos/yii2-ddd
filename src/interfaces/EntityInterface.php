@@ -41,14 +41,14 @@ interface EntityInterface extends BusinessObject
      *
      * @return array
      */
-    public static function fieldMap(): array;
+    public function fieldMapping(): array;
 
     /**
      * Mapping of property keys to entity classnames.
      *
      * @return array
      */
-    public static function relationsMap(): array;
+    public function relationMapping(): array;
 
     /**
      * @return array
