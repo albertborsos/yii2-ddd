@@ -26,10 +26,11 @@ abstract class AbstractFormTest extends Unit
 
     /**
      * @param array $loadParams
-     * @param \albertborsos\ddd\interfaces\BusinessObject|null $entity
+     * @param EntityInterface|null $entity
      * @param array $initParams
      * @param bool $isInitParamsAreArguments
      * @return \albertborsos\ddd\interfaces\FormObject|\yii\base\Model
+     * @throws \yii\base\InvalidConfigException
      */
     protected function mockForm($loadParams = [], \albertborsos\ddd\interfaces\EntityInterface $entity = null, $initParams = [], $isInitParamsAreArguments = false)
     {
