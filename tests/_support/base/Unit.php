@@ -12,4 +12,10 @@ class Unit extends \Codeception\Test\Unit
      * @var \UnitTester Tester
      */
     protected $tester;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->initFixtures();
+    }
 }
