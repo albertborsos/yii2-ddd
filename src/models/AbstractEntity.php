@@ -48,17 +48,12 @@ abstract class AbstractEntity extends Model implements EntityInterface
     {
         return array_map(function ($property) {
             return $this->{$property};
-        }, $this->getPublicFieldMap());
+        }, $this->getDataAttributesPropertiesMap());
     }
 
     public function fieldMapping(): array
     {
-        $properties = $this->attributes();
-        $dataFields = array_map(function ($propertyName) {
-            return Inflector::underscore($propertyName);
-        }, $properties);
-
-        $fields = array_combine($dataFields, $properties);
+        $fields = $this->getDataAttributesPropertiesMap();
         $relationFields = array_keys($this->relationMapping());
 
         return array_merge($fields, array_combine($relationFields, $relationFields));
@@ -67,9 +62,16 @@ abstract class AbstractEntity extends Model implements EntityInterface
     /**
      * @return array|null
      */
-    private function getPublicFieldMap()
+    private function getDataAttributesPropertiesMap()
     {
-        $map = array_intersect_key(array_flip($this->fieldMapping()), $this->attributes);
-        return array_flip($map);
+        $relationFields = array_keys($this->relationMapping());
+        $attributes = array_keys($this->attributes);
+
+        $properties = array_diff($attributes, $relationFields);
+        $properties = array_map(function ($propertyName) {
+            return Inflector::underscore($propertyName);
+        }, array_combine($properties, $properties));
+
+        return array_flip($properties);
     }
 }
