@@ -42,9 +42,12 @@ class ActiveHydrator extends Component implements HydratorInterface
             return $model;
         }
 
-        $relationMapping = $model->relationMapping();
+        $entity = $model;
+        unset($model);
+
+        $relationMapping = $entity->relationMapping();
         if (empty($relationMapping)) {
-            return $model;
+            return $entity;
         }
 
         foreach ($relationMapping as $relationName => $entityClass) {
@@ -60,10 +63,10 @@ class ActiveHydrator extends Component implements HydratorInterface
                 ? $relationHydrator->hydrateAll($entityClass, $data->$relationName)
                 : $relationHydrator->hydrate($entityClass, $data->$relationName->attributes);
 
-            $this->hydrator->hydrateInto([$relationName => $relationData], $model);
+            $this->hydrator->hydrateInto([$relationName => $relationData], $entity);
         }
 
-        return $model;
+        return $entity;
     }
 
     /**
@@ -85,7 +88,7 @@ class ActiveHydrator extends Component implements HydratorInterface
      */
     public function hydrateInto($object, array $data)
     {
-        return $this->hydrator->hydrateInto($data, $model);
+        return $this->hydrator->hydrateInto($data, $object);
     }
 
     /**

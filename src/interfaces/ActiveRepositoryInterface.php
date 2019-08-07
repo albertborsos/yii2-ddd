@@ -30,18 +30,18 @@ interface ActiveRepositoryInterface extends RepositoryInterface
     public function findAll($condition);
 
     /**
-     * @param EntityInterface $model
+     * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
      * @return bool
      */
-    public function save(EntityInterface $model, $runValidation = true, $attributeNames = null);
+    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null);
 
     /**
-     * @param EntityInterface $model
+     * @param EntityInterface $entity
      * @return bool
      */
-    public function delete(EntityInterface $model);
+    public function delete(EntityInterface $entity);
 
     /**
      * @return string

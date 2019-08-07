@@ -7,7 +7,6 @@ use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
 
 /**
  * Class AbstractDomain
@@ -34,16 +33,22 @@ abstract class AbstractService extends Component
 
     /**
      * @var \yii\db\ActiveRecord|BusinessObject
+     * @deprecated since 1.1.0
      */
     private $_model;
 
-    public function __construct(FormObject $form = null, BusinessObject $model = null, $config = [])
+    /**
+     * @var EntityInterface
+     */
+    private $_entity;
+
+    public function __construct(FormObject $form = null, EntityInterface $entity = null, $config = [])
     {
         if ($form) {
             $this->setForm($form);
         }
-        if ($model) {
-            $this->setModel($model);
+        if ($entity) {
+            $this->setEntity($entity);
         }
         if ($this->repository) {
             $repository = \Yii::createObject($this->repository);
@@ -67,10 +72,19 @@ abstract class AbstractService extends Component
 
     /**
      * @return EntityInterface|BusinessObject
+     * @deprecated since 1.1.0
      */
     protected function getModel()
     {
         return $this->_model;
+    }
+
+    /**
+     * @return EntityInterface
+     */
+    protected function getEntity()
+    {
+        return $this->_entity;
     }
 
     /**
@@ -108,10 +122,19 @@ abstract class AbstractService extends Component
 
     /**
      * @param BusinessObject $model
+     * @deprecated since 1.1.0
      */
     private function setModel(BusinessObject $model)
     {
         $this->_model = $model;
+    }
+
+    /**
+     * @param EntityInterface $entity
+     */
+    private function setEntity(EntityInterface $entity)
+    {
+        $this->_entity = $entity;
     }
 
     /**

@@ -50,7 +50,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             return null;
         }
 
-        return $this->hydrate($model->attributes);
+        return $this->hydrate($model);
     }
 
     /**
@@ -65,21 +65,21 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     }
 
     /**
-     * @param EntityInterface|Model $model
+     * @param EntityInterface|Model $entity
      * @param bool $runValidation
      * @param null $attributeNames
      * @return bool|mixed
      * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      */
-    public function save(EntityInterface $model, $runValidation = true, $attributeNames = null)
+    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null)
     {
         /** @var ActiveRecord $activeRecord */
-        $activeRecord = $this->findOrCreate($model);
+        $activeRecord = $this->findOrCreate($entity);
 
         if ($activeRecord->save($runValidation, $attributeNames)) {
-            $model->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord]));
-            $model->setPrimaryKey($activeRecord);
+            $entity->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord]));
+            $entity->setPrimaryKey($activeRecord);
             return true;
         }
 
@@ -87,17 +87,17 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     }
 
     /**
-     * @param EntityInterface|Model $model
+     * @param EntityInterface|Model $entity
      * @return bool|int
      * @throws \yii\base\InvalidConfigException
      */
-    public function delete(EntityInterface $model)
+    public function delete(EntityInterface $entity)
     {
         /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = $this->findOrCreate($model);
+        $activeRecord = $this->findOrCreate($entity);
 
         if ($activeRecord->delete() !== false) {
-            $model->trigger(EntityInterface::EVENT_AFTER_DELETE, new ActiveEvent(['sender' => $activeRecord]));
+            $entity->trigger(EntityInterface::EVENT_AFTER_DELETE, new ActiveEvent(['sender' => $activeRecord]));
             return true;
         }
 
@@ -105,25 +105,25 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     }
 
     /**
-     * @param EntityInterface|Model $model
+     * @param EntityInterface|Model $entity
      * @param bool $skipEmptyAttributes
      * @return ActiveRecord
      * @throws \yii\base\InvalidConfigException
      */
-    protected function findOrCreate(EntityInterface $model, $skipEmptyAttributes = false)
+    protected function findOrCreate(EntityInterface $entity, $skipEmptyAttributes = false)
     {
-        $keys = is_array($model->getPrimaryKey()) ? $model->getPrimaryKey() : [$model->getPrimaryKey()];
+        $keys = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
 
         $condition = [];
-        array_walk($keys, function ($key) use (&$condition, $model) {
-            $condition[$key] = $model->{$key};
+        array_walk($keys, function ($key) use (&$condition, $entity) {
+            $condition[$key] = $entity->{$key};
         });
 
         if ($skipEmptyAttributes) {
             $condition = array_filter($condition);
         }
 
-        $dataAttributes = $model->dataAttributes;
+        $dataAttributes = $entity->dataAttributes;
 
         if (empty($condition)) {
             return \Yii::createObject($this->dataModelClass, [$dataAttributes]);

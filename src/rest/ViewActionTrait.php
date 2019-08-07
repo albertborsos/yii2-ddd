@@ -18,11 +18,11 @@ trait ViewActionTrait
      */
     public function run($id)
     {
-        $model = $this->findModel($id);
+        $entity = $this->findEntity($id);
         if ($this->checkAccess) {
-            call_user_func($this->checkAccess, $this->id, $model);
+            call_user_func($this->checkAccess, $this->id, $entity);
         }
 
-        return $model;
+        return $entity;
     }
 }

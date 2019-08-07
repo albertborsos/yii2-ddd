@@ -19,7 +19,7 @@ abstract class AbstractServiceTest extends AbstractFormTest
 
     /**
      * @param \albertborsos\ddd\interfaces\FormObject $formObject
-     * @param \albertborsos\ddd\interfaces\BusinessObject|null $entity
+     * @param \albertborsos\ddd\interfaces\EntityInterface|null $entity
      * @return \albertborsos\ddd\models\AbstractService
      */
     protected function mockService(\albertborsos\ddd\interfaces\FormObject $formObject, \albertborsos\ddd\interfaces\EntityInterface $entity = null)

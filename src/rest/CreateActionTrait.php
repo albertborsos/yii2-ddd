@@ -47,7 +47,7 @@ trait CreateActionTrait
                 $id = is_array($service->getId()) ? implode(',', array_values($service->getId())) : $service->getId();
                 $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));
 
-                return $this->findModel($service->getId());
+                return $this->findEntity($service->getId());
             } elseif (!$form->hasErrors()) {
                 throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
             }

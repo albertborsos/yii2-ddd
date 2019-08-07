@@ -18,11 +18,11 @@ interface RepositoryInterface
     public function hydrate($data): EntityInterface;
 
     /**
-     * @param $model
+     * @param $entity
      * @param $data
      * @return EntityInterface
      */
-    public function hydrateInto(EntityInterface $model, $data): EntityInterface;
+    public function hydrateInto(EntityInterface $entity, $data): EntityInterface;
 
     /**
      * @param $models

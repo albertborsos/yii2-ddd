@@ -27,16 +27,16 @@ class Action extends \albertborsos\ddd\rest\Action
      * @throws NotFoundHttpException if the model cannot be found
      * @throws InvalidConfigException
      */
-    public function findModel($id): ?EntityInterface
+    public function findEntity($id): ?EntityInterface
     {
-        if ($this->findModel !== null) {
-            return call_user_func($this->findModel, $id, $this);
+        if ($this->findEntity !== null) {
+            return call_user_func($this->findEntity, $id, $this);
         }
 
-        $model = $this->getRepository()->findById($id);
+        $entity = $this->getRepository()->findById($id);
 
-        if (isset($model)) {
-            return $model;
+        if (isset($entity)) {
+            return $entity;
         }
 
         throw new NotFoundHttpException("Object not found: $id");

@@ -27,17 +27,22 @@ interface EntityInterface extends BusinessObject
     public function getPrimaryKey();
 
     /**
+     * Sets the primary key property (or properties) for the new entity from the model.
+     *
      * @param Model $model
      */
     public function setPrimaryKey(Model $model): void;
 
     /**
+     * Returns a unique cache key for the entity.
+     *
      * @return string
      */
     public function getCacheKey();
 
     /**
-     * Mapping of keys in data array to property names.
+     * Returns the data attributes and properties mapping with the relation mapping too.
+     * This required to hydrate the Entity.
      *
      * @return array
      */
@@ -51,6 +56,8 @@ interface EntityInterface extends BusinessObject
     public function relationMapping(): array;
 
     /**
+     * Returns properties and their values which are not relation properties.
+     *
      * @return array
      */
     public function getDataAttributes(): array;

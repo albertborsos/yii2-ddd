@@ -51,20 +51,20 @@ trait FormAndServiceActionTrait
      * @throws NotFoundHttpException if the model cannot be found
      * @throws InvalidConfigException
      */
-    public function findModel($id): ?EntityInterface
+    public function findEntity($id): ?EntityInterface
     {
-        if ($this->findModel !== null) {
-            return call_user_func($this->findModel, $id, $this);
+        if ($this->findEntity !== null) {
+            return call_user_func($this->findEntity, $id, $this);
         }
 
         /** @var ActiveRepositoryInterface $repository */
         $repository = $this->getRepository();
         $repository->setEntityClass($this->formClass);
 
-        $model = $repository->findOne($this->getPrimaryKeyCondition($id));
+        $entity = $repository->findOne($this->getPrimaryKeyCondition($id));
 
-        if (isset($model)) {
-            return $model;
+        if (isset($entity)) {
+            return $entity;
         }
 
         throw new NotFoundHttpException("Object not found: $id");

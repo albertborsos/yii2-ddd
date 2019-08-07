@@ -15,12 +15,16 @@ class ViewAction extends Action
 {
     use ViewActionTrait;
 
-    public function findModel($id): ?EntityInterface
+    public function findEntity($id): ?EntityInterface
     {
+        if ($this->findEntity !== null) {
+            return call_user_func($this->findEntity, $id, $this);
+        }
+
         $expand = \Yii::$app->request->getQueryParam('expand');
 
         if (empty($expand)) {
-            return parent::findModel($id);
+            return parent::findEntity($id);
         }
 
         $relations = explode(',', $expand);

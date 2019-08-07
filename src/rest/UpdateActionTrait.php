@@ -26,21 +26,21 @@ trait UpdateActionTrait
      */
     public function run($id)
     {
-        $model = $this->findModel($id);
+        $entity = $this->findEntity($id);
 
         if ($this->checkAccess) {
-            call_user_func($this->checkAccess, $this->id, $model);
+            call_user_func($this->checkAccess, $this->id, $entity);
         }
 
         /** @var Model|FormObject $form */
-        $form = \Yii::createObject($this->formClass, [$model]);
+        $form = \Yii::createObject($this->formClass, [$entity]);
         $form->load(Yii::$app->getRequest()->getBodyParams(), '');
 
         if ($form->validate()) {
             /** @var AbstractService $service */
-            $service = Yii::createObject($this->serviceClass, [$form, $model]);
+            $service = Yii::createObject($this->serviceClass, [$form, $entity]);
             if ($service->execute()) {
-                return $this->findModel($service->getId());
+                return $this->findEntity($service->getId());
             }
         }
 

@@ -22,8 +22,8 @@ abstract class Action extends \yii\base\Action
     public $repositoryInterface;
 
     /**
-     * @var callable a PHP callable that will be called to return the model corresponding
-     * to the specified primary key value. If not set, [[findModel()]] will be used instead.
+     * @var callable a PHP callable that will be called to return the entity corresponding
+     * to the specified primary key value. If not set, [[findEntity()]] will be used instead.
      * The signature of the callable should be:
      *
      * ```php
@@ -34,9 +34,9 @@ abstract class Action extends \yii\base\Action
      * }
      * ```
      *
-     * The callable should return the model found, or throw an exception if not found.
+     * The callable should return the entity found, or throw an exception if not found.
      */
-    public $findModel;
+    public $findEntity;
 
     /**
      * @var callable a PHP callable that will be called when running an action to determine
@@ -44,9 +44,9 @@ abstract class Action extends \yii\base\Action
      * check will not be performed. The signature of the callable should be as follows,
      *
      * ```php
-     * function ($action, $model = null) {
-     *     // $model is the requested model instance.
-     *     // If null, it means no specific model (e.g. IndexAction)
+     * function ($action, $entity = null) {
+     *     // $entity is the requested entity instance.
+     *     // If null, it means no specific entity (e.g. IndexAction)
      * }
      * ```
      */
@@ -67,17 +67,17 @@ abstract class Action extends \yii\base\Action
     }
 
     /**
-     * Returns the data model based on the primary key given.
-     * If the data model is not found, a 404 HTTP exception will be raised.
-     * @param string $id the ID of the model to be loaded. If the model has a composite primary key,
+     * Returns the data entity based on the primary key given.
+     * If the data entity is not found, a 404 HTTP exception will be raised.
+     * @param string $id the ID of the entity to be loaded. If the entity has a composite primary key,
      * the ID must be a string of the primary key values separated by commas.
      * The order of the primary key values should follow that returned by the `primaryKey()` method
-     * of the model.
-     * @return EntityInterface the model found
-     * @throws NotFoundHttpException if the model cannot be found
+     * of the entity.
+     * @return EntityInterface the entity found
+     * @throws NotFoundHttpException if the entity cannot be found
      * @throws InvalidConfigException
      */
-    abstract public function findModel($id): ?EntityInterface;
+    abstract public function findEntity($id): ?EntityInterface;
 
     /**
      * @return RepositoryInterface

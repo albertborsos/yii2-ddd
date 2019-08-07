@@ -22,10 +22,10 @@ interface CacheRepositoryInterface extends RepositoryInterface
     public function findById($id): ?EntityInterface;
 
     /**
-     * @param EntityInterface $model
+     * @param EntityInterface $entity
      * @return EntityInterface|null
      */
-    public function findByEntity(EntityInterface $model): ?EntityInterface;
+    public function findByEntity(EntityInterface $entity): ?EntityInterface;
 
     /**
      * @param string $key
@@ -34,10 +34,10 @@ interface CacheRepositoryInterface extends RepositoryInterface
     public function findEntityByKey(string $key): ?EntityInterface;
 
     /**
-     * @param EntityInterface $model
+     * @param EntityInterface $entity
      * @param null $duration
      * @param null $dependency
      * @return mixed
      */
-    public function storeEntity(EntityInterface $model, $duration = null, $dependency = null);
+    public function storeEntity(EntityInterface $entity, $duration = null, $dependency = null);
 }

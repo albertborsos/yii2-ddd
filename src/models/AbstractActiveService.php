@@ -17,9 +17,9 @@ use yii\base\InvalidConfigException;
  */
 abstract class AbstractActiveService extends AbstractService
 {
-    public function __construct(FormObject $form = null, EntityInterface $model = null, $config = [])
+    public function __construct(FormObject $form = null, EntityInterface $entity = null, $config = [])
     {
-        parent::__construct($form, $model, $config);
+        parent::__construct($form, $entity, $config);
     }
 
     /**
@@ -38,16 +38,16 @@ abstract class AbstractActiveService extends AbstractService
         /** @var FormObject $form */
         $form = $this->getForm();
 
-        /** @var AbstractEntity $model */
-        $model = $this->getModel() ?? $this->getRepository()->hydrate([]);
-        $model->setAttributes($form->attributes, false);
+        /** @var AbstractEntity $entity */
+        $entity = $this->getEntity() ?? $this->getRepository()->hydrate([]);
+        $entity->setAttributes($form->attributes, false);
 
-        if ($this->getRepository()->save($model)) {
-            $this->setId($model->id);
+        if ($this->getRepository()->save($entity)) {
+            $this->setId($entity->id);
             return true;
         }
 
-        $form->addErrors($model->getErrors());
+        $form->addErrors($entity->getErrors());
 
         return false;
     }

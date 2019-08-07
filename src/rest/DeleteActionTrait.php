@@ -25,16 +25,16 @@ trait DeleteActionTrait
      */
     public function run($id)
     {
-        $model = $this->findModel($id);
+        $entity = $this->findEntity($id);
 
         if ($this->checkAccess) {
-            call_user_func($this->checkAccess, $this->id, $model);
+            call_user_func($this->checkAccess, $this->id, $entity);
         }
 
-        $form = \Yii::createObject($this->formClass, [$model]);
+        $form = \Yii::createObject($this->formClass, [$entity]);
         if ($form->validate()) {
             /** @var AbstractService $service */
-            $service = \Yii::createObject($this->serviceClass, [$form, $model, $this->getRepository()]);
+            $service = \Yii::createObject($this->serviceClass, [$form, $entity, $this->getRepository()]);
             if ($service->execute()) {
                 Yii::$app->getResponse()->setStatusCode(204);
                 Yii::$app->end();

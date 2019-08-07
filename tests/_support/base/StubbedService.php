@@ -25,8 +25,8 @@ class StubbedService extends AbstractService
         return $this->getForm();
     }
 
-    public function testGetModel()
+    public function testGetEntity()
     {
-        return $this->getModel();
+        return $this->getEntity();
     }
 }

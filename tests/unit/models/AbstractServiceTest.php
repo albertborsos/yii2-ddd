@@ -3,7 +3,7 @@
 namespace albertborsos\ddd\tests\unit\models;
 
 use albertborsos\ddd\tests\support\base\StubbedForm;
-use albertborsos\ddd\tests\support\base\StubbedModel;
+use albertborsos\ddd\tests\support\base\StubbedEntity;
 use albertborsos\ddd\tests\support\base\StubbedService;
 use Codeception\PHPUnit\TestCase;
 use yii\base\Model;
@@ -12,10 +12,10 @@ class AbstractServiceTest extends TestCase
 {
     /**
      * @param null $form
-     * @param null $model
+     * @param null $entity
      * @return StubbedService
      */
-    public function mockService($form = null, $model = null)
+    public function mockService($form = null, $entity = null)
     {
         if (!empty(func_get_args())) {
             return \Yii::createObject(StubbedService::className(), func_get_args());
@@ -27,10 +27,10 @@ class AbstractServiceTest extends TestCase
     public function invalidConstructionDataProvider()
     {
         return [
-            'no arguments is valid'   => [[], null],
-            'invalid form interface'  => [[new Model()], 'TypeError'],
-            'invalid model interface' => [[new StubbedForm(), new Model()], 'TypeError'],
-            'valid arguments'         => [[new StubbedForm(), new StubbedModel()], null],
+            'no arguments is valid'    => [[], null],
+            'invalid form interface'   => [[new Model()], 'TypeError'],
+            'invalid entity interface' => [[new StubbedForm(), new Model()], 'TypeError'],
+            'valid arguments'          => [[new StubbedForm(), new StubbedEntity()], null],
         ];
     }
 
@@ -56,18 +56,18 @@ class AbstractServiceTest extends TestCase
         $this->assertSame($mockedForm, $service->testGetForm());
     }
 
-    public function testGetModelObject()
+    public function testGetEntityObject()
     {
-        $mockedModel = new StubbedModel();
-        $service = $this->mockService(null, $mockedModel);
+        $mockedEntity = new StubbedEntity();
+        $service = $this->mockService(null, $mockedEntity);
 
-        $this->assertSame($mockedModel, $service->testGetModel());
+        $this->assertSame($mockedEntity, $service->testGetEntity());
     }
 
     public function testExecuteOk()
     {
         $mockedForm = new StubbedForm();
-        $mockedModel = new StubbedModel();
+        $mockedModel = new StubbedEntity();
 
         $service = $this->mockService($mockedForm, $mockedModel);
 
@@ -80,7 +80,7 @@ class AbstractServiceTest extends TestCase
     public function testExecuteFailed()
     {
         $mockedForm = new StubbedForm();
-        $mockedModel = new StubbedModel();
+        $mockedModel = new StubbedEntity();
 
         $service = $this->mockService($mockedForm, $mockedModel);
 
