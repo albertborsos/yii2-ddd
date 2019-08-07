@@ -10,7 +10,7 @@ use yii\web\ServerErrorHttpException;
 /**
  * Trait DeleteActionTrait
  * @package albertborsos\ddd\rest
- * @since 1.1.0
+ * @since 2.0.0
  */
 trait DeleteActionTrait
 {

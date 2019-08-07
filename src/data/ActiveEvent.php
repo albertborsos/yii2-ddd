@@ -11,7 +11,7 @@ use yii\db\ActiveRecordInterface;
  * ActiveRepository instances fires this event with an `ActiveRecord` model instance as the value of the `sender` property.
  *
  * @package albertborsos\ddd\data
- * @since 1.1.0
+ * @since 2.0.0
  */
 class ActiveEvent extends Event
 {

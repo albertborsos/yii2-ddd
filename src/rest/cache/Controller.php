@@ -8,7 +8,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class Controller
  * @package albertborsos\ddd\rest\cache
- * @since 1.1.0
+ * @since 2.0.0
  */
 class Controller extends \albertborsos\ddd\rest\Controller
 {

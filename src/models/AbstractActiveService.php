@@ -3,7 +3,6 @@
 namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
-use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
@@ -13,7 +12,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class AbstractDomain
  * @package albertborsos\ddd\models
- * @since 1.1.0
+ * @since 2.0.0
  */
 abstract class AbstractActiveService extends AbstractService
 {

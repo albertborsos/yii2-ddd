@@ -7,7 +7,7 @@ use albertborsos\ddd\rest\ViewActionTrait;
 /**
  * Class ViewAction
  * @package albertborsos\ddd\rest\cache
- * @since 1.1.0
+ * @since 2.0.0
  */
 class ViewAction extends Action
 {

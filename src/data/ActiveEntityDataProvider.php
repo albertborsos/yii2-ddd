@@ -30,7 +30,7 @@ use yii\helpers\Inflector;
  * ```
  *
  * @package albertborsos\ddd\data
- * @since 1.1.0
+ * @since 2.0.0
  */
 class ActiveEntityDataProvider extends ActiveDataProvider
 {

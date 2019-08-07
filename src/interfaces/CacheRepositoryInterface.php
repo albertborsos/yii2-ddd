@@ -5,7 +5,7 @@ namespace albertborsos\ddd\interfaces;
 /**
  * Interface CacheRepositoryInterface
  * @package albertborsos\ddd\interfaces
- * @since 1.1.0
+ * @since 2.0.0
  */
 interface CacheRepositoryInterface extends RepositoryInterface
 {

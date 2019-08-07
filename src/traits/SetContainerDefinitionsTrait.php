@@ -8,7 +8,7 @@ use yii\base\Application;
 /**
  * Trait SetContainerDefinitionsTrait
  * @package albertborsos\ddd\traits
- * @since 1.1.0
+ * @since 2.0.0
  */
 trait SetContainerDefinitionsTrait
 {

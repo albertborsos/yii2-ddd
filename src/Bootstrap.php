@@ -11,7 +11,7 @@ use yii\base\BootstrapInterface;
 /**
  * Class Bootstrap
  * @package albertborsos\ddd
- * @since 1.1.0
+ * @since 2.0.0
  */
 class Bootstrap implements BootstrapInterface
 {

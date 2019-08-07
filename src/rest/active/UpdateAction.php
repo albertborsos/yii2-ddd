@@ -8,7 +8,7 @@ use albertborsos\ddd\rest\UpdateActionTrait;
 /**
  * Class UpdateAction
  * @package albertborsos\ddd\rest\active
- * @since 1.1.0
+ * @since 2.0.0
  */
 class UpdateAction extends Action
 {

@@ -15,7 +15,7 @@ use yii\base\Model;
  * If the hydrated object is an instance of `EntityInterface` then it tries to hydrate the relations too.
  *
  * @package albertborsos\ddd\hydrators
- * @since 1.1.0
+ * @since 2.0.0
  */
 class ActiveHydrator extends Component implements HydratorInterface
 {

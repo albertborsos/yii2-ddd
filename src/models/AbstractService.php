@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\models;
 
-use albertborsos\ddd\interfaces\BusinessObject;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
@@ -16,7 +15,7 @@ abstract class AbstractService extends Component
 {
     /**
      * @var string|RepositoryInterface
-     * @since 1.1.0
+     * @since 2.0.0
      */
     protected $repository;
 
@@ -30,12 +29,6 @@ abstract class AbstractService extends Component
      * @var \yii\base\Model|FormObject
      */
     private $_form;
-
-    /**
-     * @var \yii\db\ActiveRecord|BusinessObject
-     * @deprecated since 1.1.0
-     */
-    private $_model;
 
     /**
      * @var EntityInterface
@@ -71,15 +64,6 @@ abstract class AbstractService extends Component
     }
 
     /**
-     * @return EntityInterface|BusinessObject
-     * @deprecated since 1.1.0
-     */
-    protected function getModel()
-    {
-        return $this->_model;
-    }
-
-    /**
      * @return EntityInterface
      */
     protected function getEntity()
@@ -89,7 +73,7 @@ abstract class AbstractService extends Component
 
     /**
      * @return RepositoryInterface
-     * @since 1.1.0
+     * @since 2.0.0
      */
     protected function getRepository()
     {
@@ -118,15 +102,6 @@ abstract class AbstractService extends Component
     private function setForm(FormObject $form)
     {
         $this->_form = $form;
-    }
-
-    /**
-     * @param BusinessObject $model
-     * @deprecated since 1.1.0
-     */
-    private function setModel(BusinessObject $model)
-    {
-        $this->_model = $model;
     }
 
     /**

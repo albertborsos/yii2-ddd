@@ -12,7 +12,7 @@ use yii\helpers\Inflector;
  *
  * @property array $attributes
  * @property array $dataAttributes
- * @since 1.1.0
+ * @since 2.0.0
  */
 abstract class AbstractEntity extends Model implements EntityInterface
 {

@@ -7,9 +7,9 @@ use yii\base\Model;
 /**
  * Interface EntityInterface
  * @package albertborsos\ddd\interfaces
- * @since 1.1.0
+ * @since 2.0.0
  */
-interface EntityInterface extends BusinessObject
+interface EntityInterface
 {
     /**
      * @event AfterSaveEvent an event that is triggered after an entity is saved.

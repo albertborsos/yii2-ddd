@@ -10,7 +10,7 @@ use yii\data\ActiveDataProvider;
 /**
  * Class IndexAction
  * @package albertborsos\ddd\rest\cache
- * @since 1.1.0
+ * @since 2.0.0
  */
 class IndexAction extends Action
 {

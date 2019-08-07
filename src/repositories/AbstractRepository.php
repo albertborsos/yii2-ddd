@@ -11,7 +11,7 @@ use yii\base\InvalidConfigException;
 /**
  * Class AbstractRepository
  * @package albertborsos\ddd\repositories
- * @since 1.1.0
+ * @since 2.0.0
  */
 abstract class AbstractRepository extends Component implements RepositoryInterface
 {

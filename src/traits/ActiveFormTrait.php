@@ -9,7 +9,7 @@ use yii\base\InvalidConfigException;
  * Trait ActiveFormTrait
  * @package albertborsos\ddd\traits
  * @property $dataModelClass
- * @since 1.1.0
+ * @since 2.0.0
  */
 trait ActiveFormTrait
 {

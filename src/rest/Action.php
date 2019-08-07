@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
  * @package mito\cms\core\rest\admin
  *
  * @property \mito\cms\core\rest\Controller $controller
- * @since 1.1.0
+ * @since 2.0.0
  */
 abstract class Action extends \yii\base\Action
 {

@@ -14,13 +14,7 @@ abstract class AbstractFormTest extends Unit
 
     /**
      * @var string
-     * @deprecated since 1.1.0 will be removed in 2.0.0. Use `entityClass` property instead of `modelClass`.
-     */
-    protected $modelClass;
-
-    /**
-     * @var string
-     * @since 1.1.0
+     * @since 2.0.0
      */
     protected $entityClass;
 
@@ -57,15 +51,5 @@ abstract class AbstractFormTest extends Unit
         $entityClass = $this->entityClass ?? $this->modelClass;
 
         return Yii::createObject($entityClass, [$config]);
-    }
-
-    /**
-     * @param $id
-     * @return \yii\db\ActiveRecord
-     * @deprecated since 1.1.0 will be removed in 2.0.0
-     */
-    protected function getModel($id)
-    {
-        return call_user_func([$this->modelClass, 'findOne'], $id);
     }
 }
