@@ -1,3 +1,7 @@
-/vendor
+composer.lock
+
+/tests/config/*.local.php
 /tests/runtime/web/assets/
 !/tests/runtime/web/assets/.gitkeep
+
+/vendor
