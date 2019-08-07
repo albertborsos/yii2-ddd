@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "yiisoft/yii2": "~2.0.0",
+        "yiisoft/yii2": "~2.0.13",
         "samdark/hydrator": "^1.0"
     },
     "require-dev": {
@@ -20,8 +20,13 @@
         "codeception/verify": "~1.0",
         "codeception/specify": "~1.0",
         "codeception/mockery-module": "^0.3.0",
-        "satooshi/php-coveralls": "^2.1",
-        "mito/yii2-coding-standards": "~2.0.0@beta"
+        "mockery/mockery": "^0.9.9 || ^1.0.0",
+        "phpunit/phpunit": "^7.0.0",
+        "hoa/file": "~1.0",
+        "hoa/consistency": "^1.17.05.02",
+        "squizlabs/php_codesniffer": "~2.8",
+        "php-coveralls/php-coveralls": "^2.1",
+        "mito/yii2-coding-standards": "~2.0.0-beta16"
     },
     "extra": {
         "bootstrap": "albertborsos\\ddd\\Bootstrap"
