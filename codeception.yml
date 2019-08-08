@@ -10,6 +10,10 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+modules:
+    enabled:
+        - Yii2:
+            configFile: 'tests/config/main.php'
 coverage:
     enabled: true
     include:

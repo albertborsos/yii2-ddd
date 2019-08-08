@@ -1,6 +1,8 @@
 <?php
 
 $config = [
+    'id' => 'ddd-test',
+    'basePath' => dirname(__DIR__),
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
