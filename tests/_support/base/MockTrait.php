@@ -40,7 +40,7 @@ trait MockTrait
     {
         $model = \Mockery::mock($config['class'])->makePartial()->shouldAllowMockingProtectedMethods();
 
-        foreach ($config['attributes'] as $attribute => $value) {
+        foreach ($config['attributes'] ?? [] as $attribute => $value) {
             if (!is_array($value)) {
                 $model->$attribute = $value;
                 continue;
@@ -58,7 +58,7 @@ trait MockTrait
             $model->shouldReceive('get' . ucfirst($attribute))->andReturn($returnObjects)->atLeast()->once();
         }
 
-        foreach ($config['settings'] as $method => $returnValue) {
+        foreach ($config['settings'] ?? [] as $method => $returnValue) {
             $model->shouldReceive($method)->andReturn($returnValue)->atLeast()->once();
         }
 
