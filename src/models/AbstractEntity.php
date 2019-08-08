@@ -3,6 +3,7 @@
 namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\EntityInterface;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\helpers\Inflector;
 
@@ -32,6 +33,7 @@ abstract class AbstractEntity extends Model implements EntityInterface
     public function setPrimaryKey(Model $model): void
     {
         $keys = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
+        $keys = array_filter($keys);
 
         array_walk($keys, function ($key) use ($model) {
             $this->{$key} = $model->{$key};
@@ -49,7 +51,11 @@ abstract class AbstractEntity extends Model implements EntityInterface
 
         $ids = array_map(function ($key) {
             return $this->{$key};
-        }, $keys);
+        }, array_filter($keys));
+
+        if (empty($ids)) {
+            throw new InvalidConfigException('Primary key must be set for entities to generate a unique cache key.');
+        }
 
         return implode('-', array_merge([static::class], $ids));
     }
@@ -96,14 +102,10 @@ abstract class AbstractEntity extends Model implements EntityInterface
      */
     private function getDataAttributesPropertiesMap()
     {
-        $relationFields = array_keys($this->relationMapping());
-        $attributes = array_keys($this->attributes);
-
-        $properties = array_diff($attributes, $relationFields);
-        $properties = array_map(function ($propertyName) {
+        $map = array_map(function ($propertyName) {
             return Inflector::underscore($propertyName);
-        }, array_combine($properties, $properties));
+        }, array_combine($this->fields(), $this->fields()));
 
-        return array_flip($properties);
+        return array_flip($map);
     }
 }
