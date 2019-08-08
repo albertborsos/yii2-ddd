@@ -13,7 +13,7 @@
     "require": {
         "php": ">=7.1.0",
         "yiisoft/yii2": "~2.0.13",
-        "samdark/hydrator": "^1.0"
+        "samdark/hydrator": "^1.0.2"
     },
     "require-dev": {
         "codeception/base": "~3.0",
