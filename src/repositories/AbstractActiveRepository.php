@@ -237,7 +237,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     private function validateDataModelClass(): void
     {
         if (empty($this->dataModelClass) || !\Yii::createObject($this->dataModelClass) instanceof ActiveRecordInterface) {
-            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
+            throw new InvalidConfigException(get_called_class() . '::$dataModelClass must implements `yii\db\ActiveRecordInterface`');
         }
     }
 }

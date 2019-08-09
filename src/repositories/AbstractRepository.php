@@ -64,7 +64,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     protected function validateEntityClass(): void
     {
         if (empty($this->entityClass) || !\Yii::createObject($this->entityClass) instanceof EntityInterface) {
-            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . EntityInterface::class . '`');
+            throw new InvalidConfigException(get_called_class() . '::$entityClass must implements `' . EntityInterface::class . '`');
         }
     }
 
