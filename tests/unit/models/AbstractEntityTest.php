@@ -121,7 +121,7 @@ class AbstractEntityTest extends TestCase
     {
         return [
             'standard fields' => [Customer::class, [], ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses']],
-            'fields with snake_case' => [CustomerAddress::class, [], ['id' => 'id', 'customer_id' => 'customerId', 'zip_code' => 'zipCode', 'city' => 'city', 'street' => 'street', 'customer' => 'customer']],
+            'fields with snake_case' => [CustomerAddress::class, [], ['id' => 'id', 'customer_id' => 'customerId', 'zip_code' => 'zipCode', 'city' => 'city', 'street' => 'street']],
         ];
     }
 

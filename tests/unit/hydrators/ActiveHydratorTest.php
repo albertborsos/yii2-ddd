@@ -5,7 +5,9 @@ namespace albertborsos\ddd\tests\unit\hydrators;
 use albertborsos\ddd\hydrators\ActiveHydrator;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
+use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress;
 use albertborsos\ddd\tests\support\base\MockTrait;
+use albertborsos\ddd\tests\support\base\Customer as CustomerModel;
 use Codeception\PHPUnit\TestCase;
 use Codeception\Util\Debug;
 use yii\base\DynamicModel;
@@ -50,6 +52,57 @@ class ActiveHydratorTest extends TestCase
         $entity = $hydrator->hydrate($entityClass, $data);
 
         $this->assertHydratedEntity($entityClass, $entity, $data);
+    }
+
+    public function dataProviderHydrateSingleModel()
+    {
+        return [
+            'data array' => [CustomerModel::class, ['id' => 'id', 'name' => 'name'], ['id' => 1, 'name' => 'Name']],
+            'model'      => [CustomerModel::class, ['id' => 'id', 'name' => 'name'], new DynamicModel(['id' => 1, 'name' => 'Name'])],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderHydrateSingleModel
+     */
+    public function testHydrateSingleModel($modelClass, $map, $data)
+    {
+        $hydrator = $this->mockHydrator($map);
+
+        /** @var Model $model */
+        $model = $hydrator->hydrate($modelClass, $data);
+
+        $this->assertHydratedModel($modelClass, $data, $model);
+    }
+
+    public function dataProviderHydrateMultipleModels()
+    {
+        return [
+            'data array' => [CustomerModel::class, ['id' => 'id', 'name' => 'name'], [
+                ['id' => 1, 'name' => 'Name'],
+                ['id' => 2, 'name' => 'Name'],
+                ['id' => 3, 'name' => 'Name'],
+            ]],
+            'model' => [CustomerModel::class, ['id' => 'id', 'name' => 'name'], [
+                new DynamicModel(['id' => 1, 'name' => 'Name']),
+                new DynamicModel(['id' => 2, 'name' => 'Name']),
+                new DynamicModel(['id' => 3, 'name' => 'Name']),
+            ]],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderHydrateMultipleModels
+     */
+    public function testHydrateMultipleModels($modelClass, $map, $data)
+    {
+        $hydrator = $this->mockHydrator($map);
+
+        $models = $hydrator->hydrateAll($modelClass, $data);
+
+        foreach ($data as $i => $modelData) {
+            $this->assertHydratedModel($modelClass, $modelData, $models[$i]);
+        }
     }
 
     public function dataProviderHydrateMultipleEntities()
@@ -135,6 +188,30 @@ class ActiveHydratorTest extends TestCase
         }
     }
 
+    public function dataProviderExtractHydratedModel()
+    {
+        return [
+            'customer' => [Customer::class, ['id' => 'id', 'name' => 'name'], ['id' => 1, 'name' => 'Name']],
+            'customerAddress' => [CustomerAddress::class, ['id' => 'id', 'customer_id' => 'customerId', 'zip_code' => 'zipCode', 'city' => 'city', 'street' => 'street'], ['id' => 1, 'customer_id' => 1, 'zip_code' => 2030, 'city' => 'Érd', 'street' => 'Balatoni út 51.']],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderExtractHydratedModel
+     * @param $entityClass
+     * @param $map
+     * @param $data
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function testExtractHydratedModel($entityClass, $map, $data)
+    {
+        $hydrator = $this->mockHydrator($map);
+
+        $entity = $hydrator->hydrate($entityClass, $data);
+
+        $this->assertEquals($data, $hydrator->extract($entity));
+    }
+
     /**
      * @return ActiveHydrator
      */
@@ -170,6 +247,22 @@ class ActiveHydratorTest extends TestCase
                 // data property
                 $this->assertEquals($expectedValue, $entity->$attribute);
             }
+        }
+    }
+
+    /**
+     * @param $modelClass
+     * @param $data
+     * @param Model $model
+     */
+    private function assertHydratedModel($modelClass, $data, Model $model): void
+    {
+        $this->assertInstanceOf($modelClass, $model);
+
+        $attributes = $data instanceof Model ? $data->attributes : $data;
+
+        foreach ($attributes as $attribute => $expectedValue) {
+            $this->assertEquals($expectedValue, $model->$attribute);
         }
     }
 }

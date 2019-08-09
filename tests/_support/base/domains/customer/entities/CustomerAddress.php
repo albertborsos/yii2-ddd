@@ -16,9 +16,6 @@ class CustomerAddress extends AbstractEntity
     public $city;
     public $street;
 
-    /** @var Customer */
-    public $customer;
-
     public function fields()
     {
         return [
@@ -32,9 +29,7 @@ class CustomerAddress extends AbstractEntity
 
     public function extraFields()
     {
-        return [
-            'customer',
-        ];
+        return [];
     }
 
     /**
@@ -44,8 +39,6 @@ class CustomerAddress extends AbstractEntity
      */
     public function relationMapping(): array
     {
-        return [
-            'customer' => Customer::class,
-        ];
+        return [];
     }
 }
