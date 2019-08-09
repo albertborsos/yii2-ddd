@@ -7,7 +7,7 @@ class MockConfigTest extends \Codeception\PHPUnit\TestCase
     public function mockConfigDataProvider()
     {
         return [
-            [\albertborsos\ddd\tests\support\base\StubbedForm::class, ['email' => 'a@b.hu'], ['validate' => true]],
+            [\albertborsos\ddd\tests\support\base\StubForm::class, ['email' => 'a@b.hu'], ['validate' => true]],
         ];
     }
 

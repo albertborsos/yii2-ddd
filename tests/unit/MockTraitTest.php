@@ -7,10 +7,10 @@ class MockTraitTest extends \Codeception\PHPUnit\TestCase
     public function mockObjectDataProvider()
     {
         return [
-            'mock form attributes only' => [\albertborsos\ddd\tests\support\base\StubbedForm::class, ['email' => 'a@b.hu'], []],
-            'mock form attribute and method' => [\albertborsos\ddd\tests\support\base\StubbedForm::class, ['email' => 'a@b.hu'], ['validate' => true]],
-            'mock service execute method' => [\albertborsos\ddd\tests\support\base\StubbedService::class, [], ['execute' => true]],
-            'mock service with multiple settings' => [\albertborsos\ddd\tests\support\base\StubbedService::class, [], [
+            'mock form attributes only' => [\albertborsos\ddd\tests\support\base\StubForm::class, ['email' => 'a@b.hu'], []],
+            'mock form attribute and method' => [\albertborsos\ddd\tests\support\base\StubForm::class, ['email' => 'a@b.hu'], ['validate' => true]],
+            'mock service execute method' => [\albertborsos\ddd\tests\support\base\StubService::class, [], ['execute' => true]],
+            'mock service with multiple settings' => [\albertborsos\ddd\tests\support\base\StubService::class, [], [
                 'execute' => true,
                 'failedExecute' => false,
             ]],

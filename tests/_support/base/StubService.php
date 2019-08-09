@@ -5,7 +5,7 @@ namespace albertborsos\ddd\tests\support\base;
 use albertborsos\ddd\models\AbstractService;
 use yii\base\Model;
 
-class StubbedService extends AbstractService
+class StubService extends AbstractService
 {
     public function execute()
     {
