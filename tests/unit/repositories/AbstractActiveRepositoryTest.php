@@ -44,6 +44,7 @@ class AbstractActiveRepositoryTest extends TestCase
     /**
      * @dataProvider invalidDataModelClassDataProvider
      * @expectedException \yii\base\InvalidConfigException
+     * @expectedExceptionMessageRegExp  /::dataModelClass\(\) must implements `yii\\db\\ActiveRecordInterface`$/
      */
     public function testMissingDataModelClass($repositoryClass, $dataModelClass)
     {

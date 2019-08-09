@@ -25,9 +25,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     public function init()
     {
         parent::init();
-        if (empty($this->dataModelClass) || !\Yii::createObject($this->dataModelClass) instanceof ActiveRecordInterface) {
-            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
-        }
+        $this->validateDataModelClass();
     }
 
     /**
@@ -189,10 +187,8 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function setDataModelClass($className): void
     {
-        if (empty($className) || !\Yii::createObject($className) instanceof ActiveRecordInterface) {
-            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . ActiveRecordInterface::class . '`');
-        }
         $this->dataModelClass = $className;
+        $this->validateDataModelClass();
     }
 
     /**
@@ -236,5 +232,12 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         $entity->addErrors($activeRecord->getErrors());
 
         return false;
+    }
+
+    private function validateDataModelClass(): void
+    {
+        if (empty($this->dataModelClass) || !\Yii::createObject($this->dataModelClass) instanceof ActiveRecordInterface) {
+            throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `yii\db\ActiveRecordInterface`');
+        }
     }
 }
