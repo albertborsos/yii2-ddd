@@ -96,7 +96,11 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     public function delete(EntityInterface $entity)
     {
         /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = $this->findOrCreate($entity);
+        $activeRecord = call_user_func([$this->dataModelClass, 'findOne'], $entity->getDataAttributes());
+
+        if (empty($activeRecord)) {
+            return false;
+        }
 
         if ($activeRecord->delete() !== false) {
             $entity->trigger(EntityInterface::EVENT_AFTER_DELETE, new ActiveEvent(['sender' => $activeRecord]));
@@ -125,21 +129,19 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             $condition = array_filter($condition);
         }
 
-        $dataAttributes = $entity->dataAttributes;
-
         if (empty($condition)) {
-            return \Yii::createObject($this->dataModelClass, [$dataAttributes]);
+            return \Yii::createObject($this->dataModelClass, [$entity->getDataAttributes()]);
         }
 
         /** @var ActiveRecord $activeRecord */
         $activeRecord = \Yii::createObject([$this->dataModelClass, 'findOne'], [$condition]);
 
         if (!empty($activeRecord)) {
-            $activeRecord->setAttributes($dataAttributes, false);
+            $activeRecord->setAttributes($entity->getDataAttributes(), false);
             return $activeRecord;
         }
 
-        return \Yii::createObject($this->dataModelClass, [$dataAttributes]);
+        return \Yii::createObject($this->dataModelClass, [$entity->getDataAttributes()]);
     }
 
     /**
