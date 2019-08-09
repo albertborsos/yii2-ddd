@@ -104,7 +104,7 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->findOne($data['id']);
         if ($isNewRecord) {
             $this->assertNull($entity);
-        } else{
+        } else {
             $this->assertInstanceOf($repository->getEntityClass(), $entity);
         }
 
@@ -161,7 +161,6 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->findOne(4);
 
         $this->assertNull($entity);
-        $this->expectException('TypeError');
         $repository->delete($entity);
     }
 

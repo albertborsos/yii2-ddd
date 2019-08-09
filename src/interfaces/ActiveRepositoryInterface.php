@@ -39,6 +39,22 @@ interface ActiveRepositoryInterface extends RepositoryInterface
 
     /**
      * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null);
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null);
+
+    /**
+     * @param EntityInterface $entity
      * @return bool
      */
     public function delete(EntityInterface $entity);

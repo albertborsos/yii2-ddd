@@ -6,6 +6,7 @@ use albertborsos\ddd\data\ActiveEvent;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\Event;
+use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
@@ -77,15 +78,45 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         /** @var ActiveRecord $activeRecord */
         $activeRecord = $this->findOrCreate($entity);
 
-        if ($activeRecord->save($runValidation, $attributeNames)) {
-            $entity->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord]));
-            $entity->setPrimaryKey($activeRecord);
-            return true;
+        if ($activeRecord->isNewRecord) {
+            return $this->insertInternal($entity, $runValidation, $attributeNames, $activeRecord);
         }
 
-        $entity->addErrors($activeRecord->getErrors());
+        return $this->updateInternal($entity, $runValidation, $attributeNames, $activeRecord);
+    }
 
-        return false;
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     */
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null)
+    {
+        /** @var ActiveRecord $activeRecord */
+        $activeRecord = $this->findOrCreate($entity);
+
+        if (!$activeRecord->isNewRecord) {
+            throw new InvalidArgumentException('Entity is already exists, but `insert` method is called');
+        }
+
+        return $this->insertInternal($entity, $runValidation, $attributeNames, $activeRecord);
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     */
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null)
+    {
+        /** @var ActiveRecord $activeRecord */
+        $activeRecord = $this->findOrCreate($entity);
+
+        if ($activeRecord->isNewRecord) {
+            throw new InvalidArgumentException('Entity is not stored yet, but `update` method is called');
+        }
+
+        return $this->updateInternal($entity, $runValidation, $attributeNames, $activeRecord);
     }
 
     /**
@@ -162,5 +193,48 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . ActiveRecordInterface::class . '`');
         }
         $this->dataModelClass = $className;
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @param $runValidation
+     * @param $attributeNames
+     * @param ActiveRecord $activeRecord
+     * @return bool
+     * @throws \Throwable
+     */
+    private function insertInternal(EntityInterface $entity, $runValidation, $attributeNames, ActiveRecord $activeRecord): bool
+    {
+        if ($activeRecord->insert($runValidation, $attributeNames)) {
+            $entity->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord, 'scenario' => ActiveEvent::SCENARIO_INSERT]));
+            $entity->setPrimaryKey($activeRecord);
+            return true;
+        }
+
+        $entity->addErrors($activeRecord->getErrors());
+
+        return false;
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @param $runValidation
+     * @param $attributeNames
+     * @param ActiveRecord $activeRecord
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    private function updateInternal(EntityInterface $entity, $runValidation, $attributeNames, ActiveRecord $activeRecord): bool
+    {
+        if ($activeRecord->update($runValidation, $attributeNames)) {
+            $entity->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord, 'scenario' => ActiveEvent::SCENARIO_UPDATE]));
+            $entity->setPrimaryKey($activeRecord);
+            return true;
+        }
+
+        $entity->addErrors($activeRecord->getErrors());
+
+        return false;
     }
 }

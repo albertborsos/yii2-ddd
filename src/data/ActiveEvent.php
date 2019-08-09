@@ -15,8 +15,16 @@ use yii\db\ActiveRecordInterface;
  */
 class ActiveEvent extends Event
 {
+    const SCENARIO_INSERT = 'insert';
+    const SCENARIO_UPDATE = 'update';
+
     /**
      * @var ActiveRecordInterface
      */
     public $sender;
+
+    /**
+     * @var string
+     */
+    public $scenario;
 }
