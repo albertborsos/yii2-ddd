@@ -43,9 +43,4 @@ interface RepositoryInterface
      * @return string
      */
     public function getEntityClass(): string;
-
-    /**
-     * @param $className
-     */
-    public function setEntityClass($className): void;
 }

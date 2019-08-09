@@ -59,15 +59,6 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     }
 
     /**
-     * @param $className
-     */
-    public function setEntityClass($className): void
-    {
-        $this->entityClass = $className;
-        $this->validateEntityClass($className);
-    }
-
-    /**
      * @throws InvalidConfigException
      */
     protected function validateEntityClass(): void

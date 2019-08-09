@@ -59,7 +59,6 @@ trait FormAndServiceActionTrait
 
         /** @var ActiveRepositoryInterface $repository */
         $repository = $this->getRepository();
-        $repository->setEntityClass($this->formClass);
 
         $entity = $repository->findOne($this->getPrimaryKeyCondition($id));
 

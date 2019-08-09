@@ -33,7 +33,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function find()
     {
-        return call_user_func([$this->dataModelClass, 'find']);
+        return call_user_func([$this->getDataModelClass(), 'find']);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function findOne($condition)
     {
-        $model = call_user_func([$this->dataModelClass, 'findOne'], $condition);
+        $model = call_user_func([$this->getDataModelClass(), 'findOne'], $condition);
 
         if (empty($model)) {
             return null;
@@ -58,7 +58,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function findAll($condition)
     {
-        $models = call_user_func([$this->dataModelClass, 'findAll'], $condition);
+        $models = call_user_func([$this->getDataModelClass(), 'findAll'], $condition);
 
         return $this->hydrateAll($models);
     }
@@ -125,7 +125,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     public function delete(EntityInterface $entity)
     {
         /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = call_user_func([$this->dataModelClass, 'findOne'], $entity->getDataAttributes());
+        $activeRecord = call_user_func([$this->getDataModelClass(), 'findOne'], $entity->getDataAttributes());
 
         if (empty($activeRecord)) {
             return false;
@@ -159,18 +159,18 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         }
 
         if (empty($condition)) {
-            return \Yii::createObject($this->dataModelClass, [$entity->getDataAttributes()]);
+            return \Yii::createObject($this->getDataModelClass(), [$entity->getDataAttributes()]);
         }
 
         /** @var ActiveRecord $activeRecord */
-        $activeRecord = \Yii::createObject([$this->dataModelClass, 'findOne'], [$condition]);
+        $activeRecord = \Yii::createObject([$this->getDataModelClass(), 'findOne'], [$condition]);
 
         if (!empty($activeRecord)) {
             $activeRecord->setAttributes($entity->getDataAttributes(), false);
             return $activeRecord;
         }
 
-        return \Yii::createObject($this->dataModelClass, [$entity->getDataAttributes()]);
+        return \Yii::createObject($this->getDataModelClass(), [$entity->getDataAttributes()]);
     }
 
     /**

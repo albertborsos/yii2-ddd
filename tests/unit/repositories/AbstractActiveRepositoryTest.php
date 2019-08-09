@@ -120,6 +120,82 @@ class AbstractActiveRepositoryTest extends TestCase
         }
     }
 
+    public function testInsert()
+    {
+        $data = [
+            'id' => 5,
+            'name' => 'Test to Insert via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        $entity = $repository->hydrate($data);
+        $this->assertTrue($repository->insert($entity));
+
+        $entity = $repository->findOne($data['id']);
+        $this->assertInstanceOf($repository->getEntityClass(), $entity);
+
+        foreach ($entity->fields() as $attribute) {
+            $this->assertEquals($data[$attribute], $entity->$attribute);
+        }
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidArgumentException
+     */
+    public function testCallInsertForExistingRecord()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Test to Insert via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        $entity = $repository->hydrate($data);
+        $repository->insert($entity);
+    }
+
+    public function testUpdate()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Test to Update via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        $entity = $repository->hydrate($data);
+        $this->assertTrue($repository->update($entity));
+
+        $entity = $repository->findOne($data['id']);
+        $this->assertInstanceOf($repository->getEntityClass(), $entity);
+
+        foreach ($entity->fields() as $attribute) {
+            $this->assertEquals($data[$attribute], $entity->$attribute);
+        }
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidArgumentException
+     */
+    public function testCallUpdateForNonExistingRecord()
+    {
+        $data = [
+            'id' => 6,
+            'name' => 'Test to Update via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        $entity = $repository->hydrate($data);
+        $repository->update($entity);
+    }
+
     public function deleteExistingRecordDataProvider()
     {
         return [
