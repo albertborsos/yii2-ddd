@@ -31,15 +31,8 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     public function init()
     {
         parent::init();
-        $entity = \Yii::createObject($this->entityClass);
-        if (!$entity instanceof EntityInterface) {
-            throw new InvalidConfigException(get_called_class() . '::$entityClass must implements `' . EntityInterface::class . '`');
-        }
-
-        $this->hydrator = \Yii::createObject($this->hydrator, [$entity->fieldMapping()]);
-        if (!$this->hydrator instanceof HydratorInterface) {
-            throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
-        }
+        $this->validateEntityClass();
+        $this->initHydrator();
     }
 
     public function hydrate($data): EntityInterface
@@ -70,9 +63,26 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
      */
     public function setEntityClass($className): void
     {
-        if (empty($className) || !\Yii::createObject($className) instanceof EntityInterface) {
+        $this->entityClass = $className;
+        $this->validateEntityClass($className);
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    protected function validateEntityClass(): void
+    {
+        if (empty($this->entityClass) || !\Yii::createObject($this->entityClass) instanceof EntityInterface) {
             throw new InvalidConfigException(get_called_class() . '::dataModelClass() must implements `' . EntityInterface::class . '`');
         }
-        $this->entityClass = $className;
+    }
+
+    protected function initHydrator(): void
+    {
+        $entity = \Yii::createObject($this->entityClass);
+        $this->hydrator = \Yii::createObject($this->hydrator, [$entity->fieldMapping()]);
+        if (!$this->hydrator instanceof HydratorInterface) {
+            throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
+        }
     }
 }
