@@ -83,6 +83,8 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
             return true;
         }
 
+        $entity->addErrors($activeRecord->getErrors());
+
         return false;
     }
 
