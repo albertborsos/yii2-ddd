@@ -171,7 +171,7 @@ class AbstractActiveRepositoryTest extends TestCase
      * @param $data
      * @throws \yii\base\InvalidConfigException
      */
-    public function testDeleteEmptyEntiy()
+    public function testDeleteEmptyEntity()
     {
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
