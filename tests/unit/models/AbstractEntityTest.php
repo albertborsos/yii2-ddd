@@ -14,6 +14,13 @@ class AbstractEntityTest extends TestCase
 {
     use MockTrait;
 
+    public function testGetPrimaryKey()
+    {
+        $entity = \Yii::createObject(Customer::class);
+
+        $this->assertEquals($entity->getPrimaryKey(), ['id']);
+    }
+
     public function dataProviderSetPrimaryKey()
     {
         return array_merge(
