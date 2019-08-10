@@ -17,9 +17,7 @@ trait ActiveFormTrait
     {
         parent::init();
         $this->repository = \Yii::createObject($this->repository);
-        if (!$this->repository instanceof ActiveRepositoryInterface) {
-            throw new InvalidConfigException(get_class($this) . '::$repository must implements ' . ActiveRepositoryInterface::class);
-        }
+        $this->validateRepository($this->repository);
     }
 
     /**
@@ -34,11 +32,15 @@ trait ActiveFormTrait
         }
 
         $repository = \Yii::createObject($interface);
-
-        if (!$repository instanceof ActiveRepositoryInterface) {
-            throw new InvalidConfigException(get_class($this) . '::$repository must implements ' . ActiveRepositoryInterface::class);
-        }
+        $this->validateRepository($repository);
 
         return $repository;
+    }
+
+    protected function validateRepository($repository): void
+    {
+        if (!$repository instanceof ActiveRepositoryInterface) {
+            throw new InvalidConfigException(get_class($repository) . '::$repository must implements `' . ActiveRepositoryInterface::class . '`');
+        }
     }
 }
