@@ -23,7 +23,7 @@ class AbstractServiceTest extends TestCase
      * @return UpdateCustomerService|object
      * @throws \yii\base\InvalidConfigException
      */
-    public function mockService($serviceClass, $args)
+    public function mockService($serviceClass, $args = [])
     {
         if (!empty($args)) {
             return \Yii::createObject($serviceClass, $args);
@@ -71,6 +71,13 @@ class AbstractServiceTest extends TestCase
         $service = $this->mockService(StubService::class, [null, $mockedEntity]);
 
         $this->assertSame($mockedEntity, $service->testGetEntity());
+    }
+
+    public function testGetRepository()
+    {
+        $service = $this->mockService(StubService::class);
+
+        $this->assertNull($service->testGetRepository());
     }
 
     public function testExecuteOk()

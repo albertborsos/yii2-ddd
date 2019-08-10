@@ -29,4 +29,9 @@ class StubService extends AbstractService
     {
         return $this->getEntity();
     }
+
+    public function testGetRepository()
+    {
+        return $this->getRepository();
+    }
 }
