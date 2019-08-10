@@ -2,11 +2,11 @@
 
 namespace albertborsos\ddd\tests\support\base\modules\api\v1\controllers;
 
-use albertborsos\ddd\rest\active\CreateAction;
-use albertborsos\ddd\rest\active\DeleteAction;
-use albertborsos\ddd\rest\active\IndexAction;
-use albertborsos\ddd\rest\active\UpdateAction;
-use albertborsos\ddd\rest\active\ViewAction;
+use albertborsos\rest\active\CreateAction;
+use albertborsos\rest\active\DeleteAction;
+use albertborsos\rest\active\IndexAction;
+use albertborsos\rest\active\UpdateAction;
+use albertborsos\rest\active\ViewAction;
 use yii\rest\OptionsAction;
 use mito\cms\core\rest\api\Controller;
 use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActiveRepositoryInterface;

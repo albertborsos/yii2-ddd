@@ -28,6 +28,9 @@
         "php-coveralls/php-coveralls": "^2.1",
         "mito/yii2-coding-standards": "~2.0.0-beta16"
     },
+    "suggest": {
+        "albertborsos/yii2-rest": "If you want to easily use DDD forms and services in REST API endpoints."
+    },
     "extra": {
         "bootstrap": "albertborsos\\ddd\\Bootstrap"
     },
