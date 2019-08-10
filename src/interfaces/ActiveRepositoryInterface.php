@@ -15,19 +15,19 @@ interface ActiveRepositoryInterface extends RepositoryInterface
     /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
-    public function find();
+    public function find(): ActiveQueryInterface;
 
     /**
      * @param $condition
      * @return EntityInterface|Model
      */
-    public function findOne($condition);
+    public function findOne($condition): ?EntityInterface;
 
     /**
      * @param $condition
      * @return array|EntityInterface[]|Model[]
      */
-    public function findAll($condition);
+    public function findAll($condition): array;
 
     /**
      * @param EntityInterface $entity
@@ -35,7 +35,7 @@ interface ActiveRepositoryInterface extends RepositoryInterface
      * @param null $attributeNames
      * @return bool
      */
-    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null);
+    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
 
     /**
      * @param EntityInterface $entity
@@ -43,7 +43,7 @@ interface ActiveRepositoryInterface extends RepositoryInterface
      * @param null $attributeNames
      * @return bool
      */
-    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null);
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
 
     /**
      * @param EntityInterface $entity
@@ -51,13 +51,13 @@ interface ActiveRepositoryInterface extends RepositoryInterface
      * @param null $attributeNames
      * @return bool
      */
-    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null);
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
 
     /**
      * @param EntityInterface $entity
      * @return bool
      */
-    public function delete(EntityInterface $entity);
+    public function delete(EntityInterface $entity): bool;
 
     /**
      * @return string

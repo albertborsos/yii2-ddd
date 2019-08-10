@@ -15,7 +15,7 @@ class DeleteCustomerService extends AbstractCustomerService
     /**
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         return $this->getRepository()->delete($this->getEntity());
     }

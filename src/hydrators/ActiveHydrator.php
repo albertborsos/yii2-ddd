@@ -74,7 +74,7 @@ class ActiveHydrator extends Component implements HydratorInterface
      * @param array|Model[] $data
      * @return array
      */
-    public function hydrateAll($className, array $data)
+    public function hydrateAll($className, array $data): array
     {
         return array_map(function ($activeRecord) use ($className) {
             return $this->hydrate($className, $activeRecord);

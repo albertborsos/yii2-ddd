@@ -26,7 +26,7 @@ trait SetContainerDefinitionsTrait
      *
      * @return array
      */
-    abstract protected static function getContainerDefinitions();
+    abstract protected static function getContainerDefinitions(): array;
 
     /**
      * Sets the DI Container definitions for the application.
@@ -34,7 +34,7 @@ trait SetContainerDefinitionsTrait
      * @param Application $app
      * @param bool $overwrite if it is true, then it will overwrite the definition for the existing keys.
      */
-    protected function setContainerDefinitions(Application $app, $overwrite = false)
+    protected function setContainerDefinitions(Application $app, $overwrite = false): void
     {
         foreach (static::getContainerDefinitions() as $interface => $class) {
             if (Yii::$container->has($interface) && !$overwrite) {

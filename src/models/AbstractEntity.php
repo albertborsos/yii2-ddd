@@ -100,7 +100,7 @@ abstract class AbstractEntity extends Model implements EntityInterface
      *
      * @return array|null
      */
-    private function getDataAttributesPropertiesMap()
+    private function getDataAttributesPropertiesMap(): array
     {
         $map = array_map(function ($propertyName) {
             return Inflector::underscore($propertyName);

@@ -7,7 +7,7 @@ use yii\base\Model;
 
 class StubService extends AbstractService
 {
-    public function execute()
+    public function execute(): bool
     {
         $this->setId(1);
         return true;

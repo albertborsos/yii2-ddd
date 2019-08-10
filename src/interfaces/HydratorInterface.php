@@ -11,7 +11,7 @@ interface HydratorInterface
 {
     public function hydrate($className, $data);
 
-    public function hydrateAll($className, array $data);
+    public function hydrateAll($className, array $data): array;
 
     public function hydrateInto($object, array $data);
 

@@ -45,7 +45,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
         return $this->hydrator->hydrateInto($entity, $data);
     }
 
-    public function hydrateAll($models)
+    public function hydrateAll($models): array
     {
         return $this->hydrator->hydrateAll($this->entityClass, $models);
     }

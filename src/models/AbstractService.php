@@ -53,12 +53,12 @@ abstract class AbstractService extends Component
     /**
      * @return boolean
      */
-    abstract public function execute();
+    abstract public function execute(): bool;
 
     /**
      * @return FormObject|\yii\base\Model
      */
-    protected function getForm()
+    protected function getForm(): ?FormObject
     {
         return $this->_form;
     }
@@ -66,7 +66,7 @@ abstract class AbstractService extends Component
     /**
      * @return EntityInterface
      */
-    protected function getEntity()
+    protected function getEntity(): ?EntityInterface
     {
         return $this->_entity;
     }
@@ -83,13 +83,13 @@ abstract class AbstractService extends Component
     /**
      * @param $id
      */
-    protected function setId($id)
+    protected function setId($id): void
     {
         $this->_id = $id;
     }
 
     /**
-     * @return int
+     * @return int|array
      */
     public function getId()
     {
@@ -99,7 +99,7 @@ abstract class AbstractService extends Component
     /**
      * @param FormObject $form
      */
-    private function setForm(FormObject $form)
+    private function setForm(FormObject $form): void
     {
         $this->_form = $form;
     }
@@ -107,7 +107,7 @@ abstract class AbstractService extends Component
     /**
      * @param EntityInterface $entity
      */
-    private function setEntity(EntityInterface $entity)
+    private function setEntity(EntityInterface $entity): void
     {
         $this->_entity = $entity;
     }

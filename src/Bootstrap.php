@@ -40,7 +40,7 @@ class Bootstrap implements BootstrapInterface
      *
      * @return array
      */
-    protected static function getContainerDefinitions()
+    protected static function getContainerDefinitions(): array
     {
         return [
             HydratorInterface::class => ActiveHydrator::class,

@@ -28,7 +28,7 @@ interface RepositoryInterface
      * @param $models
      * @return mixed
      */
-    public function hydrateAll($models);
+    public function hydrateAll($models): array;
 
     /**
      * Creates data provider instance with search query applied

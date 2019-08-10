@@ -38,7 +38,7 @@ interface EntityInterface
      *
      * @return string
      */
-    public function getCacheKey();
+    public function getCacheKey(): string;
 
     /**
      * Returns the data attributes and properties mapping with the relation mapping too.

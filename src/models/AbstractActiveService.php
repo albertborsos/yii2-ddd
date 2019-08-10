@@ -32,7 +32,7 @@ abstract class AbstractActiveService extends AbstractService
     /**
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         /** @var FormObject $form */
         $form = $this->getForm();

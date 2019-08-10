@@ -31,7 +31,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
-    public function find()
+    public function find(): ActiveQueryInterface
     {
         return call_user_func([$this->getDataModelClass(), 'find']);
     }
@@ -41,7 +41,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
-    public function findOne($condition)
+    public function findOne($condition): ?EntityInterface
     {
         $model = call_user_func([$this->getDataModelClass(), 'findOne'], $condition);
 
@@ -56,7 +56,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @param $condition
      * @return EntityInterface[]|array
      */
-    public function findAll($condition)
+    public function findAll($condition): array
     {
         $models = call_user_func([$this->getDataModelClass(), 'findAll'], $condition);
 
@@ -71,7 +71,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      */
-    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null)
+    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
         /** @var ActiveRecord $activeRecord */
         $activeRecord = $this->findOrCreate($entity);
@@ -88,7 +88,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @param bool $runValidation
      * @param null $attributeNames
      */
-    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null)
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
         /** @var ActiveRecord $activeRecord */
         $activeRecord = $this->findOrCreate($entity);
@@ -105,7 +105,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @param bool $runValidation
      * @param null $attributeNames
      */
-    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null)
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
         /** @var ActiveRecord $activeRecord */
         $activeRecord = $this->findOrCreate($entity);
@@ -122,7 +122,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @return bool|int
      * @throws \yii\base\InvalidConfigException
      */
-    public function delete(EntityInterface $entity)
+    public function delete(EntityInterface $entity): bool
     {
         /** @var ActiveRecordInterface $activeRecord */
         $activeRecord = call_user_func([$this->getDataModelClass(), 'findOne'], $entity->getDataAttributes());
