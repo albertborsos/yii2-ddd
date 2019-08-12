@@ -11,12 +11,12 @@ use Codeception\PHPUnit\TestCase;
 class ActiveFormTraitTest extends TestCase
 {
     /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessageRegExp /\$repository must implements `albertborsos\\ddd\\interfaces\\ActiveRepositoryInterface`$/
+     * @expectedException TypeError
      */
     public function testInvalidRepositoryClass()
     {
         $form = new InvalidCreateCustomerForm();
+        $form->getRepository();
     }
 
     public function testGetRepository()
