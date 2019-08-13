@@ -11,5 +11,12 @@ use albertborsos\ddd\interfaces\CacheRepositoryInterface;
  */
 abstract class AbstractCacheRepository extends AbstractRepository implements CacheRepositoryInterface
 {
-
+    /**
+     * @param string $key
+     * @return string
+     */
+    protected function prefixedKey(string $key): string
+    {
+        return implode('-', [$this->getEntityClass(), $key]);
+    }
 }
