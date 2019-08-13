@@ -36,7 +36,7 @@ class ActiveHydrator extends Component implements HydratorInterface
      */
     public function hydrate($className, $data)
     {
-        $model = $this->hydrator->hydrate($data, $className);
+        $model = $this->hydrator->hydrateInto($data, \Yii::createObject($className));
 
         if (!$model instanceof EntityInterface) {
             return $model;
