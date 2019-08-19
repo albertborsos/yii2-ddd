@@ -15,7 +15,7 @@ abstract class AbstractCacheRepository extends AbstractRepository implements Cac
      * @param string $key
      * @return string
      */
-    protected function prefixedKey(string $key): string
+    protected function postfixedKey(string $key): string
     {
         return implode('-', [$this->getEntityClass(), $key]);
     }

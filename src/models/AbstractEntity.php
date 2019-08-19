@@ -43,21 +43,52 @@ abstract class AbstractEntity extends Model implements EntityInterface
     /**
      * Returns a unique cache key for the entity.
      *
+     * You can override the key attributes. If you want to find a Page entity by it's slug attribute,
+     * then you can store the entity with a different key(s) then the default key(s).
+     *
+     * ```php
+     *     $cacheRepository->storeEntity($pageEntity, ['slug']);
+     * ```
+     *
+     * Then if you want to find a Page by it's slug attribute, you can get a cache key based on the slug:
+     *
+     * ```php
+     *     public function findBySlug($slug): ?PageEntity
+     *     {
+     *         $pageEntity = $this->hydrate(['slug' => $slug]);
+     *
+     *         return $this->findEntityByKey($pageEntity->getCacheKey(['slug']));
+     *     }
+     * ```
+     *
+     * You can also pass a postfix to the cache key, if you want to store a related entity.
+     *
+     * ```php
+     *     $cacheRepository->set($pageEntity->getCacheKey([], 'next-page'), $nextPage)
+     * ```
+     *
+     * @param string $postfix
+     * @param array $keyAttributes to override default key attributes
      * @return string
+     * @throws InvalidConfigException
      */
-    public function getCacheKey(): string
+    public function getCacheKey(array $keyAttributes = [], string $postfix = null): string
     {
-        $keys = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
+        if (empty($keyAttributes)) {
+            $keyAttributes = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
+        }
 
-        $ids = array_map(function ($key) {
-            return $this->{$key};
-        }, array_filter($keys));
+        $ids = array_map(function ($keyAttribute) {
+            return $this->{$keyAttribute};
+        }, array_filter($keyAttributes));
+
+        $ids = array_combine($keyAttributes, $ids);
 
         if (empty($ids)) {
             throw new InvalidConfigException('Primary key must be set for entities to generate a unique cache key.');
         }
 
-        return implode('-', array_merge([static::class], $ids));
+        return implode('_', array_filter(array_merge([static::class], [http_build_query($ids)], [$postfix])));
     }
 
     /**

@@ -74,13 +74,14 @@ class CacheRepository extends AbstractCacheRepository
 
     /**
      * @param EntityInterface $entity
+     * @param array $keyAttributes
      * @param null $duration
      * @param null $dependency
-     * @return mixed
+     * @return bool|mixed
      */
-    public function storeEntity(EntityInterface $entity, $duration = null, $dependency = null)
+    public function storeEntity(EntityInterface $entity, array $keyAttributes = [], $duration = null, $dependency = null)
     {
-        return $this->set($entity->getCacheKey(), $entity->getDataAttributes(), $duration, $dependency);
+        return $this->set($entity->getCacheKey($keyAttributes), $entity->getDataAttributes(), $duration, $dependency);
     }
 
     /**
