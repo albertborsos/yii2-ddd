@@ -16,3 +16,5 @@ coverage:
     enabled: true
     include:
         - src/*
+    exclude:
+        - src/web/*

@@ -1,6 +1,10 @@
 composer.lock
 
 /tests/config/*.local.php
+
+/tests/runtime/cache/
+!/tests/runtime/cache/.gitkeep
+
 /tests/runtime/web/assets/
 !/tests/runtime/web/assets/.gitkeep
 

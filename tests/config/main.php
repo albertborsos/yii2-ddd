@@ -11,12 +11,17 @@ $config = [
             'password' => getenv('DB_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'cache' => [
+            'class' => \yii\caching\FileCache::class,
+        ],
     ],
     'container' => [
         'definitions' => [
             \albertborsos\ddd\interfaces\HydratorInterface::class => \albertborsos\ddd\hydrators\ActiveHydrator::class,
             \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerActiveRepository::class,
+            \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\cache\CustomerCacheRepository::class,
             \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerAddressActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerAddressActiveRepository::class,
+            \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerAddressCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\cache\CustomerAddressCacheRepository::class,
         ],
     ],
 ];

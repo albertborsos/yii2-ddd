@@ -6,5 +6,7 @@ use albertborsos\ddd\interfaces\CacheRepositoryInterface;
 
 interface CustomerCacheRepositoryInterface extends CacheRepositoryInterface
 {
+    public function getVipCustomers();
 
+    public function updateVipCustomers($customers);
 }
