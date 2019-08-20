@@ -60,7 +60,6 @@ class AbstractEntityTest extends TestCase
 
         /** @var EntityInterface $entity */
         $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings]);
-
         $entity->setPrimaryKey($model);
 
         foreach ($entity->attributes as $attribute => $value) {
@@ -90,11 +89,45 @@ class AbstractEntityTest extends TestCase
     {
         $model = new DynamicModel($modelAttributes);
         /** @var EntityInterface $entity */
-        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings]);
+        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings, 'attributes' => $modelAttributes]);
         $entity->setPrimaryKey($model);
 
         $this->assertNotEmpty($entity->getCacheKey());
         $this->assertNotEquals($entity->getCacheKey(), get_class($entity));
+    }
+
+    /**
+     * @dataProvider dataProviderValidPrimaryKeys
+     */
+    public function testCacheKeyWithCustomKeyAttributes($modelAttributes, $entityClass, $entitySettings)
+    {
+        $model = new DynamicModel($modelAttributes);
+        /** @var EntityInterface $entity */
+        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings, 'attributes' => $modelAttributes]);
+        $entity->setPrimaryKey($model);
+
+        $this->assertNotEmpty($entity->getCacheKey(['name']));
+        $this->assertNotEquals($entity->getCacheKey(['name']), get_class($entity));
+        $this->assertNotEquals($entity->getCacheKey(['name']), $entity->getCacheKey());
+    }
+
+    /**
+     * @dataProvider dataProviderValidPrimaryKeys
+     */
+    public function testCacheKeyWithPostfix($modelAttributes, $entityClass, $entitySettings)
+    {
+        $model = new DynamicModel($modelAttributes);
+        /** @var EntityInterface $entity */
+        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings, 'attributes' => $modelAttributes]);
+        $entity->setPrimaryKey($model);
+
+        $postfix = 'postfix';
+
+        $this->assertNotEmpty($entity->getCacheKey([], $postfix));
+        $this->assertNotEquals($entity->getCacheKey([], $postfix), get_class($entity));
+        $this->assertNotEquals($entity->getCacheKey([], $postfix), $entity->getCacheKey());
+
+        $this->assertEquals($entity->getCacheKey([], $postfix), implode('_', [$entity->getCacheKey(), $postfix]));
     }
 
     public function dataProviderDataAttributes()
