@@ -16,7 +16,7 @@
         "samdark/hydrator": "^1.0.2"
     },
     "require-dev": {
-        "codeception/base": "~3.0",
+        "codeception/codeception": "~3.0",
         "codeception/verify": "~1.0",
         "codeception/specify": "~1.0",
         "codeception/mockery-module": "^0.3.0",

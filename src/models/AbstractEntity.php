@@ -82,11 +82,11 @@ abstract class AbstractEntity extends Model implements EntityInterface
             return $this->{$keyAttribute};
         }, array_filter($keyAttributes));
 
-        $ids = array_combine($keyAttributes, $ids);
-
         if (empty($ids)) {
             throw new InvalidConfigException('Primary key must be set for entities to generate a unique cache key.');
         }
+
+        $ids = array_combine($keyAttributes, $ids);
 
         return implode('_', array_filter(array_merge([static::class], [http_build_query($ids)], [$postfix])));
     }

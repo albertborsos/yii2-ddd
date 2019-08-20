@@ -5,8 +5,6 @@ paths:
     support: tests/_support
     envs: tests/_envs
 actor_suffix: Tester
-settings:
-    bootstrap: _bootstrap.php
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
