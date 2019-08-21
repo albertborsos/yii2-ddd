@@ -9,9 +9,13 @@ use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActi
 use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerActiveRepository;
 use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
+use albertborsos\ddd\tests\support\base\services\customer\CreateCustomerService;
+use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use Codeception\PHPUnit\TestCase;
 use Codeception\Util\Debug;
+use yii\base\Exception;
 use yii\db\ActiveQueryInterface;
+use yii\db\Transaction;
 use yii\test\FixtureTrait;
 
 class AbstractActiveRepositoryTest extends TestCase
@@ -254,5 +258,69 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->hydrate([]);
 
         $this->assertFalse($repository->delete($entity));
+    }
+
+    public function testBeginTransaction()
+    {
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $transaction = $repository->beginTransaction();
+        $this->assertNotNull($transaction);
+        $this->assertTrue($transaction->isActive);
+
+        $transaction->rollBack();
+    }
+
+    public function testTransactionCommit()
+    {
+        $attributes = [
+            'name' => 'Transaction Commit',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $transaction = $repository->beginTransaction();
+
+        try {
+            $this->assertEmpty($repository->findOne($attributes));
+            $form = new CreateCustomerForm($attributes);
+            $this->assertTrue($form->validate());
+            $service = new CreateCustomerService($form);
+            $this->assertTrue($service->execute());
+            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findOne($attributes));
+            $transaction->commit();
+        } catch (Exception $e) {
+            return false;
+        }
+
+        $entity = $repository->findOne($attributes);
+        $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $entity);
+
+        $repository->delete($entity);
+    }
+
+    public function testTransactionRollback()
+    {
+        $attributes = [
+            'name' => 'Transaction Rollback',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $transaction = $repository->beginTransaction();
+
+        try {
+            $this->assertEmpty($repository->findOne($attributes));
+            $form = new CreateCustomerForm($attributes);
+            $this->assertTrue($form->validate());
+            $service = new CreateCustomerService($form);
+            $this->assertTrue($service->execute());
+            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findOne($attributes));
+
+            throw new Exception('rollback');
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            $this->assertEmpty($repository->findOne($attributes));
+        }
     }
 }

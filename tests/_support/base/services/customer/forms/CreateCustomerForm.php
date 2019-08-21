@@ -9,7 +9,7 @@ class CreateCustomerForm extends AbstractCustomerForm
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['customProperty'], 'required'],
+//            [['customProperty'], 'required'],
         ]);
     }
 }

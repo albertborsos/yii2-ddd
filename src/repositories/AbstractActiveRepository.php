@@ -5,13 +5,14 @@ namespace albertborsos\ddd\repositories;
 use albertborsos\ddd\data\ActiveEvent;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
-use yii\base\Event;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
+use yii\db\Connection;
+use yii\db\Transaction;
 
 /**
  * Class AbstractActiveRepository
@@ -87,6 +88,9 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
+     * @return bool
+     * @throws InvalidConfigException
+     * @throws \Throwable
      */
     public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
@@ -104,6 +108,10 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
+     * @return bool
+     * @throws InvalidConfigException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
@@ -234,10 +242,32 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         return false;
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     private function validateDataModelClass(): void
     {
         if (empty($this->dataModelClass) || !\Yii::createObject($this->dataModelClass) instanceof ActiveRecordInterface) {
             throw new InvalidConfigException(get_called_class() . '::$dataModelClass must implements `yii\db\ActiveRecordInterface`');
         }
+    }
+
+    /**
+     * @param null $isolationLevel
+     * @return Transaction
+     * @throws InvalidConfigException
+     */
+    public function beginTransaction($isolationLevel = null): Transaction
+    {
+        return $this->resolveDatabase()->beginTransaction($isolationLevel);
+    }
+
+    /**
+     * @return Connection
+     * @throws InvalidConfigException
+     */
+    protected function resolveDatabase(): Connection
+    {
+        return \Yii::createObject([$this->getDataModelClass(), 'getDb']);
     }
 }

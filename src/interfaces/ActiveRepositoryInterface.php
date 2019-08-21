@@ -4,6 +4,7 @@ namespace albertborsos\ddd\interfaces;
 
 use yii\base\Model;
 use yii\db\ActiveQueryInterface;
+use yii\db\Transaction;
 
 /**
  * Interface ActiveRepositoryInterface
@@ -68,4 +69,10 @@ interface ActiveRepositoryInterface extends RepositoryInterface
      * @param $className
      */
     public function setDataModelClass($className): void;
+
+    /**
+     * @param null $isolationLevel
+     * @return Transaction
+     */
+    public function beginTransaction($isolationLevel = null): Transaction;
 }
