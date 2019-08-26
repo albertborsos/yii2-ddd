@@ -231,7 +231,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     private function updateInternal(EntityInterface $entity, $runValidation, $attributeNames, ActiveRecord $activeRecord): bool
     {
-        if ($activeRecord->update($runValidation, $attributeNames)) {
+        if ($activeRecord->update($runValidation, $attributeNames) !== false) {
             $entity->trigger(EntityInterface::EVENT_AFTER_SAVE, new ActiveEvent(['sender' => $activeRecord, 'scenario' => ActiveEvent::SCENARIO_UPDATE]));
             $entity->setPrimaryKey($activeRecord);
             return true;

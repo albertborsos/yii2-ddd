@@ -148,6 +148,23 @@ class AbstractActiveRepositoryTest extends TestCase
     /**
      * @expectedException \yii\base\InvalidArgumentException
      */
+    public function testCallUpdateForNonExistingRecord()
+    {
+        $data = [
+            'id' => 6,
+            'name' => 'Test to Update via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        $entity = $repository->hydrate($data);
+        $repository->update($entity);
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidArgumentException
+     */
     public function testCallInsertForExistingRecord()
     {
         $data = [
@@ -162,11 +179,11 @@ class AbstractActiveRepositoryTest extends TestCase
         $repository->insert($entity);
     }
 
-    public function testUpdate()
+    public function testUpdateWithNoModification()
     {
         $data = [
             'id' => 1,
-            'name' => 'Test to Update via repository',
+            'name' => 'Albert',
         ];
 
         /** @var AbstractActiveRepository $repository */
@@ -181,23 +198,6 @@ class AbstractActiveRepositoryTest extends TestCase
         foreach ($entity->fields() as $attribute) {
             $this->assertEquals($data[$attribute], $entity->$attribute);
         }
-    }
-
-    /**
-     * @expectedException \yii\base\InvalidArgumentException
-     */
-    public function testCallUpdateForNonExistingRecord()
-    {
-        $data = [
-            'id' => 6,
-            'name' => 'Test to Update via repository',
-        ];
-
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
-
-        $entity = $repository->hydrate($data);
-        $repository->update($entity);
     }
 
     public function deleteExistingRecordDataProvider()
