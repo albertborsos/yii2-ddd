@@ -13,6 +13,7 @@ class m190807_151625_add_customer_tables extends \yii\db\Migration
         $this->createTable(self::TABLE_NAME_CUSTOMER, [
             'id' => $this->bigPrimaryKey(),
             'name' => $this->string(),
+            'slug' => $this->string(),
             'created_at' => $this->bigInteger(),
             'created_by' => $this->bigInteger(),
             'updated_at' => $this->bigInteger(),

@@ -9,6 +9,7 @@ use albertborsos\ddd\tests\support\base\domains\customer\traits\CustomerAttribut
  *
  * @property int $id
  * @property string $name
+ * @property string $slug
  *
  * @property CustomerAddress[] $customerAddresses
  */
@@ -30,7 +31,7 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
+            [['name', 'slug'], 'string', 'max' => 255],
         ];
     }
 

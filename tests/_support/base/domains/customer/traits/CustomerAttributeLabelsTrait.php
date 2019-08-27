@@ -14,6 +14,7 @@ trait CustomerAttributeLabelsTrait
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'slug' => 'Slug',
         ];
     }
 }

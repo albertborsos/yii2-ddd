@@ -3,8 +3,10 @@
 namespace albertborsos\ddd\tests\support\base\domains\customer\entities;
 
 use albertborsos\ddd\behaviors\BlameableBehavior;
+use albertborsos\ddd\behaviors\SluggableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\models\AbstractEntity;
+use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorsActiveRepository;
 
 /**
  * Class Customer
@@ -14,6 +16,7 @@ class CustomerWithBehaviors extends AbstractEntity
 {
     public $id;
     public $name;
+    public $slug;
     public $createdAt;
     public $createdBy;
     public $updatedAt;
@@ -27,6 +30,12 @@ class CustomerWithBehaviors extends AbstractEntity
         return [
             'timestamp' => TimestampBehavior::class,
             'blameable' => BlameableBehavior::class,
+            'sluggable' => [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'name',
+                'ensureUnique' => true,
+                'repository' => CustomerWithBehaviorsActiveRepository::class,
+            ],
         ];
     }
 
@@ -35,6 +44,7 @@ class CustomerWithBehaviors extends AbstractEntity
         return [
             'id',
             'name',
+            'slug',
             'createdAt',
             'createdBy',
             'updatedAt',
