@@ -13,6 +13,10 @@ class m190807_151625_add_customer_tables extends \yii\db\Migration
         $this->createTable(self::TABLE_NAME_CUSTOMER, [
             'id' => $this->bigPrimaryKey(),
             'name' => $this->string(),
+            'created_at' => $this->bigInteger(),
+            'created_by' => $this->bigInteger(),
+            'updated_at' => $this->bigInteger(),
+            'updated_by' => $this->bigInteger(),
         ]);
 
         $this->createTable(self::TABLE_NAME_CUSTOMER_ADDRESS, [
@@ -21,6 +25,10 @@ class m190807_151625_add_customer_tables extends \yii\db\Migration
             'zip_code' => $this->integer(),
             'city' => $this->string(),
             'street' => $this->string(),
+            'created_at' => $this->bigInteger(),
+            'created_by' => $this->bigInteger(),
+            'updated_at' => $this->bigInteger(),
+            'updated_by' => $this->bigInteger(),
         ]);
 
         $this->addForeignKey(self::FK_CUSTOMER_ADDRESS_CUSTOMER_ID_CUSTOMER_ID, self::TABLE_NAME_CUSTOMER_ADDRESS, 'customer_id', self::TABLE_NAME_CUSTOMER, 'id');

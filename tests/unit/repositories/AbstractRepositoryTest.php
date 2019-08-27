@@ -10,7 +10,6 @@ use albertborsos\ddd\tests\support\base\domains\customer\mysql\InvalidHydratorCu
 use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
-use yii\base\Model;
 
 class AbstractRepositoryTest extends TestCase
 {

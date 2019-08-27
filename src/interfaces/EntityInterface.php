@@ -2,6 +2,7 @@
 
 namespace albertborsos\ddd\interfaces;
 
+use yii\base\Event;
 use yii\base\Model;
 
 /**
@@ -20,6 +21,24 @@ interface EntityInterface
      * @event Event an event that is triggered after an entity is deleted.
      */
     const EVENT_AFTER_DELETE = 'afterDelete';
+
+    /**
+     * @event EntityEvent an event that is triggered before inserting an entity.
+     * You may set [[EntityEvent::isValid]] to be `false` to stop the insertion.
+     */
+    const EVENT_BEFORE_INSERT = 'beforeInsert';
+
+    /**
+     * @event EntityEvent an event that is triggered before updating an entity.
+     * You may set [[EntityEvent::isValid]] to be `false` to stop the update.
+     */
+    const EVENT_BEFORE_UPDATE = 'beforeUpdate';
+
+    const EVENT_AFTER_INSERT = 'afterInsert';
+
+    const EVENT_AFTER_UPDATE = 'afterUpdate';
+
+    const EVENT_BEFORE_DELETE = 'beforeDelete';
 
     /**
      * @return string|array
@@ -87,4 +106,13 @@ interface EntityInterface
      * @return array
      */
     public function getDataAttributes(): array;
+
+    /**
+     * Triggers an event.
+     * This method represents the happening of an event. It invokes
+     * all attached handlers for the event including class-level handlers.
+     * @param string $name the event name
+     * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
+     */
+    public function trigger($name, Event $event = null);
 }

@@ -179,6 +179,30 @@ class AbstractActiveRepositoryTest extends TestCase
         $repository->insert($entity);
     }
 
+    public function testUpdate()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'Test to Update via repository',
+        ];
+
+        /** @var AbstractActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+
+        /** @var \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer $entity */
+        $entity = $repository->findOne($data['id']);
+        $entity->setAttributes($data, false);
+
+        $this->assertTrue($repository->update($entity));
+
+        $entity = $repository->findOne($data['id']);
+        $this->assertInstanceOf($repository->getEntityClass(), $entity);
+
+        foreach ($entity->fields() as $attribute) {
+            $this->assertEquals($data[$attribute], $entity->$attribute);
+        }
+    }
+
     public function testUpdateWithNoModification()
     {
         $data = [
