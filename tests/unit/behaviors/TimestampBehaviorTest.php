@@ -5,8 +5,8 @@ namespace albertborsos\ddd\tests\behaviors;
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithModifiedBehaviorActiveRepository;
+use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithModifiedBehaviorsActiveRepository;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -35,14 +35,13 @@ class TimestampBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findOne($data['id']);
-        $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         $this->assertNotEmpty($entity->createdAt);
         $this->assertNotEmpty($entity->updatedAt);
@@ -57,7 +56,7 @@ class TimestampBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findOne($data['id']);
 
@@ -68,7 +67,6 @@ class TimestampBehaviorTest extends TestCase
         $this->assertTrue($repository->update($entity));
 
         $entity = $repository->findOne($data['id']);
-        $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         $this->assertNotEmpty($entity->updatedAt);
         $this->assertNotEquals($oldUpdatedAt, $entity->updatedAt);
@@ -79,7 +77,7 @@ class TimestampBehaviorTest extends TestCase
     public function testEmptyAttributes()
     {
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsActiveRepository::class);
 
         $data = [
             'id' => 3,
@@ -93,7 +91,6 @@ class TimestampBehaviorTest extends TestCase
 
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findOne($data['id']);
-        $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         $this->assertNotEmpty($entity->createdAt);
         $this->assertEmpty($entity->updatedAt);
@@ -105,8 +102,8 @@ class TimestampBehaviorTest extends TestCase
      */
     public function testInvalidEventException()
     {
-        /** @var CustomerWithModifiedBehaviorActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorActiveRepository::class);
+        /** @var CustomerWithModifiedBehaviorsActiveRepository $repository */
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsActiveRepository::class);
         $repository->fakeEventClass = true;
 
         $data = [

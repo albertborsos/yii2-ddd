@@ -5,7 +5,7 @@ namespace albertborsos\ddd\tests\support\base\domains\customer\mysql;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\ModelEvent;
 
-class CustomerWithModifiedBehaviorActiveRepository extends CustomerActiveRepository
+class CustomerWithModifiedBehaviorsActiveRepository extends CustomerActiveRepository
 {
     public $fakeEventClass = false;
 

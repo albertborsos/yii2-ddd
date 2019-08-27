@@ -2,6 +2,7 @@
 
 namespace albertborsos\ddd\tests\support\base\domains\customer\entities;
 
+use albertborsos\ddd\behaviors\BlameableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\models\AbstractEntity;
 
@@ -25,6 +26,7 @@ class CustomerWithBehaviors extends AbstractEntity
     {
         return [
             'timestamp' => TimestampBehavior::class,
+            'blameable' => BlameableBehavior::class,
         ];
     }
 

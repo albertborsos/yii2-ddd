@@ -2,6 +2,7 @@
 
 namespace albertborsos\ddd\tests\support\base\domains\customer\entities;
 
+use albertborsos\ddd\behaviors\BlameableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\models\AbstractEntity;
@@ -19,6 +20,12 @@ class CustomerWithModifiedBehaviors extends CustomerWithBehaviors
                 'class' => TimestampBehavior::class,
                 'attributes' => [
                     EntityInterface::EVENT_BEFORE_INSERT => ['createdAt'],
+                ],
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::class,
+                'attributes' => [
+                    EntityInterface::EVENT_BEFORE_INSERT => ['createdBy'],
                 ],
             ],
         ];

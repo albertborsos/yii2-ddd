@@ -14,6 +14,7 @@ $config = [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
+        'user' => \albertborsos\ddd\tests\support\base\UserMock::class,
     ],
     'container' => [
         'definitions' => [
