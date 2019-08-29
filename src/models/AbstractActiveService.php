@@ -10,7 +10,7 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 
 /**
- * Class AbstractDomain
+ * Class AbstractActiveService
  * @package albertborsos\ddd\models
  * @since 2.0.0
  */

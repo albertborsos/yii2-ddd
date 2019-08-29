@@ -8,7 +8,7 @@ use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\Component;
 
 /**
- * Class AbstractDomain
+ * Class AbstractService
  * @package albertborsos\ddd\models
  */
 abstract class AbstractService extends Component
