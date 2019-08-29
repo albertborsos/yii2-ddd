@@ -8,8 +8,6 @@ use yii\data\ActiveDataProvider;
 use yii\base\InvalidConfigException;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
-use yii\db\ActiveRecordInterface;
-use yii\helpers\Inflector;
 
 /**
  * Class ActiveEntityDataProvider implement a data provider based on ActiveDataProvider

@@ -15,7 +15,7 @@ class CustomerWithModifiedBehaviors extends CustomerWithBehaviors
 {
     public function behaviors()
     {
-        return [
+        return array_merge(parent::behaviors(), [
             'timestamp' => [
                 'class' => TimestampBehavior::class,
                 'attributes' => [
@@ -28,6 +28,6 @@ class CustomerWithModifiedBehaviors extends CustomerWithBehaviors
                     EntityInterface::EVENT_BEFORE_INSERT => ['createdBy'],
                 ],
             ],
-        ];
+        ]);
     }
 }

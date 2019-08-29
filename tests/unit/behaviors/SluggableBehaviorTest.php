@@ -6,7 +6,6 @@ use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
 use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorsActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithModifiedBehaviorsActiveRepository;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 

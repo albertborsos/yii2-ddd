@@ -1,17 +1,17 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\customer\mysql;
+namespace albertborsos\ddd\tests\support\base\domains\page\mysql;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageSlugActiveRepositoryInterface;
 use yii\data\BaseDataProvider;
 
-class CustomerActiveRepository extends AbstractActiveRepository implements CustomerActiveRepositoryInterface
+class PageSlugActiveRepository extends AbstractActiveRepository implements PageSlugActiveRepositoryInterface
 {
-    protected $dataModelClass = Customer::class;
+    protected $dataModelClass = PageSlug::class;
 
-    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class;
+    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug::class;
 
     /**
      * Creates data provider instance with search query applied
@@ -57,9 +57,15 @@ class CustomerActiveRepository extends AbstractActiveRepository implements Custo
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $model->id,
+            'page_id' => $model->page_id,
+            'created_at' => $model->created_at,
+            'created_by' => $model->created_by,
+            'updated_at' => $model->updated_at,
+            'updated_by' => $model->updated_by,
+            'status' => $model->status,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $model->name]);
+        $query->andFilterWhere(['like', 'slug', $model->slug]);
 
         return $dataProvider;
     }

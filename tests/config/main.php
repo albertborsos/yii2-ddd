@@ -23,6 +23,8 @@ $config = [
             \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\cache\CustomerCacheRepository::class,
             \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerAddressActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerAddressActiveRepository::class,
             \albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerAddressCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\customer\cache\CustomerAddressCacheRepository::class,
+            \albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\page\mysql\PageActiveRepository::class,
+            \albertborsos\ddd\tests\support\base\domains\page\interfaces\PageSlugActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\domains\page\mysql\PageSlugActiveRepository::class,
         ],
     ],
 ];

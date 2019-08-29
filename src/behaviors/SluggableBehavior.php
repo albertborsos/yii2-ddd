@@ -5,7 +5,6 @@ namespace albertborsos\ddd\behaviors;
 use albertborsos\ddd\base\EntityEvent;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
-use albertborsos\ddd\interfaces\RepositoryInterface;
 use albertborsos\ddd\traits\EvaluateAttributesTrait;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -20,35 +19,27 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
     /** @var ActiveRepositoryInterface */
     public $repository;
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init()
     {
-        if (empty($this->attributes)) {
-            $this->attributes = [
-                EntityInterface::EVENT_BEFORE_INSERT => $this->slugAttribute,
-                EntityInterface::EVENT_BEFORE_UPDATE => $this->slugAttribute,
-            ];
-        }
-
-        if ($this->attribute === null && $this->value === null) {
-            throw new InvalidConfigException('Either "attribute" or "value" property must be specified.');
-        }
-
-        if ($this->ensureUnique && empty($this->repository)) {
-            throw new InvalidConfigException(get_called_class() . '::$repository must be set!');
-        }
-
-        if ($this->repository) {
-            /** @var ActiveRepositoryInterface $repository */
-            $repository = \Yii::createObject($this->repository);
-            $this->setRepository($repository);
-        }
+        $this->setDefaultAttributes();
+        $this->checkAttributeOrValueIsConfigured();
+        $this->checkRepositoryIsConfigured();
+        $this->initRepository();
     }
 
     /**
      * @return ActiveRepositoryInterface
+     * @throws InvalidConfigException
      */
-    protected function getRepository()
+    protected function getRepository($interface = null): ActiveRepositoryInterface
     {
+        if (!empty($interface)) {
+            return Yii::createObject($interface);
+        }
+
         return $this->repository;
     }
 
@@ -113,6 +104,7 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
      * Checks if given slug value is unique.
      * @param string $slug slug value
      * @return bool whether slug is unique.
+     * @throws InvalidConfigException
      */
     protected function validateSlug($slug)
     {
@@ -125,11 +117,57 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
             $this->uniqueValidator
         ));
 
-        $model = Yii::createObject($this->repository->getDataModelClass());
+        $model = Yii::createObject($validator->targetClass ?? $this->getRepository()->getDataModelClass());
         $model->clearErrors();
         $model->{$this->slugAttribute} = $slug;
 
         $validator->validateAttribute($model, $this->slugAttribute);
         return !$model->hasErrors();
+    }
+
+    protected function setDefaultAttributes(): void
+    {
+        if (!empty($this->attributes)) {
+            return;
+        }
+
+        $this->attributes = [
+            EntityInterface::EVENT_BEFORE_INSERT => $this->slugAttribute,
+            EntityInterface::EVENT_BEFORE_UPDATE => $this->slugAttribute,
+        ];
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    protected function checkAttributeOrValueIsConfigured(): void
+    {
+        if ($this->attribute === null && $this->value === null) {
+            throw new InvalidConfigException('Either "attribute" or "value" property must be specified.');
+        }
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    protected function checkRepositoryIsConfigured(): void
+    {
+        if ($this->ensureUnique && empty($this->repository)) {
+            throw new InvalidConfigException(get_called_class() . '::$repository must be set!');
+        }
+    }
+
+    /**
+     * @throws InvalidConfigException
+     */
+    protected function initRepository(): void
+    {
+        if (empty($this->repository)) {
+            return;
+        }
+
+        /** @var ActiveRepositoryInterface $repository */
+        $repository = \Yii::createObject($this->repository);
+        $this->setRepository($repository);
     }
 }
