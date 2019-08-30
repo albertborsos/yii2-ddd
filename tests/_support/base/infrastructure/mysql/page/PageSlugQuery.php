@@ -1,6 +1,6 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\page\mysql;
+namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\page;
 
 /**
  * This is the ActiveQuery class for [[PageSlug]].

@@ -3,8 +3,8 @@
 namespace albertborsos\ddd\tests\support\base\domains\page\behaviors;
 
 use albertborsos\ddd\behaviors\AbstractUniqueSluggableBehavior;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageSlugActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
 
 class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
 {

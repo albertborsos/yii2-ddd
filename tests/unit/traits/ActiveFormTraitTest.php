@@ -2,8 +2,8 @@
 
 namespace albertborsos\ddd\tests\unit\traits;
 
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerAddressActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerAddressActiveRepository;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use albertborsos\ddd\tests\support\base\services\customer\forms\InvalidCreateCustomerForm;
 use Codeception\PHPUnit\TestCase;

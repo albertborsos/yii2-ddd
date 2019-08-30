@@ -5,8 +5,8 @@ namespace albertborsos\ddd\tests\behaviors;
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorsActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithModifiedBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithModifiedBehaviorsActiveRepository;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 

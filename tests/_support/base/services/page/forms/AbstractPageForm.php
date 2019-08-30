@@ -6,7 +6,7 @@ use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\traits\ActiveFormTrait;
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
 
 abstract class AbstractPageForm extends Page implements FormObject
 {

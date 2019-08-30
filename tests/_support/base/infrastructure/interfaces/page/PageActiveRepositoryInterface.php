@@ -1,6 +1,6 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\page\interfaces;
+namespace albertborsos\ddd\tests\support\base\infrastructure\interfaces\page;
 
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 

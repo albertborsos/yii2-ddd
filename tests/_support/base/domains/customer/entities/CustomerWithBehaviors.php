@@ -6,7 +6,7 @@ use albertborsos\ddd\behaviors\BlameableBehavior;
 use albertborsos\ddd\behaviors\SluggableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\models\AbstractEntity;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerWithBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithBehaviorsActiveRepository;
 
 /**
  * Class Customer

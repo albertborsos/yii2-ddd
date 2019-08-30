@@ -2,11 +2,11 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\CustomerActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\InvalidCustomerActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\InvalidEntityCustomerActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\InvalidHydratorCustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\InvalidCustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\InvalidEntityCustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\InvalidHydratorCustomerActiveRepository;
 use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;

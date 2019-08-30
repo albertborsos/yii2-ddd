@@ -5,7 +5,7 @@ namespace albertborsos\ddd\tests\support\base\services\page;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\models\AbstractActiveService;
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
 use albertborsos\ddd\tests\support\base\services\page\forms\AbstractPageForm;
 
 abstract class AbstractPageService extends AbstractActiveService

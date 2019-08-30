@@ -1,18 +1,17 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\page\mysql;
+namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\page;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
-use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
 use yii\data\BaseDataProvider;
 
-class PageActiveRepository extends AbstractActiveRepository implements PageActiveRepositoryInterface
+class PageSlugActiveRepository extends AbstractActiveRepository implements PageSlugActiveRepositoryInterface
 {
-    protected $dataModelClass = \albertborsos\ddd\tests\support\base\domains\page\mysql\Page::class;
+    protected $dataModelClass = PageSlug::class;
 
-    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\Page::class;
+    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug::class;
 
     /**
      * Creates data provider instance with search query applied
@@ -41,9 +40,6 @@ class PageActiveRepository extends AbstractActiveRepository implements PageActiv
                 'params' => $params,
             ],
             'sort' => [
-                'defaultOrder' => [
-                    'sort_order' => SORT_ASC,
-                ],
                 'params' => $params,
             ],
         ]);
@@ -61,7 +57,7 @@ class PageActiveRepository extends AbstractActiveRepository implements PageActiv
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $model->id,
-            'date' => $model->date,
+            'page_id' => $model->page_id,
             'created_at' => $model->created_at,
             'created_by' => $model->created_by,
             'updated_at' => $model->updated_at,
@@ -69,12 +65,18 @@ class PageActiveRepository extends AbstractActiveRepository implements PageActiv
             'status' => $model->status,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $model->name])
-            ->andFilterWhere(['like', 'category', $model->category])
-            ->andFilterWhere(['like', 'title', $model->title])
-            ->andFilterWhere(['like', 'description', $model->description])
-            ->andFilterWhere(['like', 'slug', $model->slug]);
+        $query->andFilterWhere(['like', 'slug', $model->slug]);
 
         return $dataProvider;
+    }
+
+    public function findAllByPage($page): array
+    {
+        return $this->findAllByPageId($page->id);
+    }
+
+    public function findAllByPageId($pageId): array
+    {
+        return $this->find()->andWhere(['page_id' => $pageId])->all();
     }
 }

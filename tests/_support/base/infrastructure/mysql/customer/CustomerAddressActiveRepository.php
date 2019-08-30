@@ -1,10 +1,10 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\customer\mysql;
+namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\customer;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerAddressActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressActiveRepositoryInterface;
 use yii\data\BaseDataProvider;
 
 class CustomerAddressActiveRepository extends AbstractActiveRepository implements CustomerAddressActiveRepositoryInterface

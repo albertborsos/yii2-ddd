@@ -2,7 +2,7 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerCacheRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheRepositoryInterface;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
 

@@ -6,7 +6,7 @@ use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\traits\ActiveFormTrait;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
 
 abstract class AbstractCustomerForm extends Customer implements FormObject
 {

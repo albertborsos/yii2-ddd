@@ -2,7 +2,7 @@
 
 namespace albertborsos\ddd\tests\fixtures;
 
-use albertborsos\ddd\tests\support\base\domains\customer\mysql\Customer;
+use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer;
 use yii\test\ActiveFixture;
 
 class CustomerWithBehaviorsFixtures extends ActiveFixture

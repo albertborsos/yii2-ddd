@@ -6,8 +6,8 @@ use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\traits\ActiveFormTrait;
 use albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageSlugActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\domains\page\interfaces\PageActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
 
 abstract class AbstractPageSlugForm extends PageSlug implements FormObject
 {

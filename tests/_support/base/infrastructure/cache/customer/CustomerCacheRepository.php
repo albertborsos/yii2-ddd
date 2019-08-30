@@ -1,10 +1,10 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\customer\cache;
+namespace albertborsos\ddd\tests\support\base\infrastructure\cache\customer;
 
 use albertborsos\ddd\repositories\CacheRepository;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
-use albertborsos\ddd\tests\support\base\domains\customer\interfaces\CustomerCacheRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheRepositoryInterface;
 
 class CustomerCacheRepository extends CacheRepository implements CustomerCacheRepositoryInterface
 {

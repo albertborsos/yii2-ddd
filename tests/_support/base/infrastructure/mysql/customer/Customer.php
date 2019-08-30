@@ -1,6 +1,6 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\domains\customer\mysql;
+namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\customer;
 
 use albertborsos\ddd\tests\support\base\domains\customer\traits\CustomerAttributeLabelsTrait;
 
