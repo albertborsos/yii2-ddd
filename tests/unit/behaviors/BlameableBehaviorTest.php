@@ -52,7 +52,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertEquals(self::DEFAULT_USER_ID, $entity->createdBy);
         $this->assertEquals(self::DEFAULT_USER_ID, $entity->updatedBy);
@@ -73,7 +73,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNull($entity->createdBy);
         $this->assertNull($entity->updatedBy);
@@ -91,7 +91,7 @@ class BlameableBehaviorTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $oldCreatedBy = $entity->createdBy;
         $oldUpdatedBy = $entity->updatedBy;
@@ -99,7 +99,7 @@ class BlameableBehaviorTest extends TestCase
         $entity->setAttributes($data, false);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertEquals($oldCreatedBy, $entity->createdBy);
         $this->assertEquals(self::UPDATER_USER_ID, $entity->updatedBy);
@@ -116,7 +116,7 @@ class BlameableBehaviorTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $oldCreatedBy = $entity->createdBy;
         $oldUpdatedBy = $entity->updatedBy;
@@ -124,7 +124,7 @@ class BlameableBehaviorTest extends TestCase
         $entity->setAttributes($data, false);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertEquals($oldCreatedBy, $entity->createdBy);
         $this->assertNull($entity->updatedBy);
@@ -148,7 +148,7 @@ class BlameableBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEmpty($entity->createdBy);
         $this->assertEmpty($entity->updatedBy);

@@ -23,7 +23,7 @@ class AbstractActiveServiceTest extends TestCase
 
         $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
         /** @var Customer $model */
-        $model = $repository->findOne($service->getId());
+        $model = $repository->findById($service->getId());
 
         $this->assertInstanceOf(Customer::class, $model);
         $this->assertEquals('Active Customer Service Test', $model->name);

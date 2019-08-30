@@ -69,4 +69,14 @@ class PageSlugActiveRepository extends AbstractActiveRepository implements PageS
 
         return $dataProvider;
     }
+
+    public function findAllByPage($page): array
+    {
+        return $this->findAllByPageId($page->id);
+    }
+
+    public function findAllByPageId($pageId): array
+    {
+        return $this->find()->andWhere(['page_id' => $pageId])->all();
+    }
 }

@@ -6,5 +6,7 @@ use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 
 interface PageSlugActiveRepositoryInterface extends ActiveRepositoryInterface
 {
+    public function findAllByPage($page): array;
 
+    public function findAllByPageId($pageId): array;
 }

@@ -58,7 +58,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
         $service = $this->mockService(compact('name', 'title', 'description', 'status'));
         $this->assertTrue($service->execute());
 
-        $page = $this->getPageRepository()->findOne($service->getId());
+        $page = $this->getPageRepository()->findById($service->getId());
 
         $this->assertEquals($expectedSlug, $page->slug);
     }
@@ -81,7 +81,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
         $existingPageId = $this->getPageIdByAlias($existingSlugPageAlias);
         /** @var Page $existingPage */
         $existingPage = $this->findPageByAlias($existingSlugPageAlias);
-        $existingSlugs = array_merge([$existingPage->slug], ArrayHelper::getColumn($pageSlugRepository->findAll(['page_id' => $existingPageId]), 'slug'));
+        $existingSlugs = array_merge([$existingPage->slug], ArrayHelper::getColumn($pageSlugRepository->findAllByPage($existingPage), 'slug'));
 
         $data = ['name' => $existingPage->name, 'title' => 'Title', 'description' => 'Description', 'status' => Page::STATUS_VISIBLE];
 
@@ -231,7 +231,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
      */
     protected function findPageById($id): Page
     {
-        return $this->getPageRepository()->findOne($id);
+        return $this->getPageRepository()->findById($id);
     }
 
     /**
@@ -241,6 +241,6 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
      */
     protected function findAllPageSlugsByPageId($existingSlugPageId): array
     {
-        return $this->getPageSlugRepository()->findAll(['page_id' => $existingSlugPageId]);
+        return $this->getPageSlugRepository()->findAllByPageId($existingSlugPageId);
     }
 }

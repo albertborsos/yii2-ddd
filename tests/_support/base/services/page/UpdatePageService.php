@@ -23,7 +23,7 @@ class UpdatePageService extends AbstractPageService
         try {
             if (parent::execute()) {
                 /** @var Page $entity */
-                $entity = $this->getRepository()->findOne($this->getId());
+                $entity = $this->getRepository()->findById($this->getId());
                 if ($entity->slug !== $oldSlug) {
                     $this->storeOldSlug($this->getId(), $oldSlug);
                 }

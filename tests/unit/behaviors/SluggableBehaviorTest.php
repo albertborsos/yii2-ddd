@@ -40,7 +40,7 @@ class SluggableBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEmpty($entity->slug);
     }
@@ -55,14 +55,14 @@ class SluggableBehaviorTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $oldSlug = $entity->slug;
 
         $entity->setAttributes($data, false);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEquals($oldSlug, $entity->slug);
     }
@@ -77,14 +77,14 @@ class SluggableBehaviorTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $oldSlug = $entity->slug;
 
         $entity->setAttributes($data, false);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertEquals($oldSlug, $entity->slug);
     }
@@ -102,7 +102,7 @@ class SluggableBehaviorTest extends TestCase
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEquals('albert', $entity->slug);
     }

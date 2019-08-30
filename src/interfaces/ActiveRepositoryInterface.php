@@ -15,21 +15,10 @@ use yii\db\Transaction;
 interface ActiveRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
+     * @param $id
+     * @return EntityInterface|null
      */
-    public function find(): ActiveQueryInterface;
-
-    /**
-     * @param $condition
-     * @return EntityInterface|Model
-     */
-    public function findOne($condition): ?EntityInterface;
-
-    /**
-     * @param $condition
-     * @return array|EntityInterface[]|Model[]
-     */
-    public function findAll($condition): array;
+    public function findById($id): ?EntityInterface;
 
     /**
      * @param EntityInterface $entity

@@ -33,7 +33,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     /**
      * @return ActiveQueryInterface the newly created [[ActiveQueryInterface]] instance.
      */
-    public function find(): ActiveQueryInterface
+    protected function find(): ActiveQueryInterface
     {
         return call_user_func([$this->getDataModelClass(), 'find']);
     }
@@ -43,26 +43,15 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @return EntityInterface|mixed
      * @throws \yii\base\InvalidConfigException
      */
-    public function findOne($condition): ?EntityInterface
+    public function findById($id): ?EntityInterface
     {
-        $model = call_user_func([$this->getDataModelClass(), 'findOne'], $condition);
+        $model = $this->find()->andWhere(['id' => $id])->one();
 
         if (empty($model)) {
             return null;
         }
 
         return $this->hydrate($model);
-    }
-
-    /**
-     * @param $condition
-     * @return EntityInterface[]|array
-     */
-    public function findAll($condition): array
-    {
-        $models = call_user_func([$this->getDataModelClass(), 'findAll'], $condition);
-
-        return $this->hydrateAll($models);
     }
 
     /**
@@ -161,7 +150,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     protected function findByEntity(EntityInterface $entity): ?ActiveRecordInterface
     {
-        return \Yii::createObject([$this->getDataModelClass(), 'findOne'], [$this->createFindConditionByEntityKeys($entity)]);
+        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity))->one();
     }
 
     /**

@@ -41,7 +41,7 @@ class TimestampBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEmpty($entity->createdAt);
         $this->assertNotEmpty($entity->updatedAt);
@@ -58,7 +58,7 @@ class TimestampBehaviorTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $oldCreatedAt = $entity->createdAt;
         $oldUpdatedAt = $entity->updatedAt;
@@ -66,7 +66,7 @@ class TimestampBehaviorTest extends TestCase
         $entity->setAttributes($data, false);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEmpty($entity->updatedAt);
         $this->assertNotEquals($oldUpdatedAt, $entity->updatedAt);
@@ -90,7 +90,7 @@ class TimestampBehaviorTest extends TestCase
         $this->assertTrue($repository->insert($entity));
 
         /** @var CustomerWithBehaviors $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
 
         $this->assertNotEmpty($entity->createdAt);
         $this->assertEmpty($entity->updatedAt);

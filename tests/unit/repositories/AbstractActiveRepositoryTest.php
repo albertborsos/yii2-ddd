@@ -55,36 +55,6 @@ class AbstractActiveRepositoryTest extends TestCase
         $this->mockObject(MockConfig::create($repositoryClass, ['dataModelClass' => $dataModelClass]));
     }
 
-    public function testFind()
-    {
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
-
-        $this->assertInstanceOf(ActiveQueryInterface::class, $repository->find());
-    }
-
-    public function testFindOne()
-    {
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
-
-        $fixtureId = $this->getFixture('customers')[0]['id'];
-
-        $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findOne($fixtureId));
-    }
-
-    public function testFindAll()
-    {
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
-
-        $fixtureId = $this->getFixture('customers')[0]['id'];
-
-        $entities = $repository->findAll(['id' => $fixtureId]);
-        $this->assertCount(1, $entities);
-
-        foreach ($entities as $entity) {
-            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $entity);
-        }
-    }
-
     public function saveDataProvider()
     {
         return [
@@ -106,7 +76,7 @@ class AbstractActiveRepositoryTest extends TestCase
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject($repositoryClass);
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         if ($isNewRecord) {
             $this->assertNull($entity);
         } else {
@@ -116,7 +86,7 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->save($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         foreach ($entity->fields() as $attribute) {
@@ -137,7 +107,7 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         foreach ($entity->fields() as $attribute) {
@@ -190,12 +160,12 @@ class AbstractActiveRepositoryTest extends TestCase
         $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
 
         /** @var \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer $entity */
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         $entity->setAttributes($data, false);
 
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         foreach ($entity->fields() as $attribute) {
@@ -216,7 +186,7 @@ class AbstractActiveRepositoryTest extends TestCase
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->update($entity));
 
-        $entity = $repository->findOne($data['id']);
+        $entity = $repository->findById($data['id']);
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
 
         foreach ($entity->fields() as $attribute) {
@@ -243,12 +213,12 @@ class AbstractActiveRepositoryTest extends TestCase
     {
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject($repositoryClass);
-        $entity = $repository->findOne($recordId);
+        $entity = $repository->findById($recordId);
 
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
         $this->assertTrue($repository->delete($entity));
 
-        $this->assertNull($repository->findOne($recordId));
+        $this->assertNull($repository->findById($recordId));
     }
 
     /**
@@ -263,7 +233,7 @@ class AbstractActiveRepositoryTest extends TestCase
     {
         /** @var AbstractActiveRepository $repository */
         $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
-        $entity = $repository->findOne(4);
+        $entity = $repository->findById(4);
 
         $this->assertNull($entity);
         $repository->delete($entity);
@@ -306,18 +276,18 @@ class AbstractActiveRepositoryTest extends TestCase
         $transaction = $repository->beginTransaction();
 
         try {
-            $this->assertEmpty($repository->findOne($attributes));
+            $this->assertEmpty($repository->findById($attributes));
             $form = new CreateCustomerForm($attributes);
             $this->assertTrue($form->validate());
             $service = new CreateCustomerService($form);
             $this->assertTrue($service->execute());
-            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findOne($attributes));
+            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findById($service->getId()));
             $transaction->commit();
         } catch (Exception $e) {
             return false;
         }
 
-        $entity = $repository->findOne($attributes);
+        $entity = $repository->findById($service->getId());
         $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $entity);
 
         $repository->delete($entity);
@@ -334,17 +304,17 @@ class AbstractActiveRepositoryTest extends TestCase
         $transaction = $repository->beginTransaction();
 
         try {
-            $this->assertEmpty($repository->findOne($attributes));
+            $this->assertEmpty($repository->findById($attributes));
             $form = new CreateCustomerForm($attributes);
             $this->assertTrue($form->validate());
             $service = new CreateCustomerService($form);
             $this->assertTrue($service->execute());
-            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findOne($attributes));
+            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findById($service->getId()));
 
             throw new Exception('rollback');
         } catch (Exception $e) {
             $transaction->rollBack();
-            $this->assertEmpty($repository->findOne($attributes));
+            $this->assertEmpty($repository->findById($service->getId()));
         }
     }
 }

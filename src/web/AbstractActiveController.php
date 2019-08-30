@@ -32,7 +32,7 @@ abstract class AbstractActiveController extends \yii\web\Controller
      */
     protected function findEntity($id): ?EntityInterface
     {
-        $entity = $this->getRepository()->findOne($id);
+        $entity = $this->getRepository()->findById($id);
         if ($entity === null) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
