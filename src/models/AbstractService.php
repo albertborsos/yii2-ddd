@@ -119,4 +119,9 @@ abstract class AbstractService extends Component
     {
         $this->repository = $repository;
     }
+
+    protected function hasEntity(): bool
+    {
+        return !empty($this->getEntity());
+    }
 }

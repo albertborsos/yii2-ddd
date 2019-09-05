@@ -2,9 +2,6 @@
 
 namespace albertborsos\ddd\interfaces;
 
-use yii\base\Model;
-use yii\db\ActiveQueryInterface;
-use yii\db\ActiveRecordInterface;
 use yii\db\Transaction;
 
 /**
@@ -14,43 +11,6 @@ use yii\db\Transaction;
  */
 interface ActiveRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param $id
-     * @return EntityInterface|null
-     */
-    public function findById($id): ?EntityInterface;
-
-    /**
-     * @param EntityInterface $entity
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return bool
-     */
-    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
-
-    /**
-     * @param EntityInterface $entity
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return bool
-     */
-    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
-
-    /**
-     * @param EntityInterface $entity
-     * @param ActiveRecordInterface|null $activeRecord
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return bool
-     */
-    public function update(EntityInterface $entity, ActiveRecordInterface $activeRecord = null, $runValidation = true, $attributeNames = null): bool;
-
-    /**
-     * @param EntityInterface $entity
-     * @return bool
-     */
-    public function delete(EntityInterface $entity): bool;
-
     /**
      * @return string
      */

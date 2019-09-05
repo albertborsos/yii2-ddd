@@ -2,7 +2,7 @@
 
 namespace albertborsos\ddd\web;
 
-use albertborsos\ddd\interfaces\CacheRepositoryInterface;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
  */
 abstract class AbstractCacheController extends \yii\web\Controller
 {
-    /** @var CacheRepositoryInterface */
+    /** @var RepositoryInterface */
     protected $repository;
 
     public function init()
@@ -42,10 +42,10 @@ abstract class AbstractCacheController extends \yii\web\Controller
 
     /**
      * @param string|null $interface
-     * @return CacheRepositoryInterface
+     * @return RepositoryInterface
      * @throws InvalidConfigException
      */
-    public function getRepository($interface = null): CacheRepositoryInterface
+    public function getRepository($interface = null): RepositoryInterface
     {
         if (empty($interface)) {
             return $this->repository;

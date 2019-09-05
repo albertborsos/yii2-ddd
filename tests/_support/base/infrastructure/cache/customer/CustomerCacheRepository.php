@@ -14,11 +14,11 @@ class CustomerCacheRepository extends CacheRepository implements CustomerCacheRe
 
     public function getVipCustomers()
     {
-        return $this->get($this->postfixedKey(self::POSTFIX_VIP_CUSTOMERS));
+        return $this->cache->get($this->postfixedKey(self::POSTFIX_VIP_CUSTOMERS));
     }
 
     public function updateVipCustomers($customers)
     {
-        return $this->set($this->postfixedKey(self::POSTFIX_VIP_CUSTOMERS), $customers);
+        return $this->cache->set($this->postfixedKey(self::POSTFIX_VIP_CUSTOMERS), $customers);
     }
 }

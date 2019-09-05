@@ -3,12 +3,22 @@
 namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\traits\PostfixedKeyTrait;
 use yii\caching\CacheInterface;
 use yii\data\BaseDataProvider;
 use yii\di\Instance;
 
-class CacheRepository extends AbstractCacheRepository
+/**
+ * Class CacheRepository
+ * Use this repository with a cache component which implements `\yii\caching\CacheInterface`
+ *
+ * @package albertborsos\ddd\repositories
+ * @since 2.0.0
+ */
+class CacheRepository extends AbstractRepository
 {
+    use PostfixedKeyTrait;
+
     /** @var string|CacheInterface $cache  */
     protected $cache = 'cache';
 
@@ -20,21 +30,6 @@ class CacheRepository extends AbstractCacheRepository
     {
         parent::init();
         $this->cache = Instance::ensure($this->cache, CacheInterface::class);
-    }
-
-    public function get($key)
-    {
-        return $this->cache->get($key);
-    }
-
-    public function set($key, $value, $duration = null, $dependency = null)
-    {
-        return $this->cache->set($key, $value, $duration, $dependency);
-    }
-
-    public function delete($key)
-    {
-        return $this->cache->delete($key);
     }
 
     /**
@@ -53,35 +48,9 @@ class CacheRepository extends AbstractCacheRepository
      * @param EntityInterface $entity
      * @return EntityInterface|null
      */
-    public function findByEntity(EntityInterface $entity): ?EntityInterface
+    public function exists(EntityInterface $entity): bool
     {
-        return $this->findEntityByKey($entity->getCacheKey());
-    }
-
-    /**
-     * @param string $key
-     * @return EntityInterface|null
-     */
-    public function findEntityByKey(string $key): ?EntityInterface
-    {
-        $data = $this->cache->get($key);
-        if (empty($data)) {
-            return null;
-        }
-
-        return $this->hydrate((array)$data);
-    }
-
-    /**
-     * @param EntityInterface $entity
-     * @param array $keyAttributes
-     * @param null $duration
-     * @param null $dependency
-     * @return bool|mixed
-     */
-    public function storeEntity(EntityInterface $entity, array $keyAttributes = [], $duration = null, $dependency = null)
-    {
-        return $this->set($entity->getCacheKey($keyAttributes), $entity->getDataAttributes(), $duration, $dependency);
+        return !empty($this->findEntityByKey($entity->getCacheKey()));
     }
 
     /**
@@ -94,5 +63,50 @@ class CacheRepository extends AbstractCacheRepository
     public function search($params, $formName = null): BaseDataProvider
     {
         // TODO: Implement search() method.
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
+    {
+        return $this->cache->set($entity->getCacheKey(), $entity->getDataAttributes());
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
+    {
+        return $this->cache->set($entity->getCacheKey(), $entity->getDataAttributes());
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @return bool
+     */
+    public function delete(EntityInterface $entity): bool
+    {
+        return $this->cache->delete($entity->getCacheKey());
+    }
+
+    /**
+     * @param string $key
+     * @return EntityInterface|null
+     */
+    protected function findEntityByKey(string $key): ?EntityInterface
+    {
+        $data = $this->cache->get($key);
+        if (empty($data)) {
+            return null;
+        }
+
+        return $this->hydrate((array)$data);
     }
 }

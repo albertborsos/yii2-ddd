@@ -12,10 +12,8 @@ use albertborsos\ddd\tests\support\base\MockTrait;
 use albertborsos\ddd\tests\support\base\services\customer\CreateCustomerService;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use Codeception\PHPUnit\TestCase;
-use Codeception\Util\Debug;
+use TypeError;
 use yii\base\Exception;
-use yii\db\ActiveQueryInterface;
-use yii\db\Transaction;
 use yii\test\FixtureTrait;
 
 class AbstractActiveRepositoryTest extends TestCase
@@ -53,45 +51,6 @@ class AbstractActiveRepositoryTest extends TestCase
     public function testMissingDataModelClass($repositoryClass, $dataModelClass)
     {
         $this->mockObject(MockConfig::create($repositoryClass, ['dataModelClass' => $dataModelClass]));
-    }
-
-    public function saveDataProvider()
-    {
-        return [
-            'create customer' => [true, CustomerActiveRepositoryInterface::class, ['id' => 4, 'name' => 'Test to Save via repository']],
-            'update customer' => [false, CustomerActiveRepositoryInterface::class, ['id' => 1, 'name' => 'Test to Save via repository']],
-        ];
-    }
-
-    /**
-     * @dataProvider saveDataProvider
-     *
-     * @param $isNewRecord
-     * @param $repositoryClass
-     * @param $data
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function testSave($isNewRecord, $repositoryClass, $data)
-    {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject($repositoryClass);
-
-        $entity = $repository->findById($data['id']);
-        if ($isNewRecord) {
-            $this->assertNull($entity);
-        } else {
-            $this->assertInstanceOf($repository->getEntityClass(), $entity);
-        }
-
-        $entity = $repository->hydrate($data);
-        $this->assertTrue($repository->save($entity));
-
-        $entity = $repository->findById($data['id']);
-        $this->assertInstanceOf($repository->getEntityClass(), $entity);
-
-        foreach ($entity->fields() as $attribute) {
-            $this->assertEquals($data[$attribute], $entity->$attribute);
-        }
     }
 
     public function testInsert()
@@ -204,10 +163,11 @@ class AbstractActiveRepositoryTest extends TestCase
     /**
      * @dataProvider deleteExistingRecordDataProvider
      *
-     * @param $isNewRecord
      * @param $repositoryClass
-     * @param $data
+     * @param $recordId
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
+     * @throws \yii\db\StaleObjectException
      */
     public function testDeleteExistingRecord($repositoryClass, $recordId)
     {
@@ -224,10 +184,9 @@ class AbstractActiveRepositoryTest extends TestCase
     /**
      * @expectedException TypeError
      *
-     * @param $isNewRecord
-     * @param $repositoryClass
-     * @param $data
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
+     * @throws \yii\db\StaleObjectException
      */
     public function testDeleteNotExistingRecord()
     {

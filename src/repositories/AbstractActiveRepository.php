@@ -55,26 +55,6 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     }
 
     /**
-     * @param EntityInterface|Model $entity
-     * @param bool $runValidation
-     * @param null $attributeNames
-     * @return bool|mixed
-     * @throws \Throwable
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function save(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
-    {
-        /** @var ActiveRecord $activeRecord */
-        $activeRecord = $this->findByEntity($entity);
-
-        if (empty($activeRecord)) {
-            return $this->insert($entity, $runValidation, $attributeNames, false);
-        }
-
-        return $this->update($entity, $activeRecord, $runValidation, $attributeNames);
-    }
-
-    /**
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
@@ -85,7 +65,7 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      */
     public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null, $checkIsNewRecord = true): bool
     {
-        if ($checkIsNewRecord && !empty($this->findByEntity($entity))) {
+        if ($checkIsNewRecord && $this->exists($entity)) {
             throw new InvalidArgumentException('Entity already exists, but `insert` method is called');
         }
 
@@ -105,10 +85,10 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function update(EntityInterface $entity, ActiveRecordInterface $activeRecord = null, $runValidation = true, $attributeNames = null): bool
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
         /** @var ActiveRecord $activeRecord */
-        $activeRecord = $activeRecord ?: $this->findByEntity($entity);
+        $activeRecord = $this->getActiveRecordByEntity($entity);
 
         if (empty($activeRecord)) {
             throw new InvalidArgumentException('Entity is not stored yet, but `update` method is called');
@@ -120,12 +100,14 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     /**
      * @param EntityInterface|Model $entity
      * @return bool|int
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function delete(EntityInterface $entity): bool
     {
-        /** @var ActiveRecordInterface $activeRecord */
-        $activeRecord = $this->findByEntity($entity);
+        /** @var ActiveRecord $activeRecord */
+        $activeRecord = $this->getActiveRecordByEntity($entity);
 
         if (empty($activeRecord)) {
             return false;
@@ -145,12 +127,11 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
 
     /**
      * @param EntityInterface $entity
-     * @return ActiveRecordInterface|null
-     * @throws InvalidConfigException
+     * @return bool
      */
-    protected function findByEntity(EntityInterface $entity): ?ActiveRecordInterface
+    public function exists(EntityInterface $entity): bool
     {
-        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity))->one();
+        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity))->exists();
     }
 
     /**
@@ -306,5 +287,14 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
         }
 
         return $condition;
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @return array|ActiveRecordInterface|null
+     */
+    protected function getActiveRecordByEntity(EntityInterface $entity)
+    {
+        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity))->one();
     }
 }

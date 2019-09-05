@@ -5,9 +5,6 @@ namespace albertborsos\ddd\models;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
-use albertborsos\ddd\interfaces\RepositoryInterface;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
 
 /**
  * Class AbstractActiveService
@@ -36,12 +33,13 @@ abstract class AbstractActiveService extends AbstractService
     {
         /** @var FormObject $form */
         $form = $this->getForm();
+        $action = $this->hasEntity() ? 'update' : 'insert';
 
         /** @var AbstractEntity $entity */
-        $entity = $this->getEntity() ?? $this->getRepository()->hydrate([]);
+        $entity = $this->hasEntity() ? $this->getEntity() : $this->getRepository()->newEntity();
         $entity->setAttributes($form->attributes, false);
 
-        if ($this->getRepository()->save($entity)) {
+        if (call_user_func_array([$this->getRepository(), $action], [$entity])) {
             $this->setId($entity->id);
             return true;
         }

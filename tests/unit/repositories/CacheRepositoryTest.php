@@ -2,6 +2,7 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
+use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheRepositoryInterface;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
@@ -24,14 +25,18 @@ class CacheRepositoryTest extends TestCase
     {
         $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
 
-        $key = 'test-key';
-        $value = 'test-value';
+        /** @var Customer $entity */
+        $entity = $repository->newEntity();
+        $entity->setAttributes([
+            'id' => 1,
+            'value' => 'Test',
+        ], false);
 
-        $this->assertTrue($repository->set($key, $value));
-        $this->assertEquals($value, $repository->get($key));
-        $this->assertTrue($repository->delete($key));
-        $this->assertNotEquals($value, $repository->get($key));
-        $this->assertFalse($repository->get($key));
+        $this->assertTrue($repository->insert($entity));
+        $this->assertEquals($entity, $repository->findById($entity->id));
+        $this->assertTrue($repository->delete($entity));
+        $this->assertNotEquals($entity, $repository->findById($entity->id));
+        $this->assertNull($repository->findById($entity->id));
     }
 
     public function entityDataProvider()
@@ -49,15 +54,13 @@ class CacheRepositoryTest extends TestCase
     public function testFindByEntity($data)
     {
         $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
-
         $customer = $repository->hydrate($data);
+        $repository->insert($customer);
 
-        $repository->storeEntity($customer);
+        $this->assertEquals($customer, $repository->findById($data['id']));
 
-        $this->assertEquals($customer, $repository->findByEntity($customer));
-
-        $this->assertTrue($repository->delete($customer->getCacheKey()));
-        $this->assertEmpty($repository->findByEntity($customer));
+        $this->assertTrue($repository->delete($customer));
+        $this->assertEmpty($repository->findById($data['id']));
     }
 
     /**
@@ -71,29 +74,11 @@ class CacheRepositoryTest extends TestCase
 
         $customer = $repository->hydrate($data);
 
-        $repository->storeEntity($customer);
+        $repository->insert($customer);
 
         $this->assertEquals($customer, $repository->findById($data['id']));
 
-        $this->assertTrue($repository->delete($customer->getCacheKey()));
+        $this->assertTrue($repository->delete($customer));
         $this->assertEmpty($repository->findById($data['id']));
-    }
-
-    /**
-     * @dataProvider entityDataProvider
-     * @param $data
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function testFindEntityByKey($data)
-    {
-        $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
-
-        $customer = $repository->hydrate($data);
-
-        $repository->storeEntity($customer);
-
-        $this->assertEquals($customer, $repository->findEntityByKey($customer->getCacheKey()));
-        $this->assertTrue($repository->delete($customer->getCacheKey()));
-        $this->assertEmpty($repository->findEntityByKey($customer->getCacheKey()));
     }
 }

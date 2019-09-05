@@ -12,6 +12,45 @@ use yii\data\BaseDataProvider;
 interface RepositoryInterface
 {
     /**
+     * @param $id
+     * @return EntityInterface|null
+     */
+    public function findById($id): ?EntityInterface;
+
+    /**
+     * @param $id
+     * @return EntityInterface|null
+     */
+    public function exists(EntityInterface $entity): bool;
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
+
+    /**
+     * @param EntityInterface $entity
+     * @param bool $runValidation
+     * @param null $attributeNames
+     * @return bool
+     */
+    public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
+
+    /**
+     * @param EntityInterface $entity
+     * @return bool
+     */
+    public function delete(EntityInterface $entity): bool;
+
+    /**
+     * @return EntityInterface
+     */
+    public function newEntity(): EntityInterface;
+
+    /**
      * @param $data
      * @return EntityInterface
      */
