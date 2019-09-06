@@ -5,13 +5,14 @@ namespace albertborsos\ddd\models;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\interfaces\RepositoryInterface;
+use albertborsos\ddd\interfaces\ServiceInterface;
 use yii\base\Component;
 
 /**
  * Class AbstractService
  * @package albertborsos\ddd\models
  */
-abstract class AbstractService extends Component
+abstract class AbstractService extends Component implements ServiceInterface
 {
     /**
      * @var string|RepositoryInterface
