@@ -4,10 +4,11 @@ namespace albertborsos\ddd\web;
 
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 
-abstract class Controller extends \yii\web\Controller
+abstract class AbstractController extends \yii\web\Controller
 {
     /** @var RepositoryInterface */
     protected $repository;
@@ -32,6 +33,7 @@ abstract class Controller extends \yii\web\Controller
         return \Yii::createObject($interface);
     }
 
+
     /**
      * Finds the entity based on its primary key value.
      * If the entity is not found, a 404 HTTP exception will be thrown.
@@ -40,5 +42,13 @@ abstract class Controller extends \yii\web\Controller
      * @throws InvalidConfigException
      * @throws NotFoundHttpException
      */
-    abstract protected function findEntity(): ?EntityInterface;
+    protected function findEntity($id): ?EntityInterface
+    {
+        $entity = $this->getRepository()->findById($id);
+        if ($entity === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return $entity;
+    }
 }
