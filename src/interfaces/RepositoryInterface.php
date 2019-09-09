@@ -18,10 +18,12 @@ interface RepositoryInterface
     public function findById($id): ?EntityInterface;
 
     /**
-     * @param $id
-     * @return EntityInterface|null
+     * @param EntityInterface $entity
+     * @param array $attributes
+     * @param $addNotConditionForPrimaryKeys
+     * @return bool
      */
-    public function exists(EntityInterface $entity): bool;
+    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool;
 
     /**
      * @param EntityInterface $entity

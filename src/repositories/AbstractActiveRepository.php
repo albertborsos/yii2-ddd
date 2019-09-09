@@ -12,6 +12,7 @@ use yii\base\Model;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
 use yii\db\ActiveRecordInterface;
+use yii\db\conditions\AndCondition;
 use yii\db\Connection;
 use yii\db\Transaction;
 
@@ -127,11 +128,13 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
 
     /**
      * @param EntityInterface $entity
+     * @param array $attributes
+     * @param bool $addNotConditionForPrimaryKeys
      * @return bool
      */
-    public function exists(EntityInterface $entity): bool
+    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool
     {
-        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity))->exists();
+        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity, $attributes, true, $addNotConditionForPrimaryKeys))->exists();
     }
 
     /**
@@ -269,24 +272,35 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
 
     /**
      * @param EntityInterface $entity
+     * @param array $keys
      * @param bool $skipEmptyAttributes
+     * @param bool $addNotConditionForPrimaryKeys
      * @return array
      */
-    protected function createFindConditionByEntityKeys(EntityInterface $entity, $skipEmptyAttributes = false): array
+    protected function createFindConditionByEntityKeys(EntityInterface $entity, $keys = [], $skipEmptyAttributes = false, $addNotConditionForPrimaryKeys = false)
     {
-        $keys = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
+        if (empty($keys)) {
+            $keys = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
+        }
 
         $condition = [];
 
         array_walk($keys, function ($key) use (&$condition, $entity) {
-            $condition[$key] = $entity->{$key};
+            $condition[] = [$key => $entity->{$key}];
         });
 
         if ($skipEmptyAttributes) {
             $condition = array_filter($condition);
         }
 
-        return $condition;
+        if ($addNotConditionForPrimaryKeys) {
+            $primaryKeys = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
+            array_walk($primaryKeys, function ($key) use (&$condition, $entity) {
+                $condition[] = ['NOT', [$key => $entity->{$key}]];
+            });
+        }
+
+        return new AndCondition($condition);
     }
 
     /**

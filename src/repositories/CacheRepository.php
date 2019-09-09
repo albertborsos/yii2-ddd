@@ -46,11 +46,13 @@ class CacheRepository extends AbstractRepository
 
     /**
      * @param EntityInterface $entity
-     * @return EntityInterface|null
+     * @param array $attributes
+     * @param bool $addNotConditionForPrimaryKeys
+     * @return bool
      */
-    public function exists(EntityInterface $entity): bool
+    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool
     {
-        return !empty($this->findEntityByKey($entity->getCacheKey()));
+        return !empty($this->findEntityByKey($entity->getCacheKey($attributes)));
     }
 
     /**

@@ -115,4 +115,6 @@ interface EntityInterface
      * @param Event $event the event parameter. If not set, a default [[Event]] object will be created.
      */
     public function trigger($name, Event $event = null);
+
+    public function isNew(): bool;
 }

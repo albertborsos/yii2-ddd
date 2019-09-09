@@ -41,6 +41,18 @@ abstract class AbstractEntity extends Model implements EntityInterface
         });
     }
 
+    public function isNew(): bool
+    {
+        $keys = is_array($this->getPrimaryKey()) ? $this->getPrimaryKey() : [$this->getPrimaryKey()];
+        $keys = array_filter($keys);
+
+        foreach ($keys as $key) {
+            if (empty($this->{$key})) {
+                return true;
+            }
+        }
+    }
+
     /**
      * Returns a unique cache key for the entity.
      *
