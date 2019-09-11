@@ -5,10 +5,10 @@ namespace albertborsos\ddd\traits;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\InvalidConfigException;
 
-trait RepositoryPropertyTrait
+trait TargetRepositoryPropertyTrait
 {
     /** @var string|RepositoryInterface */
-    public $repository;
+    public $targetRepository;
 
     /**
      * @throws InvalidConfigException
@@ -24,8 +24,8 @@ trait RepositoryPropertyTrait
      */
     protected function initRepository(): void
     {
-        $this->repository = \Yii::createObject($this->repository);
-        if (!$this->repository instanceof RepositoryInterface) {
+        $this->targetRepository = \Yii::createObject($this->targetRepository);
+        if (!$this->targetRepository instanceof RepositoryInterface) {
             throw new InvalidConfigException(static::class . '::$repository must implements `' . RepositoryInterface::class . '`');
         }
     }

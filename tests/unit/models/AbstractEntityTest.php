@@ -179,4 +179,20 @@ class AbstractEntityTest extends TestCase
 
         $this->assertEquals($expectedMapping, $entity->fieldMapping());
     }
+
+    /**
+     * @dataProvider dataProviderValidPrimaryKeys
+     */
+    public function testIsNew($modelAttributes, $entityClass, $entitySettings)
+    {
+        /** @var EntityInterface $entity */
+        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings, 'attributes' => $modelAttributes]);
+        $this->assertFalse($entity->isNew());
+
+        foreach ((array)$entity->getPrimaryKey() as $key) {
+            $entity->{$key} = null;
+        }
+
+        $this->assertTrue($entity->isNew());
+    }
 }

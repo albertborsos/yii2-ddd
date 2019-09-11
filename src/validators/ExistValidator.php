@@ -2,13 +2,12 @@
 
 namespace albertborsos\ddd\validators;
 
-use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\models\AbstractEntity;
-use albertborsos\ddd\traits\RepositoryPropertyTrait;
+use albertborsos\ddd\traits\TargetRepositoryPropertyTrait;
 
 class ExistValidator extends \yii\validators\Validator
 {
-    use RepositoryPropertyTrait;
+    use TargetRepositoryPropertyTrait;
 
     public $targetAttribute;
 
@@ -25,10 +24,11 @@ class ExistValidator extends \yii\validators\Validator
      */
     public function validateAttribute($form, $attribute)
     {
-        $entity = $this->repository->newEntity();
-        $entity->setPrimaryKey($form);
+        /** @var AbstractEntity $entity */
+        $entity = $this->targetRepository->newEntity();
+        $this->fillTargetAttributes($entity, $form, $attribute);
 
-        if ($this->repository->exists($entity, [$attribute], !$entity->isNew())) {
+        if (!$this->targetRepository->exists($entity, $this->targetAttribute)) {
             $this->addError($form, $attribute, $this->message);
         }
     }
@@ -38,5 +38,19 @@ class ExistValidator extends \yii\validators\Validator
         if ($this->message === null) {
             $this->message = \Yii::t('yii', '{attribute} is invalid.');
         }
+    }
+
+    private function fillTargetAttributes(AbstractEntity $entity, AbstractEntity $form, $attribute): void
+    {
+        $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
+        if (is_array($targetAttribute)) {
+            foreach ($targetAttribute as $formAttribute => $entityAttribute) {
+                $entity->{$entityAttribute} = $form->{$formAttribute};
+            }
+
+            return;
+        }
+
+        $entity->setAttributes([$targetAttribute => $form->$attribute], false);
     }
 }

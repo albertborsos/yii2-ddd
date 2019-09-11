@@ -51,6 +51,8 @@ abstract class AbstractEntity extends Model implements EntityInterface
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
