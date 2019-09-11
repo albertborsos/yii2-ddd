@@ -5,8 +5,8 @@ namespace albertborsos\ddd\tests\unit\behaviors;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 use albertborsos\ddd\tests\support\base\services\page\AbstractPageService;
 use albertborsos\ddd\tests\support\base\services\page\CreatePageService;
 use albertborsos\ddd\tests\support\base\services\page\forms\CreatePageForm;
@@ -198,14 +198,14 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
         return empty($entity) ? new CreatePageService($form) : new UpdatePageService($form, $entity);
     }
 
-    protected function getPageRepository(): PageActiveRepositoryInterface
+    protected function getPageRepository(): PageRepositoryInterface
     {
-        return \Yii::createObject(PageActiveRepositoryInterface::class);
+        return \Yii::createObject(PageRepositoryInterface::class);
     }
 
-    protected function getPageSlugRepository(): PageSlugActiveRepositoryInterface
+    protected function getPageSlugRepository(): PageSlugRepositoryInterface
     {
-        return \Yii::createObject(PageSlugActiveRepositoryInterface::class);
+        return \Yii::createObject(PageSlugRepositoryInterface::class);
     }
 
     /**

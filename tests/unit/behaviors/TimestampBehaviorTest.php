@@ -5,8 +5,8 @@ namespace albertborsos\ddd\tests\behaviors;
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithBehaviorsActiveRepository;
-use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithModifiedBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithModifiedBehaviorsRepository;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -35,7 +35,7 @@ class TimestampBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -56,7 +56,7 @@ class TimestampBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -77,7 +77,7 @@ class TimestampBehaviorTest extends TestCase
     public function testEmptyAttributes()
     {
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepository::class);
 
         $data = [
             'id' => 3,
@@ -102,8 +102,8 @@ class TimestampBehaviorTest extends TestCase
      */
     public function testInvalidEventException()
     {
-        /** @var CustomerWithModifiedBehaviorsActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsActiveRepository::class);
+        /** @var CustomerWithModifiedBehaviorsRepository $repository */
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepository::class);
         $repository->fakeEventClass = true;
 
         $data = [

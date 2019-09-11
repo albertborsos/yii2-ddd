@@ -19,12 +19,12 @@ $config = [
     'container' => [
         'definitions' => [
             \albertborsos\ddd\interfaces\HydratorInterface::class => \albertborsos\ddd\hydrators\ActiveHydrator::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerActiveRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerCacheRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerAddressActiveRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressCacheRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerAddressCacheRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\mysql\page\PageActiveRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\mysql\page\PageSlugActiveRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheUpdaterInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerAddressRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressCacheUpdaterInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerAddressRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\page\PageRepository::class,
+            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\page\PageSlugRepository::class,
         ],
     ],
 ];

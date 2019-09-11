@@ -1,17 +1,17 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\customer;
+namespace albertborsos\ddd\tests\support\base\infrastructure\db\page;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 use yii\data\BaseDataProvider;
 
-class CustomerAddressActiveRepository extends AbstractActiveRepository implements CustomerAddressActiveRepositoryInterface
+class PageSlugRepository extends AbstractActiveRepository implements PageSlugRepositoryInterface
 {
-    protected $dataModelClass = CustomerAddress::class;
+    protected $dataModelClass = PageSlug::class;
 
-    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress::class;
+    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug::class;
 
     /**
      * Creates data provider instance with search query applied
@@ -57,13 +57,26 @@ class CustomerAddressActiveRepository extends AbstractActiveRepository implement
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $model->id,
-            'customer_id' => $model->customer_id,
-            'zip_code' => $model->zip_code,
+            'page_id' => $model->page_id,
+            'created_at' => $model->created_at,
+            'created_by' => $model->created_by,
+            'updated_at' => $model->updated_at,
+            'updated_by' => $model->updated_by,
+            'status' => $model->status,
         ]);
 
-        $query->andFilterWhere(['like', 'city', $model->city])
-            ->andFilterWhere(['like', 'street', $model->street]);
+        $query->andFilterWhere(['like', 'slug', $model->slug]);
 
         return $dataProvider;
+    }
+
+    public function findAllByPage($page): array
+    {
+        return $this->findAllByPageId($page->id);
+    }
+
+    public function findAllByPageId($pageId): array
+    {
+        return $this->find()->andWhere(['page_id' => $pageId])->all();
     }
 }

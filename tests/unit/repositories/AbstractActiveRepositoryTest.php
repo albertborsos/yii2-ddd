@@ -5,8 +5,8 @@ namespace albertborsos\ddd\tests\repositories;
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
 use albertborsos\ddd\tests\support\base\Customer;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerRepository;
 use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use albertborsos\ddd\tests\support\base\services\customer\CreateCustomerService;
@@ -37,9 +37,9 @@ class AbstractActiveRepositoryTest extends TestCase
     public function invalidDataModelClassDataProvider()
     {
         return [
-            'dataModelClass is null' => [CustomerActiveRepository::class, null],
-            'dataModelClass is empty string' => [CustomerActiveRepository::class, ''],
-            'dataModelClass is not implementing ActiveRecordInterface' => [CustomerActiveRepository::class, Customer::class],
+            'dataModelClass is null' => [CustomerRepository::class, null],
+            'dataModelClass is empty string' => [CustomerRepository::class, ''],
+            'dataModelClass is not implementing ActiveRecordInterface' => [CustomerRepository::class, Customer::class],
         ];
     }
 
@@ -61,7 +61,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -85,7 +85,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $repository->update($entity);
@@ -102,7 +102,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $repository->insert($entity);
@@ -116,7 +116,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         /** @var \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer $entity */
         $entity = $repository->findById($data['id']);
@@ -140,7 +140,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->update($entity));
@@ -156,7 +156,7 @@ class AbstractActiveRepositoryTest extends TestCase
     public function deleteExistingRecordDataProvider()
     {
         return [
-            'delete existing customer' => [CustomerActiveRepositoryInterface::class, 1],
+            'delete existing customer' => [CustomerRepositoryInterface::class, 1],
         ];
     }
 
@@ -191,7 +191,7 @@ class AbstractActiveRepositoryTest extends TestCase
     public function testDeleteNotExistingRecord()
     {
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $entity = $repository->findById(4);
 
         $this->assertNull($entity);
@@ -207,7 +207,7 @@ class AbstractActiveRepositoryTest extends TestCase
     public function testDeleteEmptyEntity()
     {
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $entity = $repository->hydrate([]);
 
         $this->assertFalse($repository->delete($entity));
@@ -216,7 +216,7 @@ class AbstractActiveRepositoryTest extends TestCase
     public function testBeginTransaction()
     {
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $transaction = $repository->beginTransaction();
         $this->assertNotNull($transaction);
         $this->assertTrue($transaction->isActive);
@@ -231,7 +231,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $transaction = $repository->beginTransaction();
 
         try {
@@ -259,7 +259,7 @@ class AbstractActiveRepositoryTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $transaction = $repository->beginTransaction();
 
         try {

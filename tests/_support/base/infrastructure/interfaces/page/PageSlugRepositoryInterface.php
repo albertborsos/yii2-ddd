@@ -2,9 +2,9 @@
 
 namespace albertborsos\ddd\tests\support\base\infrastructure\interfaces\page;
 
-use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 
-interface PageSlugActiveRepositoryInterface extends ActiveRepositoryInterface
+interface PageSlugRepositoryInterface extends RepositoryInterface
 {
     public function findAllByPage($page): array;
 

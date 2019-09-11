@@ -4,7 +4,7 @@ namespace albertborsos\ddd\tests\support\base\services\page;
 
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageImageActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\mysql\page\PageImageActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\db\page\PageImageActiveRepository;
 use albertborsos\ddd\tests\support\base\services\page\forms\DeletePageForm;
 
 class DeletePageService extends AbstractPageService

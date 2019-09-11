@@ -1,17 +1,17 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\page;
+namespace albertborsos\ddd\tests\support\base\infrastructure\db\page;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
 use yii\data\BaseDataProvider;
 
-class PageSlugActiveRepository extends AbstractActiveRepository implements PageSlugActiveRepositoryInterface
+class PageRepository extends AbstractActiveRepository implements PageRepositoryInterface
 {
-    protected $dataModelClass = PageSlug::class;
+    protected $dataModelClass = \albertborsos\ddd\tests\support\base\infrastructure\db\page\Page::class;
 
-    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug::class;
+    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\Page::class;
 
     /**
      * Creates data provider instance with search query applied
@@ -40,6 +40,9 @@ class PageSlugActiveRepository extends AbstractActiveRepository implements PageS
                 'params' => $params,
             ],
             'sort' => [
+                'defaultOrder' => [
+                    'sort_order' => SORT_ASC,
+                ],
                 'params' => $params,
             ],
         ]);
@@ -57,7 +60,7 @@ class PageSlugActiveRepository extends AbstractActiveRepository implements PageS
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $model->id,
-            'page_id' => $model->page_id,
+            'date' => $model->date,
             'created_at' => $model->created_at,
             'created_by' => $model->created_by,
             'updated_at' => $model->updated_at,
@@ -65,18 +68,12 @@ class PageSlugActiveRepository extends AbstractActiveRepository implements PageS
             'status' => $model->status,
         ]);
 
-        $query->andFilterWhere(['like', 'slug', $model->slug]);
+        $query->andFilterWhere(['like', 'name', $model->name])
+            ->andFilterWhere(['like', 'category', $model->category])
+            ->andFilterWhere(['like', 'title', $model->title])
+            ->andFilterWhere(['like', 'description', $model->description])
+            ->andFilterWhere(['like', 'slug', $model->slug]);
 
         return $dataProvider;
-    }
-
-    public function findAllByPage($page): array
-    {
-        return $this->findAllByPageId($page->id);
-    }
-
-    public function findAllByPageId($pageId): array
-    {
-        return $this->find()->andWhere(['page_id' => $pageId])->all();
     }
 }

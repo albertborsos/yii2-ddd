@@ -1,17 +1,17 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\customer;
+namespace albertborsos\ddd\tests\support\base\infrastructure\db\customer;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressRepositoryInterface;
 use yii\data\BaseDataProvider;
 
-class CustomerActiveRepository extends AbstractActiveRepository implements CustomerActiveRepositoryInterface
+class CustomerAddressRepository extends AbstractActiveRepository implements CustomerAddressRepositoryInterface
 {
-    protected $dataModelClass = Customer::class;
+    protected $dataModelClass = CustomerAddress::class;
 
-    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class;
+    protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress::class;
 
     /**
      * Creates data provider instance with search query applied
@@ -57,9 +57,12 @@ class CustomerActiveRepository extends AbstractActiveRepository implements Custo
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $model->id,
+            'customer_id' => $model->customer_id,
+            'zip_code' => $model->zip_code,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $model->name]);
+        $query->andFilterWhere(['like', 'city', $model->city])
+            ->andFilterWhere(['like', 'street', $model->street]);
 
         return $dataProvider;
     }

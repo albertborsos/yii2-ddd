@@ -1,6 +1,6 @@
 <?php
 
-namespace albertborsos\ddd\tests\support\base\infrastructure\mysql\page;
+namespace albertborsos\ddd\tests\support\base\infrastructure\db\page;
 
 use albertborsos\ddd\tests\support\base\domains\page\traits\PageAttributeLabelsTrait;
 

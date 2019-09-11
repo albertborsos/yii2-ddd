@@ -3,7 +3,7 @@
 namespace albertborsos\ddd\tests\repositories;
 
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheUpdaterInterface;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
 
@@ -15,7 +15,7 @@ class CacheRepositoryTest extends TestCase
     {
         $customerIds = [1, 2, 3];
 
-        $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerCacheUpdaterInterface::class);
         $repository->updateVipCustomers($customerIds);
 
         $this->assertEquals($customerIds, $repository->getVipCustomers());
@@ -23,7 +23,7 @@ class CacheRepositoryTest extends TestCase
 
     public function testInsertAndFindAndUpdateAndDelete()
     {
-        $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerCacheUpdaterInterface::class);
         $dataInsert = ['id' => 1, 'value' => microtime(false)];
         $dataUpdate = ['id' => 1, 'value' => microtime(false)];
 
@@ -58,7 +58,7 @@ class CacheRepositoryTest extends TestCase
      */
     public function testFindByEntity($data)
     {
-        $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerCacheUpdaterInterface::class);
         $customer = $repository->hydrate($data);
         $repository->insert($customer);
 
@@ -75,7 +75,7 @@ class CacheRepositoryTest extends TestCase
      */
     public function testFindById($data)
     {
-        $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerCacheUpdaterInterface::class);
 
         $customer = $repository->hydrate($data);
 

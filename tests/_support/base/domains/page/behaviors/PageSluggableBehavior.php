@@ -3,8 +3,8 @@
 namespace albertborsos\ddd\tests\support\base\domains\page\behaviors;
 
 use albertborsos\ddd\behaviors\AbstractUniqueSluggableBehavior;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 
 class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
 {
@@ -27,8 +27,8 @@ class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
     protected function uniqueValidators()
     {
         return [
-            PageActiveRepositoryInterface::class     => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['id' => $this->owner->id]] : []],
-            PageSlugActiveRepositoryInterface::class => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['page_id' => $this->owner->id]] : []],
+            PageRepositoryInterface::class     => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['id' => $this->owner->id]] : []],
+            PageSlugRepositoryInterface::class => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['page_id' => $this->owner->id]] : []],
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace albertborsos\ddd\tests\behaviors;
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\CustomerWithBehaviorsActiveRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -34,7 +34,7 @@ class SluggableBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -53,7 +53,7 @@ class SluggableBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -75,7 +75,7 @@ class SluggableBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -97,7 +97,7 @@ class SluggableBehaviorTest extends TestCase
         ];
 
         /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsActiveRepository::class);
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));

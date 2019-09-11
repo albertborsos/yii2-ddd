@@ -32,7 +32,7 @@ class ActiveEntityDataProviderTest extends TestCase
         $dataProvider = new ActiveEntityDataProvider([
             'entityClass' => Customer::class,
             'hydrator' => \Yii::createObject(HydratorInterface::class, [\Yii::createObject([new Customer(), 'fieldMapping'])]),
-            'query' => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer::find(),
+            'query' => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\Customer::find(),
         ]);
 
         foreach ($dataProvider->getModels() as $model) {
@@ -48,7 +48,7 @@ class ActiveEntityDataProviderTest extends TestCase
         $dataProvider = new ActiveEntityDataProvider([
             'entityClass' => null,
             'hydrator' => \Yii::createObject(HydratorInterface::class, [\Yii::createObject([new Customer(), 'fieldMapping'])]),
-            'query' => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer::find(),
+            'query' => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\Customer::find(),
         ]);
     }
 
@@ -58,9 +58,9 @@ class ActiveEntityDataProviderTest extends TestCase
     public function testThrowsErrorIfEntityClassNotInstanceOfEntityInterface()
     {
         $dataProvider = new ActiveEntityDataProvider([
-            'entityClass' => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer::class,
+            'entityClass' => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\Customer::class,
             'hydrator' => \Yii::createObject(HydratorInterface::class, [\Yii::createObject([new Customer(), 'fieldMapping'])]),
-            'query' => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer::find(),
+            'query' => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\Customer::find(),
         ]);
     }
 
@@ -82,7 +82,7 @@ class ActiveEntityDataProviderTest extends TestCase
         $dataProvider = new ActiveEntityDataProvider([
             'entityClass' => Customer::class,
             'hydrator' => $hydrator,
-            'query' => \albertborsos\ddd\tests\support\base\infrastructure\mysql\customer\Customer::find(),
+            'query' => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\Customer::find(),
         ]);
     }
 }

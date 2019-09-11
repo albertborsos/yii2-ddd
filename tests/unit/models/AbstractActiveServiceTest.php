@@ -4,7 +4,7 @@ namespace albertborsos\ddd\tests\unit\models;
 
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 use albertborsos\ddd\tests\support\base\services\customer\CreateCustomerService;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use Codeception\PHPUnit\TestCase;
@@ -21,7 +21,7 @@ class AbstractActiveServiceTest extends TestCase
         $this->assertTrue($service->execute());
         $this->assertNotNull($service->getId());
 
-        $repository = \Yii::createObject(CustomerActiveRepositoryInterface::class);
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         /** @var Customer $model */
         $model = $repository->findById($service->getId());
 

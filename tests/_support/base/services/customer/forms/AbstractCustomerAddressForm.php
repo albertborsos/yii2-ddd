@@ -4,7 +4,7 @@ namespace albertborsos\ddd\tests\support\base\services\customer\forms;
 
 use albertborsos\ddd\interfaces\FormObject;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerActiveRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 use albertborsos\ddd\validators\ExistValidator;
 
 abstract class AbstractCustomerAddressForm extends CustomerAddress implements FormObject
@@ -18,7 +18,7 @@ abstract class AbstractCustomerAddressForm extends CustomerAddress implements Fo
 
             [['city', 'street'], 'string', 'max' => 255],
 
-            [['customerId'], ExistValidator::class, 'targetRepository' => CustomerActiveRepositoryInterface::class, 'targetAttribute' => ['customerId' => 'id']],
+            [['customerId'], ExistValidator::class, 'targetRepository' => CustomerRepositoryInterface::class, 'targetAttribute' => ['customerId' => 'id']],
         ];
     }
 }
