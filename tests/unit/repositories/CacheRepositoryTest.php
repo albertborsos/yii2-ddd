@@ -21,19 +21,24 @@ class CacheRepositoryTest extends TestCase
         $this->assertEquals($customerIds, $repository->getVipCustomers());
     }
 
-    public function testSetAndGetAndDelete()
+    public function testInsertAndFindAndUpdateAndDelete()
     {
         $repository = \Yii::createObject(CustomerCacheRepositoryInterface::class);
+        $dataInsert = ['id' => 1, 'value' => microtime(false)];
+        $dataUpdate = ['id' => 1, 'value' => microtime(false)];
 
         /** @var Customer $entity */
+        // insert
         $entity = $repository->newEntity();
-        $entity->setAttributes([
-            'id' => 1,
-            'value' => 'Test',
-        ], false);
-
+        $entity->setAttributes($dataInsert, false);
         $this->assertTrue($repository->insert($entity));
         $this->assertEquals($entity, $repository->findById($entity->id));
+        // update
+        $entity = $repository->newEntity();
+        $entity->setAttributes($dataUpdate, false);
+        $this->assertTrue($repository->update($entity));
+        $this->assertEquals($entity, $repository->findById($entity->id));
+        // delete
         $this->assertTrue($repository->delete($entity));
         $this->assertNotEquals($entity, $repository->findById($entity->id));
         $this->assertNull($repository->findById($entity->id));
