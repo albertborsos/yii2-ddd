@@ -38,10 +38,7 @@
         "psr-4": {
             "albertborsos\\ddd\\": "src/",
             "albertborsos\\ddd\\tests\\": "tests/",
-            "albertborsos\\ddd\\tests\\support\\base\\": "tests/_support/base/",
-            "albertborsos\\ddd\\tests\\support\\base\\domains\\": "tests/_support/base/domains",
-            "albertborsos\\ddd\\tests\\support\\base\\modules\\": "tests/_support/base/modules",
-            "albertborsos\\ddd\\tests\\support\\base\\services\\": "tests/_support/base/services"
+            "albertborsos\\ddd\\tests\\support\\base\\": "tests/_support/base/"
         }
     },
     "repositories": [
