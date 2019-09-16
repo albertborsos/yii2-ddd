@@ -9,7 +9,6 @@ use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddres
 use albertborsos\ddd\tests\support\base\MockTrait;
 use albertborsos\ddd\tests\support\base\Customer as CustomerModel;
 use Codeception\PHPUnit\TestCase;
-use Codeception\Util\Debug;
 use yii\base\DynamicModel;
 use yii\base\Model;
 

@@ -27,7 +27,6 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
         $this->setDefaultAttributes();
         $this->checkAttributeOrValueIsConfigured();
         $this->checkRepositoryIsConfigured();
-        $this->initRepository();
     }
 
     /**
@@ -40,7 +39,7 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
             return Yii::createObject($interface);
         }
 
-        return $this->repository;
+        return \Yii::createObject($this->repository);
     }
 
     /**
@@ -155,19 +154,5 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
         if ($this->ensureUnique && empty($this->repository)) {
             throw new InvalidConfigException(get_called_class() . '::$repository must be set!');
         }
-    }
-
-    /**
-     * @throws InvalidConfigException
-     */
-    protected function initRepository(): void
-    {
-        if (empty($this->repository)) {
-            return;
-        }
-
-        /** @var ActiveRepositoryInterface $repository */
-        $repository = \Yii::createObject($this->repository);
-        $this->setRepository($repository);
     }
 }
