@@ -264,4 +264,34 @@ class ActiveHydratorTest extends TestCase
             $this->assertEquals($expectedValue, $model->$attribute);
         }
     }
+
+
+    public function dataProviderHydrateEmptyEntity()
+    {
+        return [
+            'data array' => [Customer::class, ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses'], []],
+            'model' => [Customer::class, ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses'], new DynamicModel([])],
+            'model with relation data' => [Customer::class, ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses'], new DynamicModel(['customerAddresses' => []])],
+            'model with relation model' => [Customer::class, ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses'], new DynamicModel(['customerAddresses' => [
+                new DynamicModel([]),
+            ]])],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderHydrateEmptyEntity
+     * @param $entityClass
+     * @param $map
+     * @param $data
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function testToCreateNewEmptyEntity($entityClass, $map, $data)
+    {
+        $hydrator = $this->mockHydrator($map);
+
+        /** @var EntityInterface $entity */
+        $entity = $hydrator->hydrate($entityClass, $data);
+
+        $this->assertHydratedEntity($entityClass, $entity, $data);
+    }
 }

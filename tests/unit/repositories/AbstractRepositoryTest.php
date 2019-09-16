@@ -3,11 +3,8 @@
 namespace albertborsos\ddd\tests\repositories;
 
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerRepository;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\InvalidCustomerActiveRepository;
 use albertborsos\ddd\tests\support\base\infrastructure\db\customer\InvalidEntityCustomerRepository;
 use albertborsos\ddd\tests\support\base\infrastructure\db\customer\InvalidHydratorCustomerRepository;
-use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
 
@@ -45,5 +42,17 @@ class AbstractRepositoryTest extends TestCase
     public function testInvalidHydratorClass()
     {
         new InvalidHydratorCustomerRepository();
+    }
+
+    public function testNewEntity()
+    {
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
+        $entity = $repository->newEntity();
+
+        $this->assertInstanceOf($repository->getEntityClass(), $entity);
+        foreach ($entity->fieldMapping() as $dataAttribute => $property) {
+            $this->assertNull($entity->{$property});
+        }
     }
 }
