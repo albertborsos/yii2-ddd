@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd\web;
 
-use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\RepositoryInterface;
 use yii\base\InvalidConfigException;
@@ -21,7 +20,7 @@ abstract class AbstractController extends \yii\web\Controller
 
     /**
      * @param string|null $interface
-     * @return ActiveRepositoryInterface
+     * @return RepositoryInterface
      * @throws InvalidConfigException
      */
     public function getRepository($interface = null): RepositoryInterface

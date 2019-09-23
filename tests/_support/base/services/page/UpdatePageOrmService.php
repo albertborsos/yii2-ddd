@@ -3,11 +3,13 @@
 namespace albertborsos\ddd\tests\support\base\services\page;
 
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\UpdatePageServiceInterface;
 use albertborsos\ddd\tests\support\base\services\page\forms\CreatePageSlugForm;
 use albertborsos\ddd\tests\support\base\services\page\forms\UpdatePageForm;
+use Cycle\ORM\Transaction;
 use yii\base\Exception;
 
-class UpdatePageService extends AbstractPageService
+class UpdatePageOrmService extends AbstractPageService implements UpdatePageServiceInterface
 {
     public function __construct(UpdatePageForm $form, Page $entity, $config = [])
     {
@@ -18,6 +20,7 @@ class UpdatePageService extends AbstractPageService
     {
         $oldSlug = $this->getEntity()->slug;
 
+        /** @var Transaction $transaction */
         $transaction = $this->getRepository()->beginTransaction();
 
         try {
@@ -27,11 +30,13 @@ class UpdatePageService extends AbstractPageService
                 if ($entity->slug !== $oldSlug) {
                     $this->storeOldSlug($this->getId(), $oldSlug);
                 }
-                $transaction->commit();
+                $transaction->run();
                 return true;
             }
         } catch (Exception $e) {
-            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            throw $e;
         }
 
         return false;

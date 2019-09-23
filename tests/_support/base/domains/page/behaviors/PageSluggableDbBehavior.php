@@ -4,9 +4,10 @@ namespace albertborsos\ddd\tests\support\base\domains\page\behaviors;
 
 use albertborsos\ddd\behaviors\AbstractUniqueSluggableBehavior;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSluggableBehaviorInterface;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 
-class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
+class PageSluggableDbBehavior extends AbstractUniqueSluggableBehavior implements PageSluggableBehaviorInterface
 {
     public $attribute = 'name';
 
@@ -27,8 +28,10 @@ class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
     protected function uniqueValidators()
     {
         return [
-            PageRepositoryInterface::class     => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['id' => $this->owner->id]] : []],
-            PageSlugRepositoryInterface::class => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['page_id' => $this->owner->id]] : []],
+            ['targetRepository' => PageRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['NOT', ['id' => $this->owner->id]]] : []],
+            ['targetRepository' => PageSlugRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['NOT', ['page_id' => $this->owner->id]]] : []],
+//            ['targetRepository' => PageRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['id', '!=', $this->owner->id]] : []],
+//            ['targetRepository' => PageSlugRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['page_id', '!=', $this->owner->id]] : []],
         ];
     }
 }

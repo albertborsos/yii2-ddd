@@ -2,8 +2,6 @@
 
 namespace albertborsos\ddd\models;
 
-use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
-use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\FormObject;
 
 /**
@@ -13,19 +11,6 @@ use albertborsos\ddd\interfaces\FormObject;
  */
 abstract class AbstractActiveService extends AbstractService
 {
-    public function __construct(FormObject $form = null, EntityInterface $entity = null, $config = [])
-    {
-        parent::__construct($form, $entity, $config);
-    }
-
-    /**
-     * @return ActiveRepositoryInterface
-     */
-    protected function getRepository(): ActiveRepositoryInterface
-    {
-        return $this->repository;
-    }
-
     /**
      * @return bool
      */

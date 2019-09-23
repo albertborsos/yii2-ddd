@@ -9,11 +9,30 @@ namespace albertborsos\ddd\interfaces;
  */
 interface HydratorInterface
 {
+    /**
+     * @param $className
+     * @param $data
+     * @return mixed
+     */
     public function hydrate($className, $data);
 
+    /**
+     * @param $className
+     * @param array $data
+     * @return array
+     */
     public function hydrateAll($className, array $data): array;
 
+    /**
+     * @param object $object
+     * @param array $data
+     * @return mixed
+     */
     public function hydrateInto($object, array $data);
 
+    /**
+     * @param object $object
+     * @return array
+     */
     public function extract($object): array;
 }

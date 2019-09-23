@@ -2,11 +2,11 @@
 
 namespace albertborsos\ddd\tests\behaviors;
 
-use albertborsos\ddd\repositories\AbstractActiveRepository;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithModifiedBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithBehaviorsRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithModifiedBehaviorsRepositoryInterface;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -28,6 +28,7 @@ class BlameableBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 
     protected function tearDown()
@@ -45,8 +46,8 @@ class BlameableBehaviorTest extends TestCase
             'name' => 'Test blameable attributes are filled on insert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -59,15 +60,15 @@ class BlameableBehaviorTest extends TestCase
         $this->assertEquals($entity->createdBy, $entity->updatedBy);
     }
 
-    public function testInsertWhenUserisGuest()
+    public function testInsertWhenUserIsGuest()
     {
         $data = [
             'id' => 3,
             'name' => 'Test blameable attributes are filled on insert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -88,8 +89,8 @@ class BlameableBehaviorTest extends TestCase
             'name' => 'Test updatedBy timestamp attribute is modified on update',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -113,8 +114,8 @@ class BlameableBehaviorTest extends TestCase
             'name' => 'Test updatedBy timestamp attribute is modified on update',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -127,6 +128,7 @@ class BlameableBehaviorTest extends TestCase
         $entity = $repository->findById($data['id']);
 
         $this->assertEquals($oldCreatedBy, $entity->createdBy);
+        $this->assertNotNull($oldUpdatedBy);
         $this->assertNull($entity->updatedBy);
     }
 
@@ -134,8 +136,8 @@ class BlameableBehaviorTest extends TestCase
     {
         $this->authenticateUser(self::DEFAULT_USER_ID);
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepositoryInterface::class);
 
         $data = [
             'id' => 3,

@@ -13,7 +13,9 @@
     "require": {
         "php": ">=7.1.0",
         "yiisoft/yii2": "~2.0.14",
-        "samdark/hydrator": "^1.0.2"
+        "zendframework/zend-hydrator": "~2.4|~3.0",
+        "samdark/hydrator": "^1.0.2",
+        "albertborsos/yii2-cycle": "dev-master"
     },
     "require-dev": {
         "codeception/codeception": "~3.0",

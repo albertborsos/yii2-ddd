@@ -5,7 +5,6 @@ namespace albertborsos\ddd\models;
 use albertborsos\ddd\interfaces\EntityInterface;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
-use yii\db\ActiveRecordInterface;
 use yii\helpers\Inflector;
 
 /**

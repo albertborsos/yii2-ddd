@@ -3,6 +3,7 @@
 namespace albertborsos\ddd;
 
 use albertborsos\ddd\hydrators\ActiveHydrator;
+use albertborsos\ddd\hydrators\ZendHydrator;
 use albertborsos\ddd\interfaces\HydratorInterface;
 use albertborsos\ddd\traits\SetContainerDefinitionsTrait;
 use yii\base\Application;
@@ -34,7 +35,7 @@ class Bootstrap implements BootstrapInterface
      *
      * ```
      *  return [
-     *      albertborsos\ddd\interfaces\HydratorInterface::class => albertborsos\ddd\hydrators\ActiveHydrator::class,
+     *      albertborsos\ddd\interfaces\HydratorInterface::class => albertborsos\ddd\hydrators\ZendHydrator::class,
      *  ];
      * ```
      *
@@ -43,7 +44,7 @@ class Bootstrap implements BootstrapInterface
     protected static function getContainerDefinitions(): array
     {
         return [
-            HydratorInterface::class => ActiveHydrator::class,
+            HydratorInterface::class => ZendHydrator::class,
         ];
     }
 }

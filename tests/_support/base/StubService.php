@@ -3,7 +3,7 @@
 namespace albertborsos\ddd\tests\support\base;
 
 use albertborsos\ddd\models\AbstractService;
-use yii\base\Model;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 
 class StubService extends AbstractService
 {

@@ -11,7 +11,6 @@ use albertborsos\ddd\tests\support\base\StubForm;
 use albertborsos\ddd\tests\support\base\StubEntity;
 use albertborsos\ddd\tests\support\base\StubService;
 use Codeception\PHPUnit\TestCase;
-use Codeception\Util\Debug;
 use yii\base\Model;
 
 class AbstractServiceTest extends TestCase

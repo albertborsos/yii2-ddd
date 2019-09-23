@@ -6,6 +6,7 @@ use albertborsos\ddd\base\EntityEvent;
 use albertborsos\ddd\data\ActiveEvent;
 use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\interfaces\HydratorInterface;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -29,6 +30,15 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     {
         parent::init();
         $this->validateDataModelClass();
+    }
+
+    protected function initHydrator(): void
+    {
+        $entity = \Yii::createObject($this->entityClass);
+        $this->hydrator = \Yii::createObject($this->hydrator, [$entity->fieldMapping()]);
+        if (!$this->hydrator instanceof HydratorInterface) {
+            throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
+        }
     }
 
     /**
@@ -129,12 +139,26 @@ abstract class AbstractActiveRepository extends AbstractRepository implements Ac
     /**
      * @param EntityInterface $entity
      * @param array $attributes
-     * @param bool $addNotConditionForPrimaryKeys
+     * @param array $filter
      * @return bool
      */
-    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool
+    public function exists(EntityInterface $entity, $attributes = [], $filter = []): bool
     {
-        return $this->find()->andWhere($this->createFindConditionByEntityKeys($entity, $attributes, true, $addNotConditionForPrimaryKeys))->exists();
+        $query = $this->find();
+
+        if (empty($attributes)) {
+            $attributes = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
+        }
+
+        foreach ($attributes as $attribute) {
+            $query->andWhere([$attribute => $entity->{$attribute}]);
+        }
+
+        foreach ($filter as $condition) {
+            $query->andWhere($condition);
+        }
+
+        return $query->exists();
     }
 
     /**

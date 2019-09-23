@@ -73,10 +73,10 @@ abstract class AbstractService extends Component implements ServiceInterface
     }
 
     /**
-     * @return RepositoryInterface
+     * @return RepositoryInterface|null
      * @since 2.0.0
      */
-    protected function getRepository()
+    protected function getRepository(): ?RepositoryInterface
     {
         return $this->repository;
     }

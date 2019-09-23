@@ -4,6 +4,7 @@ namespace albertborsos\ddd\repositories;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\traits\PostfixedKeyTrait;
+use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
 use yii\data\BaseDataProvider;
 use yii\di\Instance;
@@ -47,10 +48,10 @@ class CacheRepository extends AbstractRepository
     /**
      * @param EntityInterface $entity
      * @param array $attributes
-     * @param bool $addNotConditionForPrimaryKeys
+     * @param array $filter
      * @return bool
      */
-    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool
+    public function exists(EntityInterface $entity, $attributes = [], $filter = []): bool
     {
         return !empty($this->findEntityByKey($entity->getCacheKey($attributes)));
     }
@@ -71,9 +72,10 @@ class CacheRepository extends AbstractRepository
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
+     * @param bool $checkIsNewRecord
      * @return bool
      */
-    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null, $checkIsNewRecord = true): bool
     {
         return $this->cache->set($entity->getCacheKey(), $entity->getDataAttributes());
     }
@@ -110,5 +112,10 @@ class CacheRepository extends AbstractRepository
         }
 
         return $this->hydrate((array)$data);
+    }
+
+    public function beginTransaction()
+    {
+        throw new NotSupportedException('Transactions are not supported in ' . static::class);
     }
 }

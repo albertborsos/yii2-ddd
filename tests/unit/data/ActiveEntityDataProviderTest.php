@@ -25,6 +25,7 @@ class ActiveEntityDataProviderTest extends TestCase
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 
     public function testReturnsEntities()

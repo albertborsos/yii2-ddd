@@ -3,9 +3,11 @@
 namespace albertborsos\ddd\tests\support\base\domains\customer\entities;
 
 use albertborsos\ddd\behaviors\BlameableBehavior;
+use albertborsos\ddd\behaviors\SluggableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\models\AbstractEntity;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithModifiedBehaviorsRepositoryInterface;
 
 /**
  * Class Customer
@@ -27,6 +29,12 @@ class CustomerWithModifiedBehaviors extends CustomerWithBehaviors
                 'attributes' => [
                     EntityInterface::EVENT_BEFORE_INSERT => ['createdBy'],
                 ],
+            ],
+            'sluggable' => [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'name',
+                'ensureUnique' => true,
+                'repository' => CustomerWithModifiedBehaviorsRepositoryInterface::class,
             ],
         ]);
     }

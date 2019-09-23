@@ -4,6 +4,7 @@ namespace albertborsos\ddd\tests\support\base\infrastructure\db\page;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\data\ActiveEntityDataProvider;
+use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 use yii\data\BaseDataProvider;
 
@@ -70,7 +71,7 @@ class PageSlugRepository extends AbstractActiveRepository implements PageSlugRep
         return $dataProvider;
     }
 
-    public function findAllByPage($page): array
+    public function findAllByPage(Page $page): array
     {
         return $this->findAllByPageId($page->id);
     }

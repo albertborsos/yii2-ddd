@@ -11,21 +11,27 @@ $config = [
             'password' => getenv('DB_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'cycle' => [
+            'class' => \albertborsos\cycle\Connection::class,
+            'dsn' => getenv('DB_TEST_DSN'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'schema' => [
+                'customer' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerRepository::schema(),
+                'customer_address' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerAddressRepository::schema(),
+                'customer_with_behaviors' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerWithBehaviorsRepository::schema(),
+                'customer_with_modified_behaviors' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerWithModifiedBehaviorsRepository::schema(),
+                'page' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\page\PageRepository::schema(),
+                'page_slug' => \albertborsos\ddd\tests\support\base\infrastructure\cycle\page\PageSlugRepository::schema(),
+            ],
+        ],
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
         'user' => \albertborsos\ddd\tests\support\base\UserMock::class,
     ],
     'container' => [
-        'definitions' => [
-            \albertborsos\ddd\interfaces\HydratorInterface::class => \albertborsos\ddd\hydrators\ActiveHydrator::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheUpdaterInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerAddressRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressCacheUpdaterInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerAddressRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\page\PageRepository::class,
-            \albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface::class => \albertborsos\ddd\tests\support\base\infrastructure\db\page\PageSlugRepository::class,
-        ],
+        'definitions' => require('definitions.orm.php'),
     ],
 ];
 

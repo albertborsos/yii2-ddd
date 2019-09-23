@@ -7,5 +7,10 @@ return [
             'username' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
         ],
+        'cycle' => [
+            'dsn' => getenv('TEST_DB_DSN'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+        ],
     ],
 ];

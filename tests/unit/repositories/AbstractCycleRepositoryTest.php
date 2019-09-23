@@ -2,21 +2,20 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
-use albertborsos\ddd\repositories\AbstractActiveRepository;
+use albertborsos\ddd\repositories\AbstractCycleRepository;
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
-use albertborsos\ddd\tests\support\base\Customer;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerRepository;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
-use albertborsos\ddd\tests\support\base\MockConfig;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use albertborsos\ddd\tests\support\base\services\customer\CreateCustomerService;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use Codeception\PHPUnit\TestCase;
+use Cycle\ORM\Transaction;
 use TypeError;
 use yii\base\Exception;
 use yii\test\FixtureTrait;
 
-class AbstractActiveRepositoryTest extends TestCase
+class AbstractCycleRepositoryTest extends TestCase
 {
     use MockTrait;
     use FixtureTrait;
@@ -40,25 +39,6 @@ class AbstractActiveRepositoryTest extends TestCase
         \Yii::$app->cycle->cleanHeap();
     }
 
-    public function invalidDataModelClassDataProvider()
-    {
-        return [
-            'dataModelClass is null' => [CustomerRepository::class, null],
-            'dataModelClass is empty string' => [CustomerRepository::class, ''],
-            'dataModelClass is not implementing ActiveRecordInterface' => [CustomerRepository::class, Customer::class],
-        ];
-    }
-
-    /**
-     * @dataProvider invalidDataModelClassDataProvider
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessageRegExp  /\$dataModelClass must implements `yii\\db\\ActiveRecordInterface`$/
-     */
-    public function testMissingDataModelClass($repositoryClass, $dataModelClass)
-    {
-        $this->mockObject(MockConfig::create($repositoryClass, ['dataModelClass' => $dataModelClass]));
-    }
-
     public function testInsert()
     {
         $data = [
@@ -66,8 +46,8 @@ class AbstractActiveRepositoryTest extends TestCase
             'name' => 'Test to Insert via repository',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -90,8 +70,8 @@ class AbstractActiveRepositoryTest extends TestCase
             'name' => 'Test to Update via repository',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $repository->update($entity);
@@ -107,8 +87,8 @@ class AbstractActiveRepositoryTest extends TestCase
             'name' => 'Test to Insert via repository',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $repository->insert($entity);
@@ -121,8 +101,8 @@ class AbstractActiveRepositoryTest extends TestCase
             'name' => 'Test to Update via repository',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         /** @var \albertborsos\ddd\tests\support\base\domains\customer\entities\Customer $entity */
         $entity = $repository->findById($data['id']);
@@ -145,8 +125,8 @@ class AbstractActiveRepositoryTest extends TestCase
             'name' => 'Albert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
 
         $entity = $repository->findById($data['id']);
         $this->assertTrue($repository->update($entity));
@@ -162,7 +142,7 @@ class AbstractActiveRepositoryTest extends TestCase
     public function deleteExistingRecordDataProvider()
     {
         return [
-            'delete existing customer' => [CustomerRepository::class, 1],
+            'delete existing customer' => [CustomerRepositoryInterface::class, 1],
         ];
     }
 
@@ -177,8 +157,8 @@ class AbstractActiveRepositoryTest extends TestCase
      */
     public function testDeleteExistingRecord($repositoryClass, $recordId)
     {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject($repositoryClass);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $entity = $repository->findById($recordId);
 
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
@@ -196,8 +176,8 @@ class AbstractActiveRepositoryTest extends TestCase
      */
     public function testDeleteNotExistingRecord()
     {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $entity = $repository->findById(4);
 
         $this->assertNull($entity);
@@ -205,14 +185,16 @@ class AbstractActiveRepositoryTest extends TestCase
     }
 
     /**
-     * @throws \Throwable
+     * @param $isNewRecord
+     * @param $repositoryClass
+     * @param $data
      * @throws \yii\base\InvalidConfigException
-     * @throws \yii\db\StaleObjectException
+     * @throws \Throwable
      */
     public function testDeleteEmptyEntity()
     {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $entity = $repository->hydrate([]);
 
         $this->assertFalse($repository->delete($entity));
@@ -220,23 +202,21 @@ class AbstractActiveRepositoryTest extends TestCase
 
     public function testBeginTransaction()
     {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $transaction = $repository->beginTransaction();
         $this->assertNotNull($transaction);
-        $this->assertTrue($transaction->isActive);
-
-        $transaction->rollBack();
+        $this->assertInstanceOf(Transaction::class, $transaction);
     }
 
-    public function testTransactionCommit()
+    public function testTransactionRun()
     {
         $attributes = [
-            'name' => 'Transaction Commit',
+            'name' => 'Transaction Run',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
+        /** @var AbstractCycleRepository $repository */
+        $repository = \Yii::createObject(CustomerRepositoryInterface::class);
         $transaction = $repository->beginTransaction();
 
         try {
@@ -245,9 +225,8 @@ class AbstractActiveRepositoryTest extends TestCase
             $service = new CreateCustomerService($form);
             $this->assertTrue($service->execute());
             $this->assertNotNull($service->getId());
-            $transaction->commit();
+            $transaction->run();
         } catch (Exception $e) {
-            $transaction->rollBack();
             return false;
         }
 
@@ -255,33 +234,5 @@ class AbstractActiveRepositoryTest extends TestCase
         $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $entity);
 
         $repository->delete($entity);
-    }
-
-    /**
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function testTransactionRollback()
-    {
-        $attributes = [
-            'name' => 'Transaction Rollback',
-        ];
-
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerRepository::class);
-        $transaction = $repository->beginTransaction();
-
-        try {
-            $form = new CreateCustomerForm($attributes);
-            $this->assertTrue($form->validate());
-            $service = new CreateCustomerService($form);
-            $this->assertTrue($service->execute());
-            $this->assertNotNull($service->getId());
-            $this->assertInstanceOf(\albertborsos\ddd\tests\support\base\domains\customer\entities\Customer::class, $repository->findById($service->getId()));
-            throw new Exception('rollback');
-        } catch (Exception $e) {
-            $transaction->rollBack();
-        }
-
-        $this->assertEmpty($repository->findById($service->getId()));
     }
 }

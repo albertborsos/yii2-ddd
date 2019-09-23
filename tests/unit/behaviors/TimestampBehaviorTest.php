@@ -2,11 +2,12 @@
 
 namespace albertborsos\ddd\tests\behaviors;
 
-use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithModifiedBehaviors;
 use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithModifiedBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithBehaviorsRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithModifiedBehaviorsRepositoryInterface;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -25,6 +26,7 @@ class TimestampBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 
     public function testInsert()
@@ -34,8 +36,8 @@ class TimestampBehaviorTest extends TestCase
             'name' => 'Test timestamp attributes are filled on insert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var \albertborsos\ddd\interfaces\RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -55,8 +57,8 @@ class TimestampBehaviorTest extends TestCase
             'name' => 'Test updatedAt timestamp attribute is modified on update',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var \albertborsos\ddd\interfaces\RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -76,15 +78,15 @@ class TimestampBehaviorTest extends TestCase
 
     public function testEmptyAttributes()
     {
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepository::class);
+        /** @var \albertborsos\ddd\interfaces\RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepositoryInterface::class);
 
         $data = [
             'id' => 3,
             'name' => 'test only createdAt',
         ];
 
-        /** @var CustomerWithBehaviors $entity */
+        /** @var CustomerWithModifiedBehaviors $entity */
         $entity = $repository->hydrate($data);
 
         $this->assertTrue($repository->insert($entity));
@@ -103,7 +105,7 @@ class TimestampBehaviorTest extends TestCase
     public function testInvalidEventException()
     {
         /** @var CustomerWithModifiedBehaviorsRepository $repository */
-        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepository::class);
+        $repository = \Yii::createObject(CustomerWithModifiedBehaviorsRepositoryInterface::class);
         $repository->fakeEventClass = true;
 
         $data = [

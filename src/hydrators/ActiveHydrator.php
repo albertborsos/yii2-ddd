@@ -4,7 +4,6 @@ namespace albertborsos\ddd\hydrators;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
-use albertborsos\ddd\models\AbstractEntity;
 use yii\base\Component;
 use yii\base\Model;
 

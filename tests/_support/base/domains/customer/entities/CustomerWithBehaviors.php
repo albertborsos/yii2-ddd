@@ -7,6 +7,7 @@ use albertborsos\ddd\behaviors\SluggableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\models\AbstractEntity;
 use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithBehaviorsRepositoryInterface;
 
 /**
  * Class Customer
@@ -34,7 +35,7 @@ class CustomerWithBehaviors extends AbstractEntity
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
                 'ensureUnique' => true,
-                'repository' => CustomerWithBehaviorsRepository::class,
+                'repository' => CustomerWithBehaviorsRepositoryInterface::class,
             ],
         ];
     }

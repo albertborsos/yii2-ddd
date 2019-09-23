@@ -2,10 +2,10 @@
 
 namespace albertborsos\ddd\tests\behaviors;
 
-use albertborsos\ddd\repositories\AbstractActiveRepository;
+use albertborsos\ddd\interfaces\RepositoryInterface;
 use albertborsos\ddd\tests\fixtures\CustomerWithBehaviorsFixtures;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors;
-use albertborsos\ddd\tests\support\base\infrastructure\db\customer\CustomerWithBehaviorsRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerWithBehaviorsRepositoryInterface;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -24,6 +24,7 @@ class SluggableBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 
     public function testInsert()
@@ -33,8 +34,8 @@ class SluggableBehaviorTest extends TestCase
             'name' => 'Test slug attribute is filled on insert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
 
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));
@@ -52,8 +53,8 @@ class SluggableBehaviorTest extends TestCase
             'name' => 'Test slug attribute is modified on update',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -74,8 +75,8 @@ class SluggableBehaviorTest extends TestCase
             'name' => 'Albert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->findById($data['id']);
 
@@ -96,8 +97,8 @@ class SluggableBehaviorTest extends TestCase
             'name' => 'Albert',
         ];
 
-        /** @var AbstractActiveRepository $repository */
-        $repository = \Yii::createObject(CustomerWithBehaviorsRepository::class);
+        /** @var RepositoryInterface $repository */
+        $repository = \Yii::createObject(CustomerWithBehaviorsRepositoryInterface::class);
         /** @var CustomerWithBehaviors $entity */
         $entity = $repository->hydrate($data);
         $this->assertTrue($repository->insert($entity));

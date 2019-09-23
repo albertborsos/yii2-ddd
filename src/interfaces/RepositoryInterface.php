@@ -20,18 +20,19 @@ interface RepositoryInterface
     /**
      * @param EntityInterface $entity
      * @param array $attributes
-     * @param $addNotConditionForPrimaryKeys
+     * @param array $filter
      * @return bool
      */
-    public function exists(EntityInterface $entity, $attributes = [], $addNotConditionForPrimaryKeys = false): bool;
+    public function exists(EntityInterface $entity, $attributes = [], $filter = []): bool;
 
     /**
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
+     * @param bool $checkIsNewRecord
      * @return bool
      */
-    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool;
+    public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null, $checkIsNewRecord = true): bool;
 
     /**
      * @param EntityInterface $entity
@@ -84,4 +85,6 @@ interface RepositoryInterface
      * @return string
      */
     public function getEntityClass(): string;
+
+    public function beginTransaction();
 }

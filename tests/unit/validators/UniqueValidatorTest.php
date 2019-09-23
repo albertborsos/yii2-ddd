@@ -59,6 +59,9 @@ class UniqueValidatorTest extends TestCase
 
     private function mockForm(array $data): CreateOrUpdateCustomerUniqueValidatorForm
     {
-        return \Yii::createObject(CreateOrUpdateCustomerUniqueValidatorForm::class, [$data]);
+        $form = \Yii::createObject(CreateOrUpdateCustomerUniqueValidatorForm::class);
+        $form->setAttributes($data, false);
+
+        return $form;
     }
 }

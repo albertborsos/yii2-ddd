@@ -68,6 +68,10 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
      */
     public function hydrateAll($models): array
     {
+        if (empty($models)) {
+            return [];
+        }
+
         return $this->hydrator->hydrateAll($this->entityClass, $models);
     }
 
@@ -91,8 +95,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
 
     protected function initHydrator(): void
     {
-        $entity = \Yii::createObject($this->entityClass);
-        $this->hydrator = \Yii::createObject($this->hydrator, [$entity->fieldMapping()]);
+        $this->hydrator = \Yii::createObject($this->hydrator);
         if (!$this->hydrator instanceof HydratorInterface) {
             throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
         }

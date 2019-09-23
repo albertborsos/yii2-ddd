@@ -17,5 +17,6 @@ class Unit extends \Codeception\Test\Unit
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 }

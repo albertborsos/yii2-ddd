@@ -3,20 +3,19 @@
 namespace albertborsos\ddd\behaviors;
 
 use albertborsos\ddd\base\EntityEvent;
-use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\interfaces\RepositoryInterface;
+use albertborsos\ddd\models\AbstractEntity;
 use albertborsos\ddd\traits\EvaluateAttributesTrait;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\validators\UniqueValidator;
 
 class SluggableBehavior extends \yii\behaviors\SluggableBehavior
 {
     use EvaluateAttributesTrait;
 
-    /** @var ActiveRepositoryInterface */
+    /** @var RepositoryInterface */
     public $repository;
 
     /**
@@ -30,24 +29,17 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
     }
 
     /**
-     * @return ActiveRepositoryInterface
+     * @param null $interface
+     * @return RepositoryInterface
      * @throws InvalidConfigException
      */
-    protected function getRepository($interface = null): ActiveRepositoryInterface
+    protected function getRepository($interface = null): RepositoryInterface
     {
         if (!empty($interface)) {
             return Yii::createObject($interface);
         }
 
         return \Yii::createObject($this->repository);
-    }
-
-    /**
-     * @param ActiveRepositoryInterface $repository
-     */
-    protected function setRepository(ActiveRepositoryInterface $repository): void
-    {
-        $this->repository = $repository;
     }
 
     /**
@@ -107,21 +99,20 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
      */
     protected function validateSlug($slug)
     {
-        /* @var $validator UniqueValidator */
-        /* @var $model BaseActiveRecord */
+        /* @var $validator \albertborsos\ddd\validators\UniqueValidator */
         $validator = Yii::createObject(array_merge(
             [
-                'class' => UniqueValidator::className(),
+                'class' => \albertborsos\ddd\validators\UniqueValidator::class,
+                'targetRepository' => $this->repository,
             ],
             $this->uniqueValidator
         ));
 
-        $model = Yii::createObject($validator->targetClass ?? $this->getRepository()->getDataModelClass());
-        $model->clearErrors();
-        $model->{$this->slugAttribute} = $slug;
-
-        $validator->validateAttribute($model, $this->slugAttribute);
-        return !$model->hasErrors();
+        /* @var $entity AbstractEntity|EntityInterface */
+        $entity = clone $this->owner;
+        $entity->{$this->slugAttribute} = $slug;
+        $validator->validateAttribute($entity, $this->slugAttribute);
+        return !$entity->hasErrors();
     }
 
     protected function setDefaultAttributes(): void

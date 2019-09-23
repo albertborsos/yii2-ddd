@@ -33,8 +33,8 @@ abstract class AbstractUniqueSluggableBehavior extends SluggableBehavior
 
     protected function validateSlug($slug)
     {
-        foreach ($this->uniqueValidators() as $repositoryInterface => $validator) {
-            $this->uniqueValidator = array_merge($validator, ['targetClass' => $this->getRepository($repositoryInterface)->getDataModelClass()]);
+        foreach ($this->uniqueValidators() as $validator) {
+            $this->uniqueValidator = $validator;
             $isUnique = parent::validateSlug($slug);
             if (!$isUnique) {
                 return false;

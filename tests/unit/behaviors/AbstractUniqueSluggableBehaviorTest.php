@@ -3,15 +3,16 @@
 namespace albertborsos\ddd\tests\unit\behaviors;
 
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\models\AbstractEntity;
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\UpdatePageServiceInterface;
 use albertborsos\ddd\tests\support\base\services\page\AbstractPageService;
 use albertborsos\ddd\tests\support\base\services\page\CreatePageService;
 use albertborsos\ddd\tests\support\base\services\page\forms\CreatePageForm;
 use albertborsos\ddd\tests\support\base\services\page\forms\UpdatePageForm;
-use albertborsos\ddd\tests\support\base\services\page\UpdatePageService;
 use albertborsos\ddd\tests\fixtures\PageFixture;
 use albertborsos\ddd\tests\fixtures\PageSlugFixture;
 use Codeception\PHPUnit\TestCase;
@@ -36,6 +37,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->initFixtures();
+        \Yii::$app->cycle->cleanHeap();
     }
 
     public function newSlugDataProvider()
@@ -52,11 +54,13 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
      * @param $name
      * @param string $title
      * @param string $description
+     * @throws \yii\base\InvalidConfigException
      */
     public function testNewSlug($expectedSlug, $name, $title = 'Title', $description = 'Description', $status = Page::STATUS_VISIBLE)
     {
         $service = $this->mockService(compact('name', 'title', 'description', 'status'));
         $this->assertTrue($service->execute());
+        $this->assertNotNull($service->getId());
 
         $page = $this->getPageRepository()->findById($service->getId());
 
@@ -78,7 +82,6 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
     public function testNewSlugWhichAlreadyExists($existingSlugPageAlias)
     {
         $pageSlugRepository = $this->getPageSlugRepository();
-        $existingPageId = $this->getPageIdByAlias($existingSlugPageAlias);
         /** @var Page $existingPage */
         $existingPage = $this->findPageByAlias($existingSlugPageAlias);
         $existingSlugs = array_merge([$existingPage->slug], ArrayHelper::getColumn($pageSlugRepository->findAllByPage($existingPage), 'slug'));
@@ -125,6 +128,8 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
      * @param $updatePageAlias
      * @param $existingSlugPageAlias
      * @param $newName
+     * @param $expectedSlug
+     * @throws \yii\base\InvalidConfigException
      */
     public function testUpdateToASlugWhichExistsInOtherPage($updatePageAlias, $existingSlugPageAlias, $newName, $expectedSlug)
     {
@@ -140,9 +145,9 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
         $service = $this->mockService($data, $updatePage);
         $this->assertTrue($service->execute());
         $this->assertEquals($updatePage->id, $service->getId());
-
         $updatedPage = $this->findPageById($service->getId());
 
+        $this->assertEquals($expectedSlug, $updatedPage->slug);
         $this->assertNotEquals($expectedSlug, $oldSlug);
         $this->assertNotContains($updatedPage->slug, $existingSlugs);
     }
@@ -162,6 +167,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
      * @param $updatePageAlias
      * @param $newName
      * @param $expectedSlug
+     * @throws \yii\base\InvalidConfigException
      */
     public function testUpdateToASlugWhichExistInCurrentPage($updatePageAlias, $newName, $expectedSlug)
     {
@@ -183,8 +189,9 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
 
     /**
      * @param $data
-     * @param EntityInterface|null $entity
+     * @param AbstractEntity|EntityInterface|null $entity
      * @return AbstractPageService
+     * @throws \yii\base\InvalidConfigException
      */
     protected function mockService($data, EntityInterface $entity = null): AbstractPageService
     {
@@ -195,7 +202,8 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
         if (!$form->validate()) {
             throw new InvalidArgumentException('Invalid values passed to form:' . Json::encode($form->getErrors()));
         }
-        return empty($entity) ? new CreatePageService($form) : new UpdatePageService($form, $entity);
+
+        return empty($entity) ? new CreatePageService($form) : \Yii::createObject(UpdatePageServiceInterface::class, [$form, $entity]);
     }
 
     protected function getPageRepository(): PageRepositoryInterface
