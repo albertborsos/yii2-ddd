@@ -73,18 +73,6 @@ class Customer extends AbstractEntity
             'languages',
         ];
     }
-
-    /**
-     * Mapping of property keys to entity classnames.
-     *
-     * @return array
-     */
-    public function relationMapping(): array
-    {
-        return [
-            'languages' => CustomerLanguage::class,
-        ];
-    }
 }
 ```
 

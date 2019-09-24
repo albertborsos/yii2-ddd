@@ -30,16 +30,4 @@ class Customer extends AbstractEntity
             'customerAddresses',
         ];
     }
-
-    /**
-     * Mapping of property keys to entity classnames.
-     *
-     * @return array
-     */
-    public function relationMapping(): array
-    {
-        return [
-            'customerAddresses' => CustomerAddress::class,
-        ];
-    }
 }

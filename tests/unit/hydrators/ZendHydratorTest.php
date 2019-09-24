@@ -197,24 +197,10 @@ class ZendHydratorTest extends TestCase
     {
         $this->assertInstanceOf($entityClass, $entity);
 
-        $dataAttributes = $entity->getDataAttributes();
-        $relationAttributes = array_keys($entity->relationMapping());
-
         $attributes = $data instanceof Model ? $data->attributes : $data;
 
         foreach ($attributes as $attribute => $expectedValue) {
-            if (in_array($attribute, $relationAttributes) && !is_array($entity->$attribute)) {
-                // on-to-one relation
-                $this->assertInstanceOf($entity->relationMapping()[$attribute], $entity->$attribute);
-            } elseif (in_array($attribute, $relationAttributes) && is_array($entity->$attribute)) {
-                // on-to-many relation
-                foreach ($entity->$attribute as $relationModel) {
-                    $this->assertInstanceOf($entity->relationMapping()[$attribute], $relationModel);
-                }
-            } else {
-                // data property
-                $this->assertEquals($expectedValue, $entity->$attribute);
-            }
+            $this->assertEquals($expectedValue, $entity->$attribute);
         }
     }
 

@@ -6,7 +6,6 @@ use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\traits\PostfixedKeyTrait;
 use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
-use yii\data\BaseDataProvider;
 use yii\di\Instance;
 
 /**
@@ -16,7 +15,7 @@ use yii\di\Instance;
  * @package albertborsos\ddd\repositories
  * @since 2.0.0
  */
-class CacheRepository extends AbstractRepository
+abstract class AbstractCacheRepository extends AbstractRepository
 {
     use PostfixedKeyTrait;
 
@@ -57,18 +56,6 @@ class CacheRepository extends AbstractRepository
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param $params
-     * @param null $formName
-     * @return BaseDataProvider
-     */
-    public function search($params, $formName = null): BaseDataProvider
-    {
-        // TODO: Implement search() method.
-    }
-
-    /**
      * @param EntityInterface $entity
      * @param bool $runValidation
      * @param null $attributeNames
@@ -77,7 +64,7 @@ class CacheRepository extends AbstractRepository
      */
     public function insert(EntityInterface $entity, $runValidation = true, $attributeNames = null, $checkIsNewRecord = true): bool
     {
-        return $this->cache->set($entity->getCacheKey(), $entity->getDataAttributes());
+        return $this->cache->set($entity->getCacheKey(), $this->serialize($entity));
     }
 
     /**
@@ -88,7 +75,7 @@ class CacheRepository extends AbstractRepository
      */
     public function update(EntityInterface $entity, $runValidation = true, $attributeNames = null): bool
     {
-        return $this->cache->set($entity->getCacheKey(), $entity->getDataAttributes());
+        return $this->insert($entity, $runValidation, $attributeNames, false);
     }
 
     /**
@@ -117,5 +104,12 @@ class CacheRepository extends AbstractRepository
     public function beginTransaction()
     {
         throw new NotSupportedException('Transactions are not supported in ' . static::class);
+    }
+
+    protected function serialize(EntityInterface $entity)
+    {
+        return array_filter($this->hydrator->extract($entity), function ($attribute) {
+            return in_array($attribute, static::columns());
+        }, ARRAY_FILTER_USE_KEY);
     }
 }

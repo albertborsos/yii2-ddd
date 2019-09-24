@@ -10,11 +10,9 @@ class CustomerWithBehaviorsRepository extends CustomerRepository implements Cust
 {
     protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithBehaviors::class;
 
-    public static function schema(): array
+    public static function columns(): array
     {
-        $schema = parent::schema();
-        $schema[Schema::ENTITY] = CustomerWithBehaviors::class;
-        $schema[Schema::COLUMNS] = [
+        return [
             'id',
             'name',
             'slug',
@@ -23,6 +21,13 @@ class CustomerWithBehaviorsRepository extends CustomerRepository implements Cust
             'updatedAt' => 'updated_at',
             'updatedBy' => 'updated_by',
         ];
+    }
+
+    public static function schema(): array
+    {
+        $schema = parent::schema();
+        $schema[Schema::ENTITY] = CustomerWithBehaviors::class;
+        $schema[Schema::COLUMNS] = static::columns();
         $schema[Schema::TYPECAST] = [
             'id' => 'int',
             'createdAt' => 'int',

@@ -6,6 +6,8 @@ use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
+use Zend\Hydrator\NamingStrategy\ArrayMapNamingStrategy;
+use Zend\Hydrator\NamingStrategy\MapNamingStrategy;
 use Zend\Hydrator\Reflection;
 use Zend\Hydrator\ReflectionHydrator;
 
@@ -14,14 +16,33 @@ class ZendHydrator extends Component implements HydratorInterface
     /** @var ReflectionHydrator */
     protected $hydrator;
 
-    public function __construct($config = [])
+    public function __construct($columns = [], $config = [])
     {
         parent::__construct($config);
         if (class_exists('Zend\Hydrator\ReflectionHydrator')) {
             $this->hydrator = new ReflectionHydrator();
+            $strategy = MapNamingStrategy::createFromExtractionMap(self::columnsToMapping($columns));
         } else {
             $this->hydrator = new Reflection();
+            $strategy = new ArrayMapNamingStrategy(self::columnsToMapping($columns));
         }
+
+        if (!empty($columns)) {
+            $this->hydrator->setNamingStrategy($strategy);
+        }
+    }
+
+    private static function columnsToMapping($columns)
+    {
+        $mapping = [];
+        foreach ($columns as $internal => $external) {
+            if (is_numeric($internal)) {
+                $mapping[$external] = $external;
+            } else {
+                $mapping[$internal] = $external;
+            }
+        }
+        return $mapping;
     }
 
     public function hydrate($className, $data)

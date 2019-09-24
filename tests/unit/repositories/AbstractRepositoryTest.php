@@ -51,8 +51,8 @@ class AbstractRepositoryTest extends TestCase
         $entity = $repository->newEntity();
 
         $this->assertInstanceOf($repository->getEntityClass(), $entity);
-        foreach ($entity->fieldMapping() as $dataAttribute => $property) {
-            $this->assertNull($entity->{$property});
+        foreach ($entity->attributes as $attribute => $value) {
+            $this->assertNull($entity->{$attribute});
         }
     }
 }

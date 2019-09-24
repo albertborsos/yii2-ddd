@@ -2,12 +2,15 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
+use albertborsos\ddd\repositories\AbstractCacheRepository;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
+use albertborsos\ddd\tests\support\base\infrastructure\cache\customer\CustomerAddressModifiedSchemaRepository;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerAddressCacheUpdaterInterface;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerCacheUpdaterInterface;
 use albertborsos\ddd\tests\support\base\MockTrait;
 use Codeception\PHPUnit\TestCase;
 
-class CacheRepositoryTest extends TestCase
+class AbstractCacheRepositoryTest extends TestCase
 {
     use MockTrait;
 
@@ -85,5 +88,47 @@ class CacheRepositoryTest extends TestCase
 
         $this->assertTrue($repository->delete($customer));
         $this->assertEmpty($repository->findById($data['id']));
+    }
+
+    public function serializerDataProvider()
+    {
+        return [
+            'serialize customer' => [
+                CustomerCacheUpdaterInterface::class,
+                ['id' => 1, 'name' => 'Albert'],
+                ['id' => 1, 'name' => 'Albert'],
+            ],
+            'serialize customer address' => [
+                CustomerAddressCacheUpdaterInterface::class,
+                ['id' => 1, 'customerId' => 1, 'zipCode' => 2030, 'city' => 'Érd', 'street' => 'Balatoni út 51.'],
+            ],
+            'serialize modified customer address' => [
+                CustomerAddressModifiedSchemaRepository::class,
+                ['id' => 1, 'customerId' => 1, 'zipCode' => 2030, 'city' => 'Érd'],
+                ['id' => 1, 'customer_id' => 1, 'zip_code' => 2030, 'city' => 'Érd'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider serializerDataProvider
+     * @param $repository
+     * @param $data
+     * @param array $expectedSerializedData
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function testSerializer($repository, $data, $expectedSerializedData = [])
+    {
+        /** @var AbstractCacheRepository $repository */
+        $repository = \Yii::createObject($repository);
+        $entity = $repository->hydrate($data);
+
+        $this->assertInstanceOf($repository->getEntityClass(), $entity);
+
+        $this->assertEquals(!empty($expectedSerializedData) ? $expectedSerializedData : $data, $repository->getSerializedAttributes($entity));
+
+        $repository->insert($entity);
+
+        $this->assertEquals($entity, $repository->findById($data['id']));
     }
 }

@@ -4,9 +4,7 @@ namespace albertborsos\ddd\tests\unit\models;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
-use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress;
 use albertborsos\ddd\tests\support\base\MockTrait;
-use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerForm;
 use Codeception\PHPUnit\TestCase;
 use yii\base\DynamicModel;
 
@@ -128,56 +126,6 @@ class AbstractEntityTest extends TestCase
         $this->assertNotEquals($entity->getCacheKey([], $postfix), $entity->getCacheKey());
 
         $this->assertEquals($entity->getCacheKey([], $postfix), implode('_', [$entity->getCacheKey(), $postfix]));
-    }
-
-    public function dataProviderDataAttributes()
-    {
-        return [
-            'Customer Entity' => [Customer::class, [], array_fill_keys(['id', 'name'], null)],
-            'CustomerAddress Entity' => [CustomerAddress::class, [], array_fill_keys(['id', 'customer_id', 'zip_code', 'city', 'street'], null)],
-            'Customer Form with custom property' => [CreateCustomerForm::class, [], array_fill_keys(['id', 'name'], null)],
-        ];
-    }
-
-    /**
-     * @dataProvider dataProviderDataAttributes
-     *
-     * @param $entityClass
-     * @param $entitySettings
-     * @param $expectedDataAttributes
-     */
-    public function testGetDataAttributes($entityClass, $entitySettings, $expectedDataAttributes)
-    {
-        /** @var EntityInterface $entity */
-        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings]);
-
-        $this->assertEquals($expectedDataAttributes, $entity->getDataAttributes());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderFieldMapping()
-    {
-        return [
-            'standard fields' => [Customer::class, [], ['id' => 'id', 'name' => 'name', 'customerAddresses' => 'customerAddresses']],
-            'fields with snake_case' => [CustomerAddress::class, [], ['id' => 'id', 'customer_id' => 'customerId', 'zip_code' => 'zipCode', 'city' => 'city', 'street' => 'street']],
-        ];
-    }
-
-    /**
-     * @dataProvider dataProviderFieldMapping
-     *
-     * @param $entityClass
-     * @param $entitySettings
-     * @param $expectedDataAttributes
-     */
-    public function testFieldmapping($entityClass, $entitySettings, $expectedMapping)
-    {
-        /** @var EntityInterface $entity */
-        $entity = $this->mockObject(['class' => $entityClass, 'settings' => $entitySettings]);
-
-        $this->assertEquals($expectedMapping, $entity->fieldMapping());
     }
 
     /**

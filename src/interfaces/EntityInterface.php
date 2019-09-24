@@ -86,28 +86,6 @@ interface EntityInterface
     public function getCacheKey(array $keyAttributes = [], string $postfix = null): string;
 
     /**
-     * Returns the data attributes and properties mapping with the relation mapping too.
-     * This required to hydrate the Entity.
-     *
-     * @return array
-     */
-    public function fieldMapping(): array;
-
-    /**
-     * Mapping of property keys to entity classnames.
-     *
-     * @return array
-     */
-    public function relationMapping(): array;
-
-    /**
-     * Returns properties and their values which are not relation properties.
-     *
-     * @return array
-     */
-    public function getDataAttributes(): array;
-
-    /**
      * Triggers an event.
      * This method represents the happening of an event. It invokes
      * all attached handlers for the event including class-level handlers.

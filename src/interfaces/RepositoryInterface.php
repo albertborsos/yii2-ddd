@@ -12,6 +12,15 @@ use yii\data\BaseDataProvider;
 interface RepositoryInterface
 {
     /**
+     * Mapping between the the properties of the entity and the attributes of the data model.
+     * Required to hydrate, extract and serialize the entity.
+     * Keys are the entity properties, values are the data attributes.
+     *
+     * @return array
+     */
+    public static function columns(): array;
+
+    /**
      * @param $id
      * @return EntityInterface|null
      */

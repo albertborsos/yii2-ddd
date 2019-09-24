@@ -15,9 +15,14 @@ class PageSlugRepository extends AbstractCycleRepository implements PageSlugRepo
 {
     protected $entityClass = \albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug::class;
 
+    public static function columns(): array
+    {
+        return ['id', 'pageId' => 'page_id', 'slug', 'createdAt' => 'created_at', 'createdBy' => 'created_by', 'updatedAt' => 'updated_at', 'updatedBy' => 'updated_by', 'status'];
+    }
+
     public static function schema(): array
     {
-        return Factory::schema(PageSlug::class, 'page_slug', 'id', ['id', 'pageId' => 'page_id', 'slug', 'createdAt' => 'created_at', 'createdBy' => 'created_by', 'updatedAt' => 'updated_at', 'updatedBy' => 'updated_by', 'status'], ['id' => 'int'], [
+        return Factory::schema(PageSlug::class, 'page_slug', 'id', static::columns(), ['id' => 'int'], [
             'page' => Factory::relation(Relation::HAS_ONE, 'page', 'lazy', 'page_id', 'id'),
         ]);
     }

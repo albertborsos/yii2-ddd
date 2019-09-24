@@ -14,13 +14,18 @@ class PageRepository extends AbstractCycleRepository implements PageRepositoryIn
 {
     protected $entityClass = Page::class;
 
+    public static function columns(): array
+    {
+        return ['id', 'name', 'category', 'title', 'description', 'date', 'slug', 'sortOrder' => 'sort_order', 'createdAt' => 'created_at', 'createdBy' => 'created_by', 'updatedAt' => 'updated_at', 'updatedBy' => 'updated_by', 'status'];
+    }
+
     public static function schema(): array
     {
         return Factory::schema(
             Page::class,
             'page',
             'id',
-            ['id', 'name', 'category', 'title', 'description', 'date', 'slug', 'sortOrder' => 'sort_order', 'createdAt' => 'created_at', 'createdBy' => 'created_by', 'updatedAt' => 'updated_at', 'updatedBy' => 'updated_by', 'status'],
+            static::columns(),
             ['id' => 'int'],
             [
                 'pageSlugs' => Factory::relation(Relation::HAS_MANY, 'page', 'lazy', 'id', 'page_id'),

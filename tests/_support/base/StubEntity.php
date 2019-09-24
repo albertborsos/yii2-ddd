@@ -7,13 +7,5 @@ use yii\base\Model;
 
 class StubEntity extends AbstractEntity
 {
-    /**
-     * Mapping of property keys to entity classnames.
-     *
-     * @return array
-     */
-    public function relationMapping(): array
-    {
-        return [];
-    }
+
 }

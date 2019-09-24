@@ -95,7 +95,7 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
 
     protected function initHydrator(): void
     {
-        $this->hydrator = \Yii::createObject($this->hydrator);
+        $this->hydrator = \Yii::createObject($this->hydrator, [static::columns()]);
         if (!$this->hydrator instanceof HydratorInterface) {
             throw new InvalidConfigException(get_called_class() . '::$hydrator must implements `' . HydratorInterface::class . '`');
         }

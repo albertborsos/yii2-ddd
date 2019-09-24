@@ -14,8 +14,8 @@ abstract class AbstractUniqueSluggableBehavior extends SluggableBehavior
      *
      * ```php
      *  [
-     *      PageActiveRepositoryInterface::class     => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['id' => $this->owner->id]] : []],
-     *      PageSlugActiveRepositoryInterface::class => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['page_id' => $this->owner->id]] : []],
+     *      ['targetRepository' => PageRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['id', '!=', $this->owner->id]] : []],
+     *      ['targetRepository' => PageSlugRepositoryInterface::class, 'targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['page_id', '!=', $this->owner->id]] : []],
      *  ]
      * ```
      *
