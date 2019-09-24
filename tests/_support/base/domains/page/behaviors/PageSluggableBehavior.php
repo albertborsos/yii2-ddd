@@ -4,10 +4,9 @@ namespace albertborsos\ddd\tests\support\base\domains\page\behaviors;
 
 use albertborsos\ddd\behaviors\AbstractUniqueSluggableBehavior;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSluggableBehaviorInterface;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 
-class PageSluggableOrmBehavior extends AbstractUniqueSluggableBehavior implements PageSluggableBehaviorInterface
+class PageSluggableBehavior extends AbstractUniqueSluggableBehavior
 {
     public $attribute = 'name';
 
@@ -17,8 +16,8 @@ class PageSluggableOrmBehavior extends AbstractUniqueSluggableBehavior implement
      *
      * ```php
      *  [
-     *      PageActiveRepositoryInterface::class     => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['id' => $this->owner->id]] : []],
-     *      PageSlugActiveRepositoryInterface::class => ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? ['NOT', ['page_id' => $this->owner->id]] : []],
+     *      ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['id', '!=', $this->owner->id]] : []],
+     *      ['targetAttribute' => 'slug', 'filter' => isset($this->owner->id) ? [['page_id', '!=', $this->owner->id]] : []],
      *  ]
      * ```
      *

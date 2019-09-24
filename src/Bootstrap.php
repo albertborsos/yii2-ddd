@@ -2,7 +2,6 @@
 
 namespace albertborsos\ddd;
 
-use albertborsos\ddd\hydrators\ActiveHydrator;
 use albertborsos\ddd\hydrators\ZendHydrator;
 use albertborsos\ddd\interfaces\HydratorInterface;
 use albertborsos\ddd\traits\SetContainerDefinitionsTrait;

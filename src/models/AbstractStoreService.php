@@ -5,11 +5,11 @@ namespace albertborsos\ddd\models;
 use albertborsos\ddd\interfaces\FormObject;
 
 /**
- * Class AbstractActiveService
+ * Class AbstractStoreService
  * @package albertborsos\ddd\models
  * @since 2.0.0
  */
-abstract class AbstractActiveService extends AbstractService
+abstract class AbstractStoreService extends AbstractService
 {
     /**
      * @return bool

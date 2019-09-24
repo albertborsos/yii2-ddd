@@ -3,13 +3,12 @@
 namespace albertborsos\ddd\tests\support\base\services\page;
 
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\UpdatePageServiceInterface;
 use albertborsos\ddd\tests\support\base\services\page\forms\CreatePageSlugForm;
 use albertborsos\ddd\tests\support\base\services\page\forms\UpdatePageForm;
 use Cycle\ORM\Transaction;
 use yii\base\Exception;
 
-class UpdatePageOrmService extends AbstractPageService implements UpdatePageServiceInterface
+class UpdatePageService extends AbstractPageService
 {
     public function __construct(UpdatePageForm $form, Page $entity, $config = [])
     {

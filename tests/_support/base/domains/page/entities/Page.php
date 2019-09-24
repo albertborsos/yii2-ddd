@@ -5,7 +5,7 @@ namespace albertborsos\ddd\tests\support\base\domains\page\entities;
 use albertborsos\ddd\behaviors\BlameableBehavior;
 use albertborsos\ddd\behaviors\TimestampBehavior;
 use albertborsos\ddd\models\AbstractEntity;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSluggableBehaviorInterface;
+use albertborsos\ddd\tests\support\base\domains\page\behaviors\PageSluggableBehavior;
 use yii\helpers\Url;
 
 /**
@@ -35,7 +35,7 @@ class Page extends AbstractEntity
         return [
             'timestamp' => TimestampBehavior::class,
             'blameable' => BlameableBehavior::class,
-            'sluggable' => PageSluggableBehaviorInterface::class,
+            'sluggable' => PageSluggableBehavior::class,
         ];
     }
 

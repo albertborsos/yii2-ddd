@@ -8,13 +8,13 @@ use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
 use albertborsos\ddd\tests\support\base\domains\page\entities\PageSlug;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageRepositoryInterface;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\UpdatePageServiceInterface;
 use albertborsos\ddd\tests\support\base\services\page\AbstractPageService;
 use albertborsos\ddd\tests\support\base\services\page\CreatePageService;
 use albertborsos\ddd\tests\support\base\services\page\forms\CreatePageForm;
 use albertborsos\ddd\tests\support\base\services\page\forms\UpdatePageForm;
 use albertborsos\ddd\tests\fixtures\PageFixture;
 use albertborsos\ddd\tests\fixtures\PageSlugFixture;
+use albertborsos\ddd\tests\support\base\services\page\UpdatePageService;
 use Codeception\PHPUnit\TestCase;
 use yii\base\InvalidArgumentException;
 use yii\helpers\ArrayHelper;
@@ -203,7 +203,7 @@ class AbstractUniqueSluggableBehaviorTest extends TestCase
             throw new InvalidArgumentException('Invalid values passed to form:' . Json::encode($form->getErrors()));
         }
 
-        return empty($entity) ? new CreatePageService($form) : \Yii::createObject(UpdatePageServiceInterface::class, [$form, $entity]);
+        return empty($entity) ? new CreatePageService($form) : \Yii::createObject(UpdatePageService::class, [$form, $entity]);
     }
 
     protected function getPageRepository(): PageRepositoryInterface

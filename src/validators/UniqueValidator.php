@@ -2,9 +2,7 @@
 
 namespace albertborsos\ddd\validators;
 
-use albertborsos\ddd\interfaces\ActiveRepositoryInterface;
 use albertborsos\ddd\models\AbstractEntity;
-use albertborsos\ddd\repositories\AbstractActiveRepository;
 use albertborsos\ddd\repositories\AbstractCycleRepository;
 use albertborsos\ddd\traits\TargetRepositoryPropertyTrait;
 use Yii;
@@ -62,9 +60,6 @@ class UniqueValidator extends \yii\validators\Validator
         $primaryKeys = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
         array_walk($primaryKeys, function ($key) use (&$condition, $entity) {
             switch (true) {
-                case $this->targetRepository instanceof AbstractActiveRepository:
-                    $condition[] = ['NOT', [$key => $entity->{$key}]];
-                    break;
                 case $this->targetRepository instanceof AbstractCycleRepository:
                     $condition[] = [$key, '!=', $entity->{$key}];
                     break;

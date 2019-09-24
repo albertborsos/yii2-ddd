@@ -6,8 +6,5 @@ use yii\base\Model;
 
 class InvalidHydrator extends Model
 {
-    public function __construct($map, $config = [])
-    {
-        parent::__construct($config);
-    }
+
 }

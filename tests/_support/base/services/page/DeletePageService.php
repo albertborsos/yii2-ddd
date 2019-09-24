@@ -3,9 +3,7 @@
 namespace albertborsos\ddd\tests\support\base\services\page;
 
 use albertborsos\ddd\tests\support\base\domains\page\entities\Page;
-use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageImageActiveRepositoryInterface;
-use albertborsos\ddd\tests\support\base\infrastructure\db\page\PageImageActiveRepository;
-use albertborsos\ddd\tests\support\base\services\page\forms\DeletePageForm;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\page\PageSlugRepositoryInterface;
 
 class DeletePageService extends AbstractPageService
 {
@@ -16,18 +14,19 @@ class DeletePageService extends AbstractPageService
 
     /**
      * @return bool
+     * @throws \yii\base\InvalidConfigException
      */
     public function execute(): bool
     {
         /** @var Page $entity */
         $entity = $this->getEntity();
 
-        /** @var PageImageActiveRepositoryInterface $repository */
-        $repository = \Yii::createObject(PageImageActiveRepositoryInterface::class);
-        $images = $repository->findAllByPage($entity);
+        /** @var PageSlugRepositoryInterface $repository */
+        $repository = \Yii::createObject(PageSlugRepositoryInterface::class);
+        $slugs = $repository->findAllByPage($entity);
 
-        foreach ($images as $image) {
-            $service = new DeletePageImageService($image);
+        foreach ($slugs as $slug) {
+            $service = new DeletePageSlugService($slug);
             if (!$service->execute()) {
                 return false;
             }

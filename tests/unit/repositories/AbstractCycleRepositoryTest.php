@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\tests\repositories;
 
+use albertborsos\ddd\hydrators\ZendHydrator;
+use albertborsos\ddd\interfaces\HydratorInterface;
 use albertborsos\ddd\repositories\AbstractCycleRepository;
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
 use albertborsos\ddd\tests\support\base\infrastructure\cycle\customer\CustomerRepository;
@@ -30,11 +32,6 @@ class AbstractCycleRepositoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        \Yii::$app->setContainer([
-            'definitions' => [
-                CustomerRepositoryInterface::class => CustomerRepository::class,
-            ],
-        ]);
         $this->initFixtures();
         \Yii::$app->cycle->cleanHeap();
     }
