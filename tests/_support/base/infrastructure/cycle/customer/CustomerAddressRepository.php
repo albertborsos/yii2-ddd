@@ -23,7 +23,7 @@ class CustomerAddressRepository extends AbstractCycleRepository implements Custo
     public static function schema(): array
     {
         return Factory::schema(CustomerAddress::class, 'customer_address', 'id', static::columns(), ['id' => 'int', 'customerId' => 'int', 'zipCode' => 'int'], [
-            'customer' => Factory::relation(Relation::HAS_MANY, 'customer', 'lazy', 'customer_id', 'id'),
+            'customer' => Factory::relation(Relation::HAS_MANY, 'customer', 'customer_id', 'id'),
         ]);
     }
 

@@ -28,7 +28,7 @@ class PageRepository extends AbstractCycleRepository implements PageRepositoryIn
             static::columns(),
             ['id' => 'int'],
             [
-                'pageSlugs' => Factory::relation(Relation::HAS_MANY, 'page', 'lazy', 'id', 'page_id'),
+                'pageSlugs' => Factory::relation(Relation::HAS_MANY, 'page', 'id', 'page_id'),
             ]
         );
     }

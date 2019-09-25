@@ -23,7 +23,7 @@ class PageSlugRepository extends AbstractCycleRepository implements PageSlugRepo
     public static function schema(): array
     {
         return Factory::schema(PageSlug::class, 'page_slug', 'id', static::columns(), ['id' => 'int'], [
-            'page' => Factory::relation(Relation::HAS_ONE, 'page', 'lazy', 'page_id', 'id'),
+            'page' => Factory::relation(Relation::HAS_ONE, 'page', 'page_id', 'id'),
         ]);
     }
 
