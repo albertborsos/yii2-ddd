@@ -11,7 +11,6 @@ use yii\base\Model;
  * @package albertborsos\ddd\models
  *
  * @property array $attributes
- * @property array $dataAttributes
  * @since 2.0.0
  */
 abstract class AbstractEntity extends Model implements EntityInterface

@@ -15,6 +15,11 @@ class CustomerAddressRepository extends AbstractCycleRepository implements Custo
 {
     protected $entityClass = CustomerAddress::class;
 
+    public static function tableName(): string
+    {
+        return 'customer_address';
+    }
+
     public static function columns(): array
     {
         return ['id', 'customerId' => 'customer_id', 'zipCode' => 'zip_code', 'city', 'street'];
@@ -22,7 +27,7 @@ class CustomerAddressRepository extends AbstractCycleRepository implements Custo
 
     public static function schema(): array
     {
-        return Factory::schema(CustomerAddress::class, 'customer_address', 'id', static::columns(), ['id' => 'int', 'customerId' => 'int', 'zipCode' => 'int'], [
+        return Factory::schema(CustomerAddress::class, static::tableName(), 'id', static::columns(), ['id' => 'int', 'customerId' => 'int', 'zipCode' => 'int'], [
             'customer' => Factory::relation(Relation::HAS_MANY, 'customer', 'customer_id', 'id'),
         ]);
     }

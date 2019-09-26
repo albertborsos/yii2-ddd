@@ -25,6 +25,8 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
         $this->select = new Select($this->orm, $this->orm->resolveRole($this->entityClass));
     }
 
+    abstract public static function tableName(): string;
+
     abstract public static function schema(): array;
 
     protected function find(): Select

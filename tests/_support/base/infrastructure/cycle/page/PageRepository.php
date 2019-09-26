@@ -14,6 +14,11 @@ class PageRepository extends AbstractCycleRepository implements PageRepositoryIn
 {
     protected $entityClass = Page::class;
 
+    public static function tableName(): string
+    {
+        return 'page';
+    }
+
     public static function columns(): array
     {
         return ['id', 'name', 'category', 'title', 'description', 'date', 'slug', 'sortOrder' => 'sort_order', 'createdAt' => 'created_at', 'createdBy' => 'created_by', 'updatedAt' => 'updated_at', 'updatedBy' => 'updated_by', 'status'];
@@ -23,7 +28,7 @@ class PageRepository extends AbstractCycleRepository implements PageRepositoryIn
     {
         return Factory::schema(
             Page::class,
-            'page',
+            static::tableName(),
             'id',
             static::columns(),
             ['id' => 'int'],

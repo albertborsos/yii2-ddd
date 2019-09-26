@@ -87,7 +87,7 @@ For `ActiveRecord` usage you can use the `AbstractActiveRecordRepository` class,
 namespace applcation\domains\customer\mysql;
 
 use albertborsos\ddd\repositories\AbstractActiveRepository;
-use albertborsos\ddd\data\ActiveEntityDataProvider;
+use albertborsos\ddd\data\CycleDataProvider;
 use application\domains\customer\interfaces\CustomerActiveRepositoryInterface;
 
 class CustomerActiveRepository extends AbstractActiveRepository implements CustomerActiveRepositoryInterface
@@ -102,7 +102,7 @@ class CustomerActiveRepository extends AbstractActiveRepository implements Custo
      * @param array $params
      *
      * @param string $formName
-     * @return ActiveEntityDataProvider
+     * @return CycleDataProvider
      * @throws \yii\base\InvalidConfigException
      */
     public function search($params, $formName = null): BaseDataProvider
