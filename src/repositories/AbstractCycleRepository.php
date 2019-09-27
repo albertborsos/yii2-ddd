@@ -168,4 +168,13 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
     {
         return new Transaction($this->orm);
     }
+
+    protected function andFilterWhere(Select $select, $attribute, $operator, $value): void
+    {
+        if ($value === '' || $value === null || $value === [] || is_string($value) && trim($value) === '') {
+            return;
+        }
+
+        $select->andWhere($attribute, $operator, $value);
+    }
 }
