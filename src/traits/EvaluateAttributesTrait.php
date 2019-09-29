@@ -22,7 +22,7 @@ trait EvaluateAttributesTrait
         if (
             $this->skipUpdateOnClean
             && $event->name == EntityInterface::EVENT_BEFORE_UPDATE
-            && empty($event->dirtyAttributes)
+            && empty($this->owner->dirtyAttributes)
         ) {
             return;
         }

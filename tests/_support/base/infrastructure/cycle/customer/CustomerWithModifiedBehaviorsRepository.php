@@ -14,10 +14,10 @@ class CustomerWithModifiedBehaviorsRepository extends CustomerWithBehaviorsRepos
 
     protected $entityClass = \albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerWithModifiedBehaviors::class;
 
-    public function beforeSave(bool $insert, EntityInterface $entity, array $dirtyAttributes = [])
+    public function beforeSave(bool $insert, EntityInterface $entity)
     {
         if (!$this->fakeEventClass) {
-            return parent::beforeSave($insert, $entity, $dirtyAttributes);
+            return parent::beforeSave($insert, $entity);
         }
 
         $event = new ModelEvent();

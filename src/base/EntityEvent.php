@@ -14,9 +14,4 @@ class EntityEvent extends \yii\base\Event
      * A entity is in valid status if it passes validations or certain checks.
      */
     public $isValid = true;
-
-    /**
-     * @var array
-     */
-    public $dirtyAttributes = [];
 }

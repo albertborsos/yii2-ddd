@@ -13,16 +13,6 @@ use yii\base\Model;
 interface EntityInterface
 {
     /**
-     * @event AfterSaveEvent an event that is triggered after an entity is saved.
-     */
-    const EVENT_AFTER_SAVE   = 'afterSave';
-
-    /**
-     * @event Event an event that is triggered after an entity is deleted.
-     */
-    const EVENT_AFTER_DELETE = 'afterDelete';
-
-    /**
      * @event EntityEvent an event that is triggered before inserting an entity.
      * You may set [[EntityEvent::isValid]] to be `false` to stop the insertion.
      */
@@ -34,11 +24,26 @@ interface EntityInterface
      */
     const EVENT_BEFORE_UPDATE = 'beforeUpdate';
 
+    /**
+     * @event \albertborsos\ddd\base\AfterSaveEvent an event that is triggered after a record is inserted.
+     */
     const EVENT_AFTER_INSERT = 'afterInsert';
 
+    /**
+     * @event \albertborsos\ddd\base\AfterSaveEvent an event that is triggered after a record is updated.
+     */
     const EVENT_AFTER_UPDATE = 'afterUpdate';
 
+    /**
+     * @event ModelEvent an event that is triggered before deleting a record.
+     * You may set [[EntityEvent::isValid]] to be `false` to stop the deletion.
+     */
     const EVENT_BEFORE_DELETE = 'beforeDelete';
+
+    /**
+     * @event Event an event that is triggered after an entity is deleted.
+     */
+    const EVENT_AFTER_DELETE = 'afterDelete';
 
     /**
      * @return string|array

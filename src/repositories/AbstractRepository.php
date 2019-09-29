@@ -2,6 +2,8 @@
 
 namespace albertborsos\ddd\repositories;
 
+use albertborsos\ddd\base\AfterSaveEvent;
+use albertborsos\ddd\base\EntityEvent;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\HydratorInterface;
 use albertborsos\ddd\interfaces\RepositoryInterface;
@@ -81,6 +83,51 @@ abstract class AbstractRepository extends Component implements RepositoryInterfa
     public function getEntityClass(): string
     {
         return $this->entityClass;
+    }
+
+    /**
+     * @param bool $insert
+     * @param EntityInterface $entity
+     * @return bool
+     */
+    public function beforeSave(bool $insert, EntityInterface $entity)
+    {
+        $event = new EntityEvent();
+        $entity->trigger($insert ? EntityInterface::EVENT_BEFORE_INSERT : EntityInterface::EVENT_BEFORE_UPDATE, $event);
+
+        return $event->isValid;
+    }
+
+    /**
+     * @param bool $insert
+     * @param EntityInterface $entity
+     * @param array $changedAttributes
+     */
+    public function afterSave(bool $insert, EntityInterface $entity, $changedAttributes = [])
+    {
+        $entity->trigger($insert ? EntityInterface::EVENT_AFTER_INSERT : EntityInterface::EVENT_AFTER_UPDATE, new AfterSaveEvent([
+            'changedAttributes' => $changedAttributes,
+        ]));
+    }
+
+    /**
+     * @param EntityInterface $entity
+     * @return bool
+     */
+    public function beforeDelete(EntityInterface $entity)
+    {
+        $event = new EntityEvent();
+        $entity->trigger(EntityInterface::EVENT_BEFORE_DELETE, $event);
+
+        return $event->isValid;
+    }
+
+    /**
+     * @param EntityInterface $entity
+     */
+    public function afterDelete(EntityInterface $entity)
+    {
+        $entity->trigger(EntityInterface::EVENT_AFTER_DELETE);
     }
 
     /**

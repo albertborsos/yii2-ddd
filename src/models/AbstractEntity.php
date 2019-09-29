@@ -3,6 +3,7 @@
 namespace albertborsos\ddd\models;
 
 use albertborsos\ddd\interfaces\EntityInterface;
+use albertborsos\ddd\traits\DirtyAttributesTrait;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 
@@ -15,6 +16,8 @@ use yii\base\Model;
  */
 abstract class AbstractEntity extends Model implements EntityInterface
 {
+    use DirtyAttributesTrait;
+
     /**
      * @return array|string
      */

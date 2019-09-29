@@ -2,9 +2,9 @@
 
 namespace albertborsos\ddd\repositories;
 
-use albertborsos\ddd\base\EntityEvent;
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\interfaces\RepositoryInterface;
+use albertborsos\ddd\models\AbstractEntity;
 use Cycle\ORM\Select;
 use Cycle\ORM\Transaction;
 use yii\base\InvalidArgumentException;
@@ -68,9 +68,10 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param EntityInterface|AbstractEntity $entity
      * @param bool $runValidation
      * @param null $attributeNames
+     * @param bool $checkIsNewRecord
      * @return bool
      * @throws \Throwable
      */
@@ -87,11 +88,16 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
         $transaction = new Transaction($this->orm);
         $transaction->persist($entity, Transaction::MODE_ENTITY_ONLY);
         $transaction->run();
+
+        $changedAttributes = array_fill_keys(array_keys($entity->attributes), null);
+        $entity->setOldAttributes($entity->attributes);
+        $this->afterSave(true, $entity, $changedAttributes);
+
         return true;
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param EntityInterface|AbstractEntity $entity
      * @param bool $runValidation
      * @param null $attributeNames
      * @return bool
@@ -103,14 +109,23 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
             throw new InvalidArgumentException('Entity is not stored yet, but `update` method is called');
         }
 
-        $dirtyAttributes = $entity->attributes; // @TODO: hack to update entity, should pass only dirty attributes
-        if (!$this->beforeSave(false, $entity, $dirtyAttributes)) {
+        if (!$this->beforeSave(false, $entity)) {
             return false;
         }
 
         $transaction = new Transaction($this->orm);
         $transaction->persist($entity, Transaction::MODE_ENTITY_ONLY);
         $transaction->run();
+
+        $values = $entity->getDirtyAttributes($attributeNames);
+        $changedAttributes = [];
+        foreach ($values as $name => $value) {
+            $changedAttributes[$name] = $entity->getOldAttribute($name);
+            $entity->setOldAttribute($name, $value);
+        }
+
+        $this->afterSave(true, $entity, $changedAttributes);
+
         return true;
     }
 
@@ -132,33 +147,10 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
         $transaction = new Transaction($this->orm);
         $transaction->delete($entity, Transaction::MODE_CASCADE);
         $transaction->run();
+
+        $this->afterDelete($entity);
+
         return true;
-    }
-
-    /**
-     * @param bool $insert
-     * @param EntityInterface $entity
-     * @param array $dirtyAttributes
-     * @return bool
-     */
-    public function beforeSave(bool $insert, EntityInterface $entity, array $dirtyAttributes = [])
-    {
-        $event = new EntityEvent(['dirtyAttributes' => $dirtyAttributes]);
-        $entity->trigger($insert ? EntityInterface::EVENT_BEFORE_INSERT : EntityInterface::EVENT_BEFORE_UPDATE, $event);
-
-        return $event->isValid;
-    }
-
-    /**
-     * @param EntityInterface $entity
-     * @return bool
-     */
-    public function beforeDelete(EntityInterface $entity)
-    {
-        $event = new EntityEvent();
-        $entity->trigger(EntityInterface::EVENT_BEFORE_DELETE, $event);
-
-        return $event->isValid;
     }
 
     /**

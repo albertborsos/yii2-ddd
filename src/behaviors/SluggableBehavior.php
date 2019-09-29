@@ -43,55 +43,6 @@ class SluggableBehavior extends \yii\behaviors\SluggableBehavior
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getValue($event)
-    {
-        if (!$this->isNewSlugNeededByEvent($event)) {
-            return $this->owner->{$this->slugAttribute};
-        }
-
-        if ($this->attribute !== null) {
-            $slugParts = [];
-            foreach ((array)$this->attribute as $attribute) {
-                $part = ArrayHelper::getValue($this->owner, $attribute);
-                if ($this->skipOnEmpty && $this->isEmpty($part)) {
-                    return $this->owner->{$this->slugAttribute};
-                }
-                $slugParts[] = $part;
-            }
-            $slug = $this->generateSlug($slugParts);
-        } else {
-            $slug = parent::getValue($event);
-        }
-
-        return $this->ensureUnique ? $this->makeUnique($slug) : $slug;
-    }
-
-    protected function isNewSlugNeededByEvent(EntityEvent $event)
-    {
-        if (empty($this->owner->{$this->slugAttribute})) {
-            return true;
-        }
-
-        if ($this->immutable) {
-            return false;
-        }
-
-        if ($this->attribute === null) {
-            return true;
-        }
-
-        foreach ((array)$this->attribute as $attribute) {
-            if (in_array($attribute, array_keys($event->dirtyAttributes))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Checks if given slug value is unique.
      * @param string $slug slug value
      * @return bool whether slug is unique.
