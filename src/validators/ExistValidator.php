@@ -28,9 +28,11 @@ class ExistValidator extends \yii\validators\Validator
     {
         /** @var AbstractEntity $entity */
         $entity = $this->targetRepository->newEntity();
-        $this->fillTargetAttributes($entity, $form, $attribute);
 
-        if (!$this->targetRepository->exists($entity, $this->targetAttribute, !empty($this->filter) ? $this->filter : $this->defaultFilterCondition($form))) {
+        $this->normalizeTargetAttribute($attribute);
+        $this->fillEntity($entity, $form, $attribute);
+
+        if (!$this->targetRepository->exists($entity, array_values($this->targetAttribute), !empty($this->filter) ? $this->filter : $this->defaultFilterCondition($form))) {
             $this->addError($form, $attribute, $this->message);
         }
     }
@@ -42,17 +44,32 @@ class ExistValidator extends \yii\validators\Validator
         }
     }
 
-    private function fillTargetAttributes(AbstractEntity $entity, AbstractEntity $form, $attribute): void
+    protected function fillEntity(AbstractEntity $entity, AbstractEntity $form, $attribute): void
     {
-        $targetAttribute = $this->targetAttribute === null ? $attribute : $this->targetAttribute;
-        if (is_array($targetAttribute)) {
-            foreach ($targetAttribute as $formAttribute => $entityAttribute) {
-                $entity->{$entityAttribute} = $form->{$formAttribute};
-            }
+        foreach ($this->targetAttribute as $formAttribute => $entityAttribute) {
+            $entity->{$entityAttribute} = $form->{$formAttribute};
+        }
+    }
 
-            return;
+    /**
+     * @param $attribute
+     * @return mixed
+     */
+    protected function normalizeTargetAttribute($attribute)
+    {
+        if (empty($this->targetAttribute)) {
+            $this->targetAttribute = [$attribute];
         }
 
-        $entity->setAttributes([$targetAttribute => $form->$attribute], false);
+        if (is_string($this->targetAttribute)) {
+            $this->targetAttribute = [$this->targetAttribute];
+        }
+
+        foreach ($this->targetAttribute as $formAttribute => $entityAttribute) {
+            if (is_int($formAttribute)) {
+                unset($this->targetAttribute[$formAttribute]);
+                $this->targetAttribute[$entityAttribute] = $entityAttribute;
+            }
+        }
     }
 }

@@ -2,9 +2,12 @@
 
 namespace albertborsos\ddd\tests\unit\validators;
 
+use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
-use albertborsos\ddd\tests\support\base\services\customer\forms\AbstractCustomerAddressForm;
+use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerAddressForm;
+use albertborsos\ddd\tests\support\base\services\customer\forms\DynamicRulesCustomerForm;
+use albertborsos\ddd\validators\ExistValidator;
 use Codeception\PHPUnit\TestCase;
 use yii\test\FixtureTrait;
 
@@ -44,13 +47,44 @@ class ExistValidatorTest extends TestCase
         $this->assertCount(1, $form->getErrors());
     }
 
+    public function targetAttributeDataProvider()
+    {
+        return [
+            'not set' => [null],
+            'as string' => ['name'],
+            'as array value only' => [['name']],
+            'as array key-value pair' => [['name' => 'name']],
+        ];
+    }
+
+    /**
+     * @dataProvider targetAttributeDataProvider
+     * @param $targetAttribute
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function testTargetAttributeFormats($targetAttribute)
+    {
+        $rules = [
+            [['name'], ExistValidator::class, 'targetRepository' => CustomerRepositoryInterface::class, 'targetAttribute' => $targetAttribute],
+        ];
+
+        $form = $this->mockForm(DynamicRulesCustomerForm::class, [
+            'name' => 'Sándor',
+            'rules' => $rules,
+        ]);
+
+        $this->assertFalse($form->validate());
+        $this->assertArrayHasKey('name', $form->getErrors());
+        $this->assertCount(1, $form->getErrors());
+    }
+
     /**
      * @param $class
      * @param array $data
-     * @return AbstractCustomerAddressForm
+     * @return EntityInterface
      * @throws \yii\base\InvalidConfigException
      */
-    private function mockForm($class, array $data): AbstractCustomerAddressForm
+    private function mockForm($class, array $data): EntityInterface
     {
         return \Yii::createObject($class, [$data]);
     }

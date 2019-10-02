@@ -56,6 +56,11 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
         if (empty($attributes)) {
             $attributes = is_array($entity->getPrimaryKey()) ? $entity->getPrimaryKey() : [$entity->getPrimaryKey()];
         }
+
+        if (is_string($attributes)) {
+            $attributes = [$attributes];
+        }
+
         foreach ($attributes as $attribute) {
             $select->andWhere([$attribute => $entity->{$attribute}]);
         }

@@ -2,7 +2,9 @@
 
 namespace albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer;
 
-interface CustomerRepositoryInterface
+use albertborsos\ddd\interfaces\RepositoryInterface;
+
+interface CustomerRepositoryInterface extends RepositoryInterface
 {
     public function getVipCustomers();
 }
