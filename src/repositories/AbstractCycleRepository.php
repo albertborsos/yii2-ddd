@@ -163,10 +163,23 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
 
     protected function andFilterWhere(Select $select, $attribute, $operator, $value): void
     {
-        if ($value === '' || $value === null || $value === [] || is_string($value) && trim($value) === '') {
+        if ($this->isEmpty($value, $operator)) {
             return;
         }
 
         $select->andWhere($attribute, $operator, $value);
+    }
+
+    protected function isEmpty($value, $operator)
+    {
+        if ($operator === 'like') {
+            $value = trim($value, '%');
+        }
+
+        if ($value === '' || $value === null || $value === [] || is_string($value) && trim($value) === '') {
+            return true;
+        }
+
+        return false;
     }
 }
