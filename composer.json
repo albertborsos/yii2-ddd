@@ -13,10 +13,10 @@
     "require": {
         "php": ">=7.1.0",
         "yiisoft/yii2": "~2.0.14",
-        "zendframework/zend-hydrator": "~2.4|~3.0",
-        "albertborsos/yii2-cycle": "dev-master"
+        "zendframework/zend-hydrator": "~2.4|~3.0"
     },
     "require-dev": {
+        "albertborsos/yii2-cycle": "dev-master",
         "codeception/codeception": "~3.0",
         "codeception/verify": "~1.0",
         "codeception/specify": "~1.0",
@@ -30,6 +30,7 @@
         "mito/yii2-coding-standards": "~2.0.0-beta16"
     },
     "suggest": {
+        "albertborsos/yii2-cycle": "If you want to use Cycle ORM related classes",
         "albertborsos/yii2-rest": "If you want to easily use DDD forms and services in REST API endpoints."
     },
     "extra": {
