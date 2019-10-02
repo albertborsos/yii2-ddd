@@ -3,11 +3,13 @@
 namespace albertborsos\ddd\validators;
 
 use albertborsos\ddd\models\AbstractEntity;
+use albertborsos\ddd\traits\DefaultFilterConditionTrait;
 use albertborsos\ddd\traits\TargetRepositoryPropertyTrait;
 
 class ExistValidator extends \yii\validators\Validator
 {
     use TargetRepositoryPropertyTrait;
+    use DefaultFilterConditionTrait;
 
     public $targetAttribute;
 
@@ -28,7 +30,7 @@ class ExistValidator extends \yii\validators\Validator
         $entity = $this->targetRepository->newEntity();
         $this->fillTargetAttributes($entity, $form, $attribute);
 
-        if (!$this->targetRepository->exists($entity, $this->targetAttribute)) {
+        if (!$this->targetRepository->exists($entity, $this->targetAttribute, !empty($this->filter) ? $this->filter : $this->defaultFilterCondition($form))) {
             $this->addError($form, $attribute, $this->message);
         }
     }
