@@ -34,10 +34,7 @@
         "albertborsos/yii2-rest": "If you want to easily use DDD forms and services in REST API endpoints."
     },
     "extra": {
-        "bootstrap": "albertborsos\\ddd\\Bootstrap",
-        "branch-alias": {
-            "dev-master": "repository-dev"
-        }
+        "bootstrap": "albertborsos\\ddd\\Bootstrap"
     },
     "autoload": {
         "psr-4": {
