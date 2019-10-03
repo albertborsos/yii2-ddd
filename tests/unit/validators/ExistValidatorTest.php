@@ -64,13 +64,9 @@ class ExistValidatorTest extends TestCase
      */
     public function testTargetAttributeFormats($targetAttribute)
     {
-        $rules = [
-            [['name'], ExistValidator::class, 'targetRepository' => CustomerRepositoryInterface::class, 'targetAttribute' => $targetAttribute],
-        ];
-
         $form = $this->mockForm(DynamicRulesCustomerForm::class, [
             'name' => 'Sándor',
-            'rules' => $rules,
+            'rules' => $this->mockRules($targetAttribute),
         ]);
 
         $this->assertFalse($form->validate());
@@ -87,5 +83,16 @@ class ExistValidatorTest extends TestCase
     private function mockForm($class, array $data): EntityInterface
     {
         return \Yii::createObject($class, [$data]);
+    }
+
+    /**
+     * @param $targetAttribute
+     * @return array
+     */
+    protected function mockRules($targetAttribute): array
+    {
+        return [
+            [['name'], ExistValidator::class, 'targetRepository' => CustomerRepositoryInterface::class, 'targetAttribute' => $targetAttribute],
+        ];
     }
 }
