@@ -4,6 +4,7 @@ namespace albertborsos\ddd\tests\unit\validators;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use albertborsos\ddd\tests\fixtures\CustomerFixtures;
+use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 use albertborsos\ddd\tests\support\base\services\customer\forms\CreateCustomerAddressForm;
 use albertborsos\ddd\tests\support\base\services\customer\forms\DynamicRulesCustomerForm;
@@ -29,14 +30,14 @@ class ExistValidatorTest extends TestCase
         ];
     }
 
-    public function testCustomerIdIsExist()
+    public function testCustomerIdExists()
     {
         $form = $this->mockForm(CreateCustomerAddressForm::class, self::VALID_ADDRESS_DATA);
 
         $this->assertTrue($form->validate());
     }
 
-    public function testCustomerIdIsNotExist()
+    public function testCustomerIdNotExists()
     {
         $form = $this->mockForm(CreateCustomerAddressForm::class, array_merge(self::VALID_ADDRESS_DATA, [
             'customerId' => 99,
@@ -71,6 +72,21 @@ class ExistValidatorTest extends TestCase
 
         $this->assertFalse($form->validate());
         $this->assertArrayHasKey('name', $form->getErrors());
+        $this->assertCount(1, $form->getErrors());
+    }
+
+    public function testShouldNotActivateDeletedUser()
+    {
+        $form = $this->mockForm(DynamicRulesCustomerForm::class, [
+            'id' => 3,
+            'name' => 'Deleted User',
+            'rules' => [
+                [['id'], ExistValidator::class, 'targetRepository' => CustomerRepositoryInterface::class, 'filter' => [['status', '!=', Customer::STATUS_DELETED]]],
+            ],
+        ]);
+
+        $this->assertFalse($form->validate());
+        $this->assertArrayHasKey('id', $form->getErrors());
         $this->assertCount(1, $form->getErrors());
     }
 

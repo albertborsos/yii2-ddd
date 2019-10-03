@@ -5,6 +5,7 @@ namespace albertborsos\ddd\tests\support\base\infrastructure\cycle\customer;
 use albertborsos\cycle\Factory;
 use albertborsos\ddd\repositories\AbstractCycleRepository;
 use albertborsos\ddd\tests\support\base\domains\customer\entities\Customer;
+use albertborsos\ddd\tests\support\base\domains\customer\entities\CustomerAddress;
 use albertborsos\ddd\tests\support\base\infrastructure\interfaces\customer\CustomerRepositoryInterface;
 use Cycle\ORM\Relation;
 use yii\data\ArrayDataProvider;
@@ -22,13 +23,13 @@ class CustomerRepository extends AbstractCycleRepository implements CustomerRepo
 
     public static function columns(): array
     {
-        return ['id', 'name'];
+        return ['id', 'name', 'status'];
     }
 
     public static function schema(): array
     {
         return Factory::schema(Customer::class, static::tableName(), 'id', static::columns(), ['id' => 'int'], [
-            'customerAddresses' => Factory::relation(Relation::HAS_MANY, 'customer_address', 'id', 'customer_id'),
+            'customerAddresses' => Factory::relation(Relation::HAS_MANY, CustomerAddress::class, 'id', 'customer_id'),
         ]);
     }
 

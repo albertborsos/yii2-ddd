@@ -41,6 +41,7 @@ class AbstractCycleRepositoryTest extends TestCase
         $data = [
             'id' => 5,
             'name' => 'Test to Insert via repository',
+            'status' => 1,
         ];
 
         /** @var AbstractCycleRepository $repository */
@@ -65,6 +66,7 @@ class AbstractCycleRepositoryTest extends TestCase
         $data = [
             'id' => 6,
             'name' => 'Test to Update via repository',
+            'status' => 1,
         ];
 
         /** @var AbstractCycleRepository $repository */
@@ -82,6 +84,7 @@ class AbstractCycleRepositoryTest extends TestCase
         $data = [
             'id' => 1,
             'name' => 'Test to Insert via repository',
+            'status' => 1,
         ];
 
         /** @var AbstractCycleRepository $repository */
@@ -96,6 +99,7 @@ class AbstractCycleRepositoryTest extends TestCase
         $data = [
             'id' => 1,
             'name' => 'Test to Update via repository',
+            'status' => 1,
         ];
 
         /** @var AbstractCycleRepository $repository */
@@ -120,6 +124,7 @@ class AbstractCycleRepositoryTest extends TestCase
         $data = [
             'id' => 1,
             'name' => 'Albert',
+            'status' => 1,
         ];
 
         /** @var AbstractCycleRepository $repository */

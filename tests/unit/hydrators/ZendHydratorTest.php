@@ -160,7 +160,7 @@ class ZendHydratorTest extends TestCase
     public function dataProviderExtractHydratedModel()
     {
         return [
-            'customer' => [Customer::class, ['id' => 1, 'name' => 'Name', 'customerAddresses' => null]],
+            'customer' => [Customer::class, ['id' => 1, 'name' => 'Name', 'customerAddresses' => null, 'status' => null]],
             'customerAddress' => [CustomerAddress::class, ['id' => 1, 'customerId' => 1, 'zipCode' => 2030, 'city' => 'Érd', 'street' => 'Balatoni út 51.']],
         ];
     }

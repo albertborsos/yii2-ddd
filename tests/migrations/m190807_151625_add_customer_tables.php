@@ -18,6 +18,7 @@ class m190807_151625_add_customer_tables extends \yii\db\Migration
             'created_by' => $this->bigInteger(),
             'updated_at' => $this->bigInteger(),
             'updated_by' => $this->bigInteger(),
+            'status' => $this->integer(),
         ]);
 
         $this->createTable(self::TABLE_NAME_CUSTOMER_ADDRESS, [
