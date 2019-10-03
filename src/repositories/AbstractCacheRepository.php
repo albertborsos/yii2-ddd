@@ -101,6 +101,9 @@ abstract class AbstractCacheRepository extends AbstractRepository
         return $this->hydrate((array)$data);
     }
 
+    /**
+     * @throws NotSupportedException
+     */
     public function beginTransaction()
     {
         throw new NotSupportedException('Transactions are not supported in ' . static::class);

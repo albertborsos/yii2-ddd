@@ -90,6 +90,21 @@ class AbstractCacheRepositoryTest extends TestCase
         $this->assertEmpty($repository->findById($data['id']));
     }
 
+    /**
+     * @dataProvider entityDataProvider
+     * @param $data
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function testExists($data)
+    {
+        /** @var AbstractCacheRepository $repository */
+        $repository = \Yii::createObject(CustomerCacheUpdaterInterface::class);
+        $customer = $repository->hydrate($data);
+        $repository->insert($customer);
+
+        $this->assertTrue($repository->exists($customer));
+    }
+
     public function serializerDataProvider()
     {
         return [
