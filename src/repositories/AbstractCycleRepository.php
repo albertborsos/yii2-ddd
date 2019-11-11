@@ -31,7 +31,7 @@ abstract class AbstractCycleRepository extends AbstractRepository implements Rep
 
     protected function find(): Select
     {
-        return $this->select;
+        return clone($this->select);
     }
 
     /**
