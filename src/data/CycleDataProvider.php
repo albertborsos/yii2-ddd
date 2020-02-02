@@ -4,6 +4,7 @@ namespace albertborsos\ddd\data;
 
 use albertborsos\ddd\interfaces\EntityInterface;
 use Cycle\ORM\Select;
+use Spiral\Database\Query\SelectQuery;
 use yii\base\InvalidConfigException;
 use yii\data\BaseDataProvider;
 use yii\db\Connection;
@@ -69,7 +70,7 @@ class CycleDataProvider extends BaseDataProvider
             $select->limit($pagination->getLimit())->offset($pagination->getOffset());
         }
         if (($sort = $this->getSort()) !== false) {
-            $select->orderBy($sort->getOrders());
+            $select->orderBy($this->compileOrdersForCycle($sort->getOrders()));
         }
 
         return $select->fetchAll();
@@ -159,5 +160,17 @@ class CycleDataProvider extends BaseDataProvider
         }
 
         parent::__clone();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function compileOrdersForCycle($orders)
+    {
+        array_walk($orders, function (&$sort) {
+            $sort = $sort === SORT_ASC ? SelectQuery::SORT_ASC : SelectQuery::SORT_DESC;
+        });
+
+        return $orders;
     }
 }
